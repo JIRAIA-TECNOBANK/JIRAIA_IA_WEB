@@ -1,0 +1,141 @@
+<div fxLayout="row" fxLayoutGap="24px" fxLayoutAlign="space-between">
+    <!--REGISTRADAS-->
+    <mat-card class="btn-acao success" [class.selected]="tipoSelecionado === 'success'"
+        (click)="selecionarTipo('success')" [id]="utility.getElementId(2, 'filtro-success')">
+
+        <div class="option-item" fxLex="row" fxLayoutGap="16px">
+            <div class="option-icon success" fxFlex="30">
+                <i class="fa-regular fa-memo-circle-check"></i>
+            </div>
+            <div class="option-description" fxLayout="column" fxLayoutGap="9px" fxLayoutAlign="space-between">
+                <div class="description-title mb-0">Contratos registrados</div>
+                <div class="description-result" fxLayout="row" fxLayoutAlign="start end">
+                    <span class="result">{{ consolidated?.qtdeContratosRegistrados?.toLocaleString() }}</span>
+                    <span class="porcentagem" [matTooltip]="obterTooltip(calcularPorcentagem('success') | percent: '2.1-2', 'success')">{{
+                        calcularPorcentagem('success') | percent: '2.1-2' }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div fxLayout="column" fxLayoutAlign="center center" fxFlex="10">
+            <div class="action-consulta" [id]="utility.getElementId(2, 'filtro-registrados-consulta')"
+                (click)="consultarRegistros('success')">
+                <i class="fa-solid fa-angle-right"></i>
+            </div>
+        </div>
+    </mat-card>
+
+    <!--INCONSISTENCIAS-->
+    <mat-card class="btn-acao warning" [class.selected]="tipoSelecionado === 'warning'"
+        (click)="selecionarTipo('warning')" [id]="utility.getElementId(2, 'filtro-warning')">
+
+        <ng-container *ngIf="tabInconsistentesIndex === 1; then defaultInconsistentes"> </ng-container>
+        <ng-container *ngIf="tabInconsistentesIndex === 2; then detalhesInconsistentes"> </ng-container>
+
+        <ng-template #defaultInconsistentes>
+            <div class="option-item" fxLex="row" fxLayoutGap="16px">
+                <div class="option-icon warning" fxFlex="30">   
+                    <i class="fa-regular fa-triangle-exclamation"></i>
+                </div>
+                <div class="option-description" fxLayout="column" fxLayoutGap="9px" fxLayoutAlign="space-between">
+                    <div class="description-title mb-0">Contratos com inconsistências</div>
+                    <div class="description-result" fxLayout="row" fxLayoutAlign="start end">
+                        <span class="result">{{ consolidated?.qtdeContratosComInconsistencia?.toLocaleString() }}</span>
+                        <span class="porcentagem" [matTooltip]="obterTooltip(calcularPorcentagem('warning') | percent: '2.1-2', 'warning')">{{
+                            calcularPorcentagem('warning') | percent: '2.1-2' }}</span>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+
+        <ng-template #detalhesInconsistentes>
+            <section fxLayout="column" class="detalhes">
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <section fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="mr-1">
+                        <div class="bullet"></div>
+                        <p> Pendente de revisão </p>
+                    </section>
+                    <p class="valor my-0"> {{ consolidated?.qtdeContratosPendenteRevisao?.toLocaleString() }} </p>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <section fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="mr-1">
+                        <div class="bullet"></div>
+                        <p> Em análise </p>
+                    </section>
+                    <p class="valor my-0"> {{ consolidated?.qtdeContratosInconsistenciaEmAnalise?.toLocaleString() }} </p>
+                </div>
+            </section>
+        </ng-template>
+
+        <div fxLayout="column" fxLayoutAlign="center center" fxFlex="10">
+            <div class="tab" fxLayout="row" fxLayoutAlign="center none" fxLayoutGap="5px">
+                <span class="tab-button" [ngClass]="{ active: tabInconsistentesIndex === 1 }"
+                    (click)="tabInconsistentesIndex = 1"
+                    [id]="utility.getElementId(2, 'filtro-inconsistentes-resumo')"></span>
+                <span class="tab-button" [ngClass]="{ active: tabInconsistentesIndex === 2 }"
+                    (click)="tabInconsistentesIndex = 2"
+                    [id]="utility.getElementId(2, 'filtro-inconsistentes-detalhes')"></span>
+            </div>
+            <div class="action-consulta" [id]="utility.getElementId(2, 'filtro-inconsistentes-consulta')"
+                (click)="consultarRegistros('warning')">
+                <i class="fa-solid fa-angle-right"></i>
+            </div>
+        </div>
+    </mat-card>
+
+    <!--SEM IMAGEM-->
+    <mat-card class="btn-acao danger" [class.selected]="tipoSelecionado === 'danger'" (click)="selecionarTipo('danger')"
+        [id]="utility.getElementId(2, 'filtro-danger')">
+
+        <ng-container *ngIf="tabImgPendenteIndex === 1; then defaultImgPendente"> </ng-container>
+        <ng-container *ngIf="tabImgPendenteIndex === 2; then detalhesImgPendente"> </ng-container>
+
+        <ng-template #defaultImgPendente>
+            <div class="option-item" fxLex="row" fxLayoutGap="16px">
+                <div class="option-icon danger" fxFlex="30">
+                    <i class="fa-regular fa-images"></i>
+                </div>
+                <div class="option-description" fxLayout="column" fxLayoutGap="9px" fxLayoutAlign="space-between">
+                    <div class="description-title mb-0">Contratos sem imagem</div>
+                    <div class="description-result" fxLayout="row" fxLayoutAlign="start end">
+                        <span class="result">{{ consolidated?.qtdeContratosSemImagem?.toLocaleString() }}</span>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+
+        <ng-template #detalhesImgPendente>
+            <section fxLayout="column" class="detalhes">
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <section fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="mr-1">
+                        <div class="bullet"></div>
+                        <p> Pendente </p>
+                    </section>
+                    <p class="valor my-0"> {{ consolidated?.qtdeContratosSemImagemPendente?.toLocaleString() }} </p>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <section fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" class="mr-1">
+                        <div class="bullet"></div>
+                        <p> Prazo expirado </p>
+                    </section>
+                    <p class="valor my-0"> {{ consolidated?.qtdeContratosSemImagemExpirado?.toLocaleString() }} </p>
+                </div>
+            </section>
+        </ng-template>
+
+        <div fxLayout="column" fxLayoutAlign="center center" fxFlex="10">
+            <div class="tab" fxLayout="row" fxLayoutAlign="center none" fxLayoutGap="5px">
+                <span class="tab-button" [ngClass]="{ active: tabImgPendenteIndex === 1 }"
+                    (click)="tabImgPendenteIndex = 1"
+                    [id]="utility.getElementId(2, 'filtro-img-pendente-resumo')"></span>
+                <span class="tab-button" [ngClass]="{ active: tabImgPendenteIndex === 2 }"
+                    (click)="tabImgPendenteIndex = 2"
+                    [id]="utility.getElementId(2, 'filtro-img-pendente-detalhes')"></span>
+            </div>
+            <div class="action-consulta" [id]="utility.getElementId(2, 'filtro-img-pendente-consulta')"
+                (click)="consultarRegistros('danger')">
+                <i class="fa-solid fa-angle-right"></i>
+            </div>
+        </div>
+    </mat-card>
+</div>

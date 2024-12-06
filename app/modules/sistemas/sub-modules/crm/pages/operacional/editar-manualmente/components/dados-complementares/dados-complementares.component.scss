@@ -1,0 +1,25 @@
+@import '$settings';
+@import '$tools';
+
+.headline {
+  @include fontMontserratBold;
+  font-size: 16px;
+  color: $gray-800;
+  margin: 8px 0 15px 0;
+}
+
+textarea[name=comentario] {
+    resize: none;
+}
+
+mat-button-toggle-group {
+  margin-top: 0.25em;
+}
+
+p {
+  color: $gray-800;
+}
+
+.toggle-wrap {
+  height: 62px;
+}

@@ -1,0 +1,100 @@
+<section class="top-options mb-2">
+  <app-atualizar-pagina (atualizar)="atualizarPagina()"></app-atualizar-pagina>
+
+  <button mat-flat-button color="secondary" type="button" [id]="utility.getElementId(2, 'consultar-detran')"
+    (click)="consultarDetran()">
+    <span fxLayout="row" fxLayoutAlign="center center">
+      <img src="./../../../../../../../../../../assets/img/custom-icons/icon-detran.svg" class="detran-icon"
+        alt="Consulta DETRAN" />
+      DETRAN
+    </span>
+  </button>
+</section>
+
+<mat-tab-group (selectedTabChange)="onTabChange($event)" [selectedIndex]="activeIndex">
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <div class="tab-label">
+        <i class="fa-regular fa-file-circle-exclamation"></i>
+        <span>Pendências</span>
+      </div>
+    </ng-template>
+    <div class="px-2">
+      <app-filtro-pendencias (filtro)="filtroPendencias = $event" [ufOptions]="filterOptionUf"
+        [empresaOptions]="filterOptionEmpresa"></app-filtro-pendencias>
+    </div>
+
+    <div class="default-tab px-2 pb-3">
+      <mat-card class="mat-elevation-z8 mt-2 p-0">
+        <app-table-pendencias [atualizar]="atualizaGrids" [filtro]="filtroPendencias"
+          [aba]="activeIndex === 0"></app-table-pendencias>
+      </mat-card>
+    </div>
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <div class="tab-label">
+        <i class="fa-regular fa-handshake-angle"></i>
+        <span>Conciliação</span>
+      </div>
+    </ng-template>
+    <div class="px-2">
+      <app-filtro-conciliacao (filtro)="filtroConciliacao = $event" [ufOptions]="filterOptionUf"
+        [empresaOptions]="filterOptionEmpresa" [statusOptions]="filterOptionStatusConciliacao"
+        [id]="'conciliacao'"></app-filtro-conciliacao>
+    </div>
+
+    <div class="default-tab px-2 pb-3">
+      <mat-card class="mat-elevation-z8 mt-2 p-0">
+        <app-table-conciliacao [atualizar]="atualizaGrids" (atualizarGrids)="atualizarPagina()"
+          [filtro]="filtroConciliacao" [aba]="activeIndex === 1"></app-table-conciliacao>
+      </mat-card>
+    </div>
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <div class="tab-label">
+        <i class="fa-regular fa-file-invoice-dollar"></i>
+        <span>A faturar</span>
+      </div>
+    </ng-template>
+    <div class="px-2">
+      <app-filtro-conciliacao (filtro)="filtroFaturar = $event" [ufOptions]="filterOptionUf"
+        [empresaOptions]="filterOptionEmpresa" [statusOptions]="filterOptionStatusFaturar"
+        [id]="'faturar'"></app-filtro-conciliacao>
+    </div>
+
+    <div class="default-tab px-2 pb-3">
+      <mat-card class="mat-elevation-z8 mt-2 p-0">
+        <app-table-faturar [atualizar]="atualizaGrids" (atualizarGrids)="atualizarPagina()" [filtro]="filtroFaturar"
+          [aba]="activeIndex === 2"></app-table-faturar>
+      </mat-card>
+    </div>
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <div class="tab-label">
+        <i class="fa-regular fa-file-check"></i>
+        <span>Faturado</span>
+      </div>
+    </ng-template>
+
+    <section *ngIf="activeIndex === 3">
+
+    </section>
+    <div class="px-2">
+      <app-filtro-faturado (filtro)="filtroFaturado = $event" [ufOptions]="filterOptionUf"
+        [empresaOptions]="filterOptionEmpresa"></app-filtro-faturado>
+    </div>
+
+    <div class="default-tab px-2 pb-3">
+      <mat-card class="mat-elevation-z8 mt-2 p-0">
+        <app-table-faturado [atualizar]="atualizaGrids" (atualizarGrids)="atualizarPagina()" [filtro]="filtroFaturado"
+          [aba]="activeIndex === 3"></app-table-faturado>
+      </mat-card>
+    </div>
+  </mat-tab>
+</mat-tab-group>

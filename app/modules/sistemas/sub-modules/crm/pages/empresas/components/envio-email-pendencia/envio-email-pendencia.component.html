@@ -1,0 +1,37 @@
+<div class="description">
+    <p class="d-flex justify-content-center text-center mt-0">
+        Escolha o tipo de e-mail e os usuários <br>
+        da empresa que irão recebê-lo:
+    </p>
+</div>
+
+<form [formGroup]="envioEmailForm" class="pb-2 px-2">
+    <mat-radio-group [formControl]="envioEmailForm.get('tipoEmailId')">
+        <mat-radio-button [value]="1" class="m-0">Enviar e-mail de “registros com
+            imagens pendentes”</mat-radio-button>
+    </mat-radio-group>
+
+    <div class="row mt-2" [hidden]="!showUsuariosChip">
+        <mat-form-field class="default-chip-list py-0" appearance="outline">
+            <mat-label>Enviar para</mat-label>
+            <mat-chip-list #chipList aria-label="Seleção de usuários" required>
+                <mat-chip *ngFor="let usuario of usuarios" (removed)="remove(usuario)">
+                    {{usuario.nome}}
+                    <button matChipRemove>
+                        <i class="fa-solid fa-xmark text-primary"></i>
+                    </button>
+                </mat-chip>
+                <input [id]="getElementId(0, 'empresa-envio-email')" #usuarioInput [formControl]="usuariosControl" [matAutocomplete]="auto"
+                    [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    (matChipInputTokenEnd)="add($event)" >
+            </mat-chip-list>
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                <mat-option *ngFor="let usuario of filteredUsuarios | async" [value]="usuario.nome" class="email-chip">
+                    {{usuario.nome}}
+                    <span class="usuario-adicionado" *ngIf="verifyUsuarioAdicionado(usuario)">Adicionado</span>
+                    <span>{{ usuario.email }}</span>
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+    </div>
+</form>

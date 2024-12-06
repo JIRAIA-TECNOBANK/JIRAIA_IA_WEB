@@ -1,0 +1,170 @@
+<div class="d-flex justify-content-between align-items-center mt-1">
+  <div class="fw-bold text-gray-800">Dados complementares</div>
+</div>
+
+<form [formGroup]="formulario" novalidate class="mt-2"  >
+  <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="10px grid">
+    <mat-form-field fxFlex="25" *ngIf="contratoResponse.contrato.ufLicenciamento === 'PR'" appearance="outline">
+      <mat-label>Taxa do contrato</mat-label>
+      <input [id]="utility.getElementId(0, 'taxa-contrato')" type="text" matInput name="taxaContrato"
+        formControlName="taxaContrato" placeholder="Digite a taxa do contrato" prefix="R$ " min="0.01" max="9999999.99"
+        maxlength="15" currencyMask>
+    </mat-form-field>
+
+    <mat-form-field [fxFlex]="contratoResponse.contrato.ufLicenciamento === 'PR' ? 25 : 20" appearance="outline">
+      <mat-label>Valor de IOF</mat-label>
+      <input [id]="utility.getElementId(0, 'taxa-iof')" type="text" matInput name="taxaIof" formControlName="taxaIof"
+        placeholder="Digite o valor de IOF" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }">
+    </mat-form-field>
+
+    <mat-form-field [fxFlex]="contratoResponse.contrato.ufLicenciamento === 'PR' ? 25 : 20" appearance="outline">
+      <mat-label>Taxa de juros ao mês</mat-label>
+      <input [id]="utility.getElementId(0, 'taxa-juros-mes')" type="text" matInput name="taxaJurosMes"
+        formControlName="taxaJurosMes" placeholder="Digite a taxa de juros mês" [percentage]="7">
+    </mat-form-field>
+
+    <mat-form-field [fxFlex]="contratoResponse.contrato.ufLicenciamento === 'PR' ? 25 : 20" appearance="outline">
+      <mat-label>Taxa de juros ao ano</mat-label>
+      <input [id]="utility.getElementId(0, 'taxa-juros-ano')" type="text" matInput name="taxaJurosAno"
+        formControlName="taxaJurosAno" placeholder="Digite a taxa de juros ano" [percentage]="4">
+    </mat-form-field>
+
+    <mat-form-field fxFlex appearance="outline">
+      <mat-label>Índice</mat-label>
+      <input [id]="utility.getElementId(0, 'indice')" type="text" matInput name="indice" formControlName="indice"
+        placeholder="Digite o índice" maxlength="10" [alphanumerics-only]="['acento', 'hifen', 'espaco']" required>
+    </mat-form-field>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="start" fxLayoutGap="10px">
+    <mat-form-field fxFlex="100" appearance="outline">
+      <mat-label>Principal recebedor do pagamento</mat-label>
+      <input [id]="utility.getElementId(0, 'principal-recebedor')" type="text" matInput name="nomeRecebedorPagamento"
+        formControlName="nomeRecebedorPagamento" placeholder="Digite o nome do recebedor do pagto.">
+    </mat-form-field>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="start" fxLayoutGap="10px" class="justify-content-between">
+    <div class="toggle-default" fxFlex="50">
+      <p class="bold desk text-gray-800 mt-0">Tipo de documento</p>
+      <div fxLayout="row" class="align-items-start toggle-wrap" fxLayoutGap="10px">
+        <mat-button-toggle-group [id]="utility.getElementId(7, 'tipo-documento')" name="tipoDocumentoRecebedor"
+          formControlName="tipoDocumentoRecebedor" aria-label="tipoDocumentoRecebedor">
+          <mat-button-toggle [id]="utility.getElementId(7, 'documento-cpf')" value="cpf"
+            class="btn-toggle">CPF</mat-button-toggle>
+          <mat-button-toggle [id]="utility.getElementId(7, 'documento-cnpj')" value="cnpj"
+            class="btn-toggle">CNPJ</mat-button-toggle>
+        </mat-button-toggle-group>
+
+        <mat-form-field fxFlex="auto" appearance="outline">
+          <mat-label>Documento do recebedor
+          </mat-label>
+          <input [id]="utility.getElementId(0, 'documento-recebedor')" type="text" matInput name="documentoRecebedor"
+            formControlName="documentoRecebedor"
+            [mask]="mascaraDocumento(formulario.get('tipoDocumentoRecebedor').value)"
+            placeholder="Digite o documento do recebedor">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="toggle-default" fxFlex="50">
+      <p class="bold desk text-gray-800 mt-0">Tipo de documento</p>
+      <div fxLayout="row" class="align-items-start toggle-wrap" fxLayoutGap="10px">
+        <mat-button-toggle-group [id]="utility.getElementId(7, 'tipo-documento-vendedor')" name="tipoDocumentoVendedor"
+          formControlName="tipoDocumentoVendedor" aria-label="tipoDocumentoVendedor">
+          <mat-button-toggle [id]="utility.getElementId(0, 'documento-vendedor')" value="cpf"
+            class="btn-toggle">CPF</mat-button-toggle>
+          <mat-button-toggle value="cnpj" class="btn-toggle">CNPJ</mat-button-toggle>
+        </mat-button-toggle-group>
+
+        <mat-form-field fxFlex="auto" appearance="outline">
+          <mat-label>Documento do vendedor</mat-label>
+          <input [id]="utility.getElementId(0, 'documento-vendedor')" type="text" matInput name="documentoVendedor"
+            formControlName="documentoVendedor" [mask]="mascaraDocumento(formulario.get('tipoDocumentoVendedor').value)"
+            placeholder="Digite o documento do vendedor">
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="start" fxLayoutGap="10px" class="justify-content-between">
+    <div class="toggle-default" fxFlex="50">
+      <p class="bold desk text-gray-800">Taxa de mora?</p>
+      <div fxLayout="row" class="align-items-start toggle-wrap" fxLayoutGap="10px">
+        <mat-button-toggle-group [id]="utility.getElementId(7, 'taxa-mora')" name="indicadorTaxaMora"
+          formControlName="indicadorTaxaMora" aria-label="indicadorTaxaMora">
+          <mat-button-toggle value="true" class="btn-toggle">Sim</mat-button-toggle>
+          <mat-button-toggle value="false" class="btn-toggle">Não</mat-button-toggle>
+        </mat-button-toggle-group>
+
+        <mat-form-field fxFlex="auto" appearance="outline">
+          <mat-label>Taxa de mora</mat-label>
+          <input [id]="utility.getElementId(0, 'taxa-mora')" type="text" matInput name="valorTaxaMora"
+            formControlName="valorTaxaMora" [percentage]="4" placeholder="Digite a taxa mora">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="pt-1 toggle-default" fxFlex="50">
+      <p class="bold desk text-gray-800">Comissão?</p>
+      <div fxLayout="row" class="align-items-start toggle-wrap" fxLayoutGap="10px">
+        <mat-button-toggle-group [id]="utility.getElementId(7, 'indicador-comissao')" name="indicadorComissao"
+          formControlName="indicadorComissao" aria-label="indicadorComissao">
+          <mat-button-toggle value="true" class="btn-toggle">Sim</mat-button-toggle>
+          <mat-button-toggle value="false" class="btn-toggle">Não</mat-button-toggle>
+        </mat-button-toggle-group>
+
+        <mat-form-field fxFlex="auto" appearance="outline">
+          <mat-label>Comissão</mat-label>
+          <input [id]="utility.getElementId(0, 'comissao')" type="text" matInput name="comissao"
+            formControlName="comissao" placeholder="Digite a taxa comissão" [percentage]="4">
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="start" fxLayoutGap="10px" class="justify-content-between">
+    <div class="pt-1 toggle-default" fxFlex="50">
+      <p class="bold desk text-gray-800">Taxa de multa?</p>
+      <div fxLayout="row" class="align-items-start toggle-wrap" fxLayoutGap="10px">
+        <mat-button-toggle-group [id]="utility.getElementId(7, 'taxa-multa')" name="indicadorTaxaMulta"
+          formControlName="indicadorTaxaMulta" aria-label="indicadorTaxaMulta">
+          <mat-button-toggle value="true" class="btn-toggle">Sim</mat-button-toggle>
+          <mat-button-toggle value="false" class="btn-toggle">Não</mat-button-toggle>
+        </mat-button-toggle-group>
+
+        <mat-form-field fxFlex="auto" appearance="outline">
+          <mat-label>Taxa de multa</mat-label>
+          <input [id]="utility.getElementId(0, 'multa')" type="text" matInput name="valorTaxaMulta"
+            formControlName="valorTaxaMulta" placeholder="Digite a taxa de multa" [percentage]="4">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="pt-1 toggle-default" fxFlex="50">
+      <p class="bold desk text-gray-800">Penalidade?</p>
+      <div fxLayout="row" class="align-items-start toggle-wrap" fxLayoutGap="10px">
+        <mat-button-toggle-group [id]="utility.getElementId(7, 'taxa-penalidade')" name="indicadorPenalidade"
+          formControlName="indicadorPenalidade" aria-label="indicadorPenalidade">
+          <mat-button-toggle value="true" class="btn-toggle">Sim</mat-button-toggle>
+          <mat-button-toggle value="false" class="btn-toggle">Não</mat-button-toggle>
+        </mat-button-toggle-group>
+
+        <mat-form-field fxFlex="auto" appearance="outline">
+          <mat-label>Penalidade</mat-label>
+          <input [id]="utility.getElementId(0, 'penalidade')" type="text" matInput name="penalidade"
+            formControlName="penalidade" placeholder="Digite a penalidade" maxlength="50"
+            [alphanumerics-only]="['espaco']">
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="start" fxLayoutGap="10px" class="pt-1">
+    <mat-form-field class="input-width-8" fxFlex="auto" appearance="outline">
+      <mat-label>Comentários</mat-label>
+      <textarea [id]="utility.getElementId(0, 'comentario')" matInput rows="5" name="comentario"
+        formControlName="comentario" maxlength="1000"></textarea>
+    </mat-form-field>
+  </div>
+</form>

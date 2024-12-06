@@ -1,0 +1,10 @@
+.box__btn {
+  display: flex;
+  justify-content: right;
+  position: relative;
+
+  .box__btn--btn {
+    position: absolute;
+    top: -68px;
+  }
+}

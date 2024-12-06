@@ -1,0 +1,33 @@
+@import '$settings';
+@import '$tools';
+
+p {
+  font-size: 14px;
+  
+  &.mensagem {
+    text-overflow: ellipsis !important;
+    white-space: nowrap;
+    overflow: hidden;
+    margin-top: 0;
+  }
+
+  i {
+    color: $primary;
+    cursor: pointer;
+  }
+
+  .copiado {
+    color: $gray-700;
+    font-size: 14px;
+  }
+}
+
+section {
+  &.bloco-ds {
+    padding: 10px 20px;
+  }
+}
+
+mat-dialog-content {
+  height: 215px;
+}

@@ -1,0 +1,39 @@
+<div class="px-2">
+  <mat-card class="mb-4 mat-elevation-z8">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="fw-bold">Dados da seção</div>
+    </div>
+    <form [formGroup]="formulario" class="mt-2">
+
+      <div fxLayout="row" fxLayoutGap="10px" class="mt-1">
+        <mat-form-field appearance="outline" fxFlex="auto">
+          <mat-label>Título</mat-label>
+          <input matInput placeholder="Título" formControlName="titulo"
+            [id]="utility.getElementId(0, 'notificacao-titulo')" #titulo />
+          <mat-hint>Obrigatório</mat-hint>
+          <mat-hint align="end">{{ titulo.value?.length || 0 }}/150</mat-hint>
+          <mat-error *ngIf="formulario.controls['titulo'].hasError('required')">Obrigatório</mat-error>
+          <mat-error *ngIf="formulario.controls['titulo'].hasError('maxlength')" align="end">{{ titulo.value?.length ||
+            0 }}/150</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="auto">
+          <mat-label>Descrição</mat-label>
+          <input matInput placeholder="Descrição" formControlName="descricao"
+            [id]="utility.getElementId(0, 'notificacao-descricao')" #descricao />
+          <mat-hint align="end">{{ descricao.value?.length || 0 }}/150</mat-hint>
+          <mat-error *ngIf="formulario.controls['descricao'].hasError('maxlength')" align="end">{{
+            descricao.value?.length
+            ||
+            0 }}/150</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="end center" class="mt-1">
+        <button mat-flat-button color="secondary" type="button" (click)="onClickConfirmar()"
+          [id]="utility.getElementId(2, 'confirmar')" [disabled]="!formulario.valid"
+          *ngIf="utility.getPermission([Permissoes.GESTAO_CENTRAL_AJUDA_CADASTRAR])">Confirmar</button>
+      </div>
+    </form>
+  </mat-card>
+</div>

@@ -1,0 +1,208 @@
+@import "$settings";
+@import "$tools";
+
+.btn-acao {
+    height: 114px;
+    display: flex;
+    flex-wrap: wrap;
+    cursor: pointer;
+    width: -webkit-fill-available;
+
+    &.success {
+
+        &:hover,
+        &.selected {
+            background: linear-gradient(180deg, #ceffcd 0%, $white 100%);
+
+            .option-icon {
+                background-color: #1ED07A;
+
+                i {
+                    color: $white;
+                }
+            }
+        }
+
+        .detalhes {
+            .bullet {
+                background-color: $warning-900;
+            }
+        }
+    }
+
+    &.warning {
+
+        &:hover,
+        &.selected {
+            background: linear-gradient(180deg, #f8ddb8 0%, #ffffff 100%);
+
+            .option-icon {
+                background-color: $warning-900;
+
+                i {
+                    color: $white;
+                }
+            }
+        }
+
+        .detalhes {
+            .bullet {
+                background-color: $warning-900;
+            }
+        }
+    }
+
+    &.danger {
+
+        &:hover,
+        &.selected {
+            background: linear-gradient(180deg, #f4dbd1 0%, #ffffff 100%);
+
+            .option-icon {
+                background-color: #F2652D;
+
+                i {
+                    color: $white;
+                }
+            }
+        }
+
+        .detalhes {
+            .bullet {
+                background-color: #F2652D;
+            }
+        }
+    }
+
+    .option-icon {
+        @include border-radius(8px);
+        width: 67px;
+        height: 67px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        i {
+            font-size: 27px;
+        }
+
+        &.success {
+            background-color: rgb(206 248 228 / 60%);
+
+            i {
+                color: #1ED07A;
+            }
+        }
+
+        &.warning {
+            background-color: rgb(255 231 197 / 60%);
+
+            i {
+                color: $warning-900;
+            }
+        }
+
+        &.danger {
+            background-color: rgb(255 226 235 / 60%);
+
+            i {
+                color: #F2652D;
+            }
+        }
+    }
+
+    .description-title {
+        @include fontMontserratBold;
+        font-size: 12px;
+        color: $gray-700;
+        letter-spacing: 0.25px;
+        width: 70%;
+    }
+
+    .description-result {
+        width: 75%;
+    }
+
+    .result {
+        @include fontMontserratBold;
+        color: $gray-900;
+        margin-right: 0.5rem;
+        font-size: clamp(14px, 1.7vw, 30px);
+    }
+
+    .porcentagem {
+        @include fontMontserratBold;
+        font-size: clamp(8px, .7vw, 12px);
+        color: $gray-700;
+        margin-bottom: 3px;
+    }
+
+    .tab {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+
+        .tab-button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 7px;
+            padding: 0 4px 0 3px;
+            background-color: $gray-400;
+            border-radius: 10px;
+            min-width: 1px;
+            transition: 0.7s;
+
+            &.active {
+                min-width: 20px;
+                background-color: $primary;
+            }
+        }
+    }
+
+    .action-consulta {
+        @include border-radius(100%);
+        background-color: $blue-600;
+        width: 22px;
+        height: 22px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        bottom: 8px;
+        right: 8px;
+
+        i {
+            color: $white;
+            font-size: 13px;
+        }
+    }
+
+    .detalhes {
+        min-width: 85%;
+        max-width: 100%;
+
+        .bullet {
+            width: 6px;
+            height: 6px;
+        }
+
+        p {
+            @include fontMontserratBold;
+            color: $gray-700;
+            font-size: .7vw;
+            
+            &.valor {
+                @include border-radius(5px);
+                color: $gray-800;
+                background-color: $gray-300;
+                min-width: 36px;
+                height: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0 7px;
+            }
+        }
+    }
+}

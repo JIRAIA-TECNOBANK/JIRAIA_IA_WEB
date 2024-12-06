@@ -1,0 +1,133 @@
+<form [formGroup]="formulario" class="px-2">
+
+  <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="15px">
+    <mat-form-field class="input-width-4" appearance="outline" fxFlex="auto">
+      <mat-label>Modelo do relatório</mat-label>
+      <mat-select [id]="utility.getElementId(5, 'modelo-relatorio')" name="modelo-relatorio"
+        formControlName="modeloRelatorio" required #modelo>
+        <mat-option *ngFor="let modelo of modelos; index as i" [value]="modelo.id">
+          {{ modelo.valor }}
+        </mat-option>
+      </mat-select>
+      <mat-hint>Obrigatório</mat-hint>
+    </mat-form-field>
+    <mat-form-field class="input-width-4" appearance="outline" fxFlex="auto">
+      <mat-label>Formato</mat-label>
+      <mat-select [id]="utility.getElementId(5, 'formato-relatorio')" name="formato-relatorio"
+        formControlName="formatoRelatorio" required>
+        <mat-option [value]="1">CSV</mat-option>
+        <mat-option [value]="2">XLS</mat-option>
+      </mat-select>
+      <mat-hint>Obrigatório</mat-hint>
+    </mat-form-field>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="15px">
+    <mat-form-field appearance="outline" fxFlex="100">
+      <mat-label>Selecione ao menos uma empresa</mat-label>
+      <mat-select multiple panelClass="panel-select-empresa" required (selectionChange)="selecionarEmpresa($event.value)" [(value)]="empresasSelecionadas">
+        <mat-select-trigger *ngIf="empresasSelecionadas.length > 0">
+          {{empresasSelecionadas[0]?.nomeFantasia}}
+          <span *ngIf="(empresasSelecionadas.length || 0) > 1"> 
+            ( + {{(empresasSelecionadas.length || 0) - 1}} {{empresasSelecionadas.length === 2 ? ' outro' : ' outros'}})
+          </span>
+        </mat-select-trigger>
+
+        <mat-card class="p-1">
+          <div class="d-flex justify-content-between align-items-center pl-2 pt-1">
+            <span>
+              Pesquise pela empresa
+            </span>
+            <button [id]="utility.getElementId(2, 'redefinir')" mat-button color="primary" class="btn-redefinir"
+              (click)="limparEmpresas()">
+              Limpar
+            </button>
+          </div>
+
+          <div class="b-divider">
+            <mat-form-field appearance="outline" class="fix-prefix px-2 pb-0"
+              style="font-size: 14px; width: 100%; margin-left: -5px">
+              <mat-label>Procure</mat-label>
+              <i matPrefix class="far fa-search ml-1 mr-1"></i>
+              <input type="text" matInput [id]="utility.getElementId(5, 'empresa')" name="empresaNome"
+                formControlName="empresaNome" placeholder="Digite a empresa"
+                (input)="carregarEmpresas($event.target.value, formulario.get('modeloRelatorio').value)"
+                class="elevation">
+            </mat-form-field>
+          </div>
+
+          <section>
+            <mat-optgroup label="Todas as empresas" *ngIf="habilitarOpcaoTodasEmpresas()">
+              <mat-option value="Todas as empresas" (click)="selecionarTodas()">
+                Selecionar todas as empresas
+              </mat-option>
+            </mat-optgroup>
+
+            <mat-optgroup label="Empresas selecionadas" *ngIf="empresasSelecionadas.length">
+              <mat-option *ngFor="let empresa of empresasSelecionadas" [value]="empresa"
+                [matTooltip]="empresa.nomeFantasia + ' - ' + empresa.cnpj" (click)="$event.stopPropagation();"
+                [disabled]="formulario.get('empresaNome').value == 'Todas as empresas'">
+                {{empresa.nomeFantasia}} - {{ empresa.cnpj }}
+              </mat-option>
+            </mat-optgroup>
+
+            <mat-optgroup label="Não selecionadas">
+              <mat-option *ngFor="let empresa of empresasFiltradas" [value]="empresa"
+                [matTooltip]="empresa.nomeFantasia + ' - ' + empresa.cnpj" (click)="$event.stopPropagation();"
+                [disabled]="formulario.get('empresaNome').value == 'Todas as empresas'">
+                {{empresa.nomeFantasia }} - {{ empresa.cnpj }}
+              </mat-option>
+            </mat-optgroup>
+          </section>
+        </mat-card>
+      </mat-select>
+      <mat-hint *ngIf="empresaObrigatoriaSelecao">Obrigatório</mat-hint>
+      <mat-error *ngIf="empresas.errors?.['minLength']">Selecione ao menos uma empresa</mat-error>
+    </mat-form-field>
+  </div>
+
+  <p class="tooltip-label">
+    Escolha um período de sua preferência:
+    <i class="fa-regular fa-circle-info info" matTooltip="• Último dia: irá trazer as informações das últimas 24 horas, com base na data de solicitação.
+      &#13;
+      • Últimos 15 dias: irá trazer as informações dos últimos 15 dias, com base na data de solicitação."
+      matTooltipClass="tooltip-relatorio"></i>
+  </p>
+  <mat-button-toggle-group formControlName="periodo" aria-label="Font Style" class="relatorio-buttons"
+    [id]="utility.getElementId(12, 'periodo-relatorio')">
+    <mat-button-toggle [value]="1" [id]="utility.getElementId(12, 'periodo-relatorio', '1')">Último
+      dia</mat-button-toggle>
+    <mat-button-toggle [value]="2" [id]="utility.getElementId(12, 'periodo-relatorio', '2')">Últimos 15
+      dias</mat-button-toggle>
+    <mat-button-toggle [value]="3"
+      [id]="utility.getElementId(12, 'periodo-relatorio', '3')">Personalizado</mat-button-toggle>
+  </mat-button-toggle-group>
+
+  <p class="mt-2 tooltip-label">
+    Ou, personalize com uma data específica:
+    <i class="fa-regular fa-circle-info info" matTooltip="Período máximo de 6 meses."
+      matTooltipClass="tooltip-relatorio"></i>
+  </p>
+
+  <div>
+    <mat-form-field appearance="outline" fxFlex="50" class="mr-1">
+      <mat-label>Data inicial</mat-label>
+      <input [id]="utility.getElementId(6, 'data-inicial')" formControlName="dataInicial" matInput
+        placeholder="dd/mm/aaaa" [min]="addMonths(dataFinal, -6)" [max]="addMonths(dataFinal, 0)" [matDatepicker]="de"
+        (click)="de.open()" (keydown.tab)="de.close()" />
+      <mat-datepicker-toggle matSuffix [for]="de"
+        [id]="utility.getElementId(6, 'data-inicial', 'picker')"></mat-datepicker-toggle>
+      <mat-datepicker #de></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" fxFlex="50" class="mat-field-small">
+      <mat-label>Data final</mat-label>
+      <input [id]="utility.getElementId(6, 'data-final')" formControlName="dataFinal" matInput placeholder="dd/mm/aaaa"
+        [min]="addMonths(dataInicial, 0)" [max]="addMonths(dataInicial, 6)" [matDatepicker]="ate" (click)="ate.open()"
+        (keydown.tab)="ate.close()" />
+      <mat-datepicker-toggle matSuffix [for]="ate"
+        [id]="utility.getElementId(6, 'data-final', 'picker')"></mat-datepicker-toggle>
+      <mat-datepicker #ate></mat-datepicker>
+    </mat-form-field>
+  </div>
+</form>

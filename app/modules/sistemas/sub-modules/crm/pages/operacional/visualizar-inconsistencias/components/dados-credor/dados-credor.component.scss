@@ -1,0 +1,23 @@
+@import '$settings';
+@import '$tools';
+
+.property-row {
+  @include border-radius(10px);
+  background: $gray-200;
+  padding: 10px 20px;
+
+  &.error-cell {
+    background-color: $warning-300;
+    border: 2px solid $warning-900;
+  }
+
+  div {
+    @include fontMontserratBold;
+    color: $gray-800;
+
+    &.nome-exibicao {
+      @include fontMontserratRegular;
+      color: $gray-600;
+    }
+  }
+}

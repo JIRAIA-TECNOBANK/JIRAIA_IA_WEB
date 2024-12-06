@@ -1,0 +1,30 @@
+<div>
+  <form [formGroup]="configLotesForm">
+    <!-- Head Title -->
+    <div fxLayout="column" fxFlex="100">
+      <h6>Informações complementares</h6>
+      <div fxLayout="row wrap" fxLayoutGap="10px">
+        <mat-form-field appearance="outline" fxFlex="38">
+          <mat-label>Lotes disponíveis para a empresa </mat-label>
+          <mat-select formControlName="tipoLote" name="tipoLote" multiple [disabled]="
+              !utility.getPermission([Permissoes.GESTAO_EMPRESA_CADASTRAR])
+            " [id]="utility.getElementId(5, 'lotes-empresa')">
+            <mat-option value="todos" #allSelectedOptions (click)="toggleAllSelection()">
+              Todos
+            </mat-option>
+            <mat-option *ngFor="let versao of versoesLote" [value]="versao.id" (click)="togglePerOne()">
+              {{ versao.valor }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="mt-2 d-flex justify-content-end align-items-center" fxFlex="100">
+        <button mat-flat-button color="primary" type="button" (click)="confirmarLotes()" [disabled]="!companyId"
+          *ngIf="utility.getPermission([Permissoes.GESTAO_EMPRESA_CADASTRAR])"
+          [id]="utility.getElementId(2, 'salvar-informacoes-complementares')">
+          Salvar e continuar
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

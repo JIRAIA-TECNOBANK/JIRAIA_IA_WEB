@@ -1,0 +1,34 @@
+<div fxLayout="row" fxLayoutAlign="space-between none">
+    <div fxFlex>
+      <div *ngIf="isLoading" class="d-flex" fxLayout="row" fxLayoutAlign="space-between none">
+        <div *skeleton="
+              isLoading;
+              className: 'mr-1';
+              height: '36px';
+              width: '10%';"></div>
+        <div *skeleton="
+              isLoading;
+              className: 'mr-1';
+              height: '36px';
+              width: '80%';"></div>
+        <div *skeleton="
+              isLoading;
+              className: 'mr-1';
+              height: '36px';
+              width: '10%';"></div>
+      </div>
+  
+      <div fxLayout="column" fxLayoutGap="15px">
+        <div fxLayout="row" class="property-row" *ngFor="let revisao of dadosInconsistenciasContrato"
+          [ngClass]="{'error-cell': revisao.possuiInconsistencia }">
+          <div fxFlex="45" class="nome-exibicao"> {{revisao.nomeExibicao}} </div>
+          <div fxFlex="45"> {{formatarDados(revisao)}} </div>
+          <div fxFlex="10" *ngIf="revisao.possuiInconsistencia" fxLayout="row" fxLayoutAlign="end center">
+            <i class="fa-regular fa-circle-info text-warning" matTooltip="{{ revisao.message}}"></i>
+          </div>
+        </div>
+  
+      </div>
+    </div>
+  </div>
+  

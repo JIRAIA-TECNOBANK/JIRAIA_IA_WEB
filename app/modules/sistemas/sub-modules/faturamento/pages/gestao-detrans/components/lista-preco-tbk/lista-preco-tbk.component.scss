@@ -1,0 +1,18 @@
+@import "$settings";
+@import "$tools";
+
+.cabecalho {
+    padding: 0 1rem;
+
+    span {
+        font-size: 12px;
+    }
+}
+
+.nome {
+    @include text-overflow(280px);
+    
+    &.privado {
+        @include text-overflow(30vw);
+    }
+}

@@ -1,0 +1,16 @@
+<div class="row d-flex justify-content-between header-notifier">
+    <span *ngIf="data.type == 'error'">ERRO</span>
+    <span *ngIf="data.type == 'info'">INFO</span>
+    <span *ngIf="data.type == 'success'">SUCESSO</span>
+    <span *ngIf="data.type == 'warning'">ATENÇÃO</span>
+    <span class="btn-dismiss pt-0" (click)="snackbarRef.dismiss()">FECHAR</span>
+</div>
+
+<div fxLayout="row" fxLayoutAlign="space-between start">
+    <div class="title-notifier">
+        <div class="content-notifier ml-0" id="notifier">
+            {{getFormatacao(data.message)}}
+        </div>
+    </div>
+
+</div>

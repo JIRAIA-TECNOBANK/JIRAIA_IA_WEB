@@ -1,0 +1,47 @@
+@import "$settings";
+@import "$tools";
+
+.observacoes {
+  overflow: hidden;
+  background-color: #ebf5ff;
+
+  p {
+    @include fontMontserratBold;
+    color: $blue-900;
+    font-size: 14px;
+    letter-spacing: 0.25px;
+    margin-top: 0;
+  }
+
+  span {
+    color: $gray-700;
+    font-size: 12.4px;
+    line-height: 18.52px;
+  }
+
+  .circle {
+    @include border-radius(100%);
+    width: 290px;
+    height: 290px;
+    transform: rotate(175deg);
+    opacity: 0.05;
+    background: linear-gradient(90deg, #e32b51 0%, #056ab0 100%);
+    background-blend-mode: darken;
+    position: absolute;
+    right: 39rem;
+    top: 4rem;
+  }
+
+  .circle-top {
+    @include border-radius(100%);
+    width: 290px;
+    height: 290px;
+    transform: rotate(175deg);
+    opacity: 0.05;
+    background: linear-gradient(90deg, #e32b51 0%, #056ab0 100%);
+    background-blend-mode: darken;
+    position: absolute;
+    right: -2rem;
+    top: -13rem;
+  }
+}

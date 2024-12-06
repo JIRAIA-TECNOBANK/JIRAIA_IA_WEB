@@ -1,0 +1,102 @@
+<section class="cesta" fxLayout="column" [ngClass]="{ 'min-heigth': !cadastroEmpresa }">
+    <div fxLayout="row" fxLayoutAlign="space-between" class="mb-2">
+        <p class="bold desk mt-0 text-gray-800"> Cesta de serviços DETRAN {{ uf }}</p>
+
+        <section>
+            <button mat-flat-button class="btn-add" [ngClass]="{'mr-1': !cadastroEmpresa}"
+                *ngIf="!(cadastroEmpresa && precosSelecionados.length > 0)" [id]="utility.getElementId(2, 'add-preco')"
+                (click)="abrirModalPesquisa()" type="button">
+                <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Add cesta
+            </button>
+
+            <button mat-flat-button class="btn-cancelar" [id]="utility.getElementId(2, 'cancelar-taxa')"
+                (click)="cancelar()" *ngIf="!cadastroEmpresa">
+                Cancelar
+            </button>
+        </section>
+    </div>
+
+    <form [formGroup]="formulario" fxLayout="column" fxLayoutAlign="space-between">
+
+        <app-bloco-vazio *ngIf="precosSelecionados?.length === 0 && !cadastroEmpresa"
+            [options]="blocoVazio"></app-bloco-vazio>
+
+        <ng-container *ngIf="precosSelecionados?.length > 0; then formPrecoTecnobank"></ng-container>
+
+        <ng-template #formPrecoTecnobank>
+            <section fxLayout="column" fxLayoutAlign="space-between" [ngClass]="{ 'conteudo': !cadastroEmpresa }">
+                <div fxLayout="row" fxLayoutAlign="space-between center" *ngFor="let preco of precosSelecionados"
+                    class="wrap-taxa mb-1">
+
+                    <mat-accordion class="gestao-detran w-100">
+                        <mat-expansion-panel class="w-100" (opened)="panelOpenState = true"
+                            (closed)="panelOpenState = false">
+                            <mat-expansion-panel-header class="p-0">
+                                <section class="w-100 mr-1" fxLayout="row" fxLayoutAlign="space-between center"
+                                    fxLayoutGap="10px">
+                                    <p class="nome bold"> {{ preco.nome }} </p>
+
+                                    <section fxLayoutAlign="end center" fxLayoutGap="10px">
+                                        <span class="bold gray-600" *ngIf="!verificarAprovacao(preco.id)"><i
+                                                class="fa-regular fa-clock mr-1"></i>Aguardando
+                                            aprovação</span>
+
+                                        <div class="icone edicao ml-1" fxLayoutAlign="center center"
+                                            [id]="utility.getElementId(2, 'editar-preco', preco.id)"
+                                            matTooltip="Editar cesta" (click)="abrirModalEditarCesta(preco)">
+                                            <i class="fa-regular fa-pen"></i>
+                                        </div>
+
+                                        <div class="icone exclusao ml-1" fxLayoutAlign="center center"
+                                            [id]="utility.getElementId(2, 'excluir-preco', preco.id)"
+                                            matTooltip="Excluir cesta" (click)="excluirCesta(preco)"
+                                            *ngIf="!verificarAprovacao(preco.id)">
+                                            <i class="fa-regular fa-trash"></i>
+                                        </div>
+                                    </section>
+                                </section>
+                            </mat-expansion-panel-header>
+
+                            <section fxLayout="row" class="mb-2 vigencia">
+                                <span class="bold gray-600 fnt-12">Início da vigência: </span>&nbsp;
+                                <span class="bold desk">{{ preco.dataInicioVigencia | date:"dd/MM/yyyy" }}</span>
+                            </section>
+
+                            <div class="detalhes-taxa" fxLayout="column" fxLayoutGap="10px">
+
+                                <app-tabela-listagem-precos [taxaDetran]="taxaDetran"
+                                    [preco]="preco"></app-tabela-listagem-precos>
+
+                                <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100 mr-1">
+                                    <div fxLayout="row" fxLayoutGap="20px" class="mt-1">
+                                        <section fxLayout="row">
+                                            <span class="bold gray-600 fnt-12">Criado por: </span>&nbsp;
+                                            <span class="bold desk fnt-12">{{ preco.criadoPor }}</span>
+                                        </section>
+
+                                        <section fxLayout="row">
+                                            <span class="bold gray-600 fnt-12">Data/horário: </span>&nbsp;
+                                            <span class="bold desk fnt-12">{{ preco.criadoEm | date:"dd/MM/yyyy
+                                                HH:mm"
+                                                }}</span>
+                                        </section>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                </div>
+
+                <section *ngIf="!cadastroEmpresa">
+                    <mat-slide-toggle formControlName="emitirNota">Emitir nota de débito</mat-slide-toggle>
+
+                    <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="end center" class="mt-1">
+                        <button mat-flat-button color="secondary" type="submit" (click)="onSalvar()"
+                            [id]="utility.getElementId(2, 'salvar-preco-servico')">Salvar e
+                            continuar</button>
+                    </div>
+                </section>
+            </section>
+        </ng-template>
+    </form>
+</section>

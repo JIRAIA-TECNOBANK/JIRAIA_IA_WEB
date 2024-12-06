@@ -1,0 +1,153 @@
+@import "$settings";
+@import "$tools";
+
+.bold {
+    @include fontMontserratBold;
+}
+
+.dropzone {
+    @include border-radius(0.25rem);
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    border: dashed 2px $primary;
+    position: relative;
+    margin: 0 auto;
+    margin-top: 20px;
+    padding: 12px 18px 12px 18px;
+    cursor: pointer;
+
+    .primeira-frase {
+        @include fontMontserratBold;
+        color: $gray-700;
+        font-size: 12px;
+        letter-spacing: 0.25px;
+    }
+
+    i {
+        color: $primary;
+    }
+
+    .segunda-frase {
+        @include fontMontserratBold;
+        color: $primary;
+        font-size: 12px;
+        letter-spacing: 0.25px;
+        text-decoration-line: underline;
+    }
+
+    &.disabled {
+        border-color: $gray-500;
+        background: $gray-200;
+        color: $gray-600;
+
+        i {
+            color: $gray-600;
+        }
+
+        p {
+            color: $gray-600;
+        }
+    }
+}
+
+.dropzone-hint {
+    @include fontMontserratRegular;
+    color: $gray-800;
+    font-size: 12px;
+    letter-spacing: 0.25px;
+    margin-top: 5px;
+}
+
+.files-list {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.files-list .mat-icon {
+    color: $primary;
+    margin-right: 0.3rem;
+}
+
+.single-file {
+    @include border-radius(0.25rem);
+    padding: 10px;
+    justify-content: space-between;
+    align-items: center;
+    border: solid 1px #cacccf;
+    margin-bottom: 1rem;
+}
+
+.file-name {
+    display: flex;
+    align-items: center;
+}
+
+.icon {
+    margin-right: 1rem;
+}
+
+.info {
+    width: 100%;
+}
+
+.name {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 350px;
+}
+
+.size {
+    @include border-radius(0.25rem);
+    font-size: 12px;
+    font-weight: 500;
+    color: #a4a4a4;
+    margin: 0;
+}
+
+.error {
+    @include fontMontserratBold;
+    font-size: 12px;
+}
+
+.file-actions {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.btn-tentar-novamente {
+    border: solid 2px #384047;
+    height: 32px;
+    line-height: 2;
+
+    i {
+        margin-right: 5px;
+    }
+}
+
+.file-delete {
+    @include border-radius(1rem);
+    background: $blue-600;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.file-delete i {
+    color: $white !important;
+    font-size: 8px;
+    display: inline-flex !important;
+    justify-content: center !important;
+    margin: 0 !important;
+    width: 20px;
+}

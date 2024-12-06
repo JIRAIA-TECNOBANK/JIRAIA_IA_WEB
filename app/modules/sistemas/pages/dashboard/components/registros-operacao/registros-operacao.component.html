@@ -1,0 +1,59 @@
+<div class="registros-operacoes h-100" fxLayout="column" fxLayoutAlign="space-between" *ngIf="!loading && registrosOperacoes.length > 0">
+    <p class="bold mt-0">
+        Registros por operação
+    </p>
+
+    <div fxLayout="column" fxLayoutAlign="space-between"
+        *ngFor="let operacaoRegistro of registrosOperacoes; let i = index">
+        <p class="bold title-chart mb-0">{{ retornarTipoOperacao(operacaoRegistro.tipoOperacao) }}</p>
+
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+            <div class="bg-chart" [fxFlex]="100">
+                <div class="operacao total" [ngClass]="{ 'd-none': operacaoRegistro.total === 0 }"
+                    [fxFlex]="calcularPorcentagemRegistros(operacaoRegistro.total)">
+                </div>
+            </div>
+            <span class="valor">{{ operacaoRegistro.total.toLocaleString() }}</span>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+            <div class="bg-chart mb-0" [fxFlex]="100">
+                <div class="operacao sucesso" [ngClass]="{ 'd-none': operacaoRegistro.totalSucesso === 0 }"
+                    [fxFlex]="calcularPorcentagemRegistros(operacaoRegistro.totalSucesso)"></div>
+            </div>
+            <span class="valor">{{ operacaoRegistro.totalSucesso.toLocaleString() }}</span>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+            <div class="bg-chart mb-0" [fxFlex]="100">
+                <div class="operacao inconsistencia"
+                    [ngClass]="{ 'd-none': operacaoRegistro.totalInconsistencia === 0 }"
+                    [fxFlex]="calcularPorcentagemRegistros(operacaoRegistro.totalInconsistencia)"></div>
+            </div>
+            <span class="valor">{{ operacaoRegistro.totalInconsistencia.toLocaleString() }}</span>
+        </div>
+    </div>
+
+    <div class="legenda align-self-end">
+        <div class="legenda-item ml-0">
+            <div class="legenda-cor total"></div>
+            <div class="legenda-nome">Total</div>
+        </div>
+
+        <div class="legenda-item">
+            <div class="legenda-cor sucesso"></div>
+            <div class="legenda-nome">Sucesso</div>
+        </div>
+
+        <div class="legenda-item">
+            <div class="legenda-cor inconsistencia"></div>
+            <div class="legenda-nome">Inconsistência</div>
+        </div>
+    </div>
+</div>
+
+<app-bloco-vazio *ngIf="!loading && registrosOperacoes.length === 0" [options]="blocoVazio"></app-bloco-vazio>
+
+<section class="w-100 h-100 d-flex align-items-center justify-content-center" *ngIf="loading">
+    <mat-spinner [diameter]="50"></mat-spinner>
+</section>

@@ -1,0 +1,38 @@
+<div class="px-2 pb-4">
+	<table mat-table [dataSource]="items$ | async" aria-describedby="Arquivo Compilado">
+		<ng-container matColumnDef="Nome">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Nome</th>
+			<td mat-cell *matCellDef="let element" [matTooltip]="element.nome" class="column-max-width">{{
+				element.nome }}</td>
+		</ng-container>
+
+		<ng-container matColumnDef="Status">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+			<td mat-cell *matCellDef="let element" class="column-max-width">{{
+				getStatusDescricao(element.status) }}</td>
+		</ng-container>
+
+		<ng-container matColumnDef="CriadoEm">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Criado Em</th>
+			<td mat-cell *matCellDef="let element" class="column-max-width">{{
+				element.dtHrCriado | date:"dd/MM/yyyy HH:mm" }}</td>
+		</ng-container>
+
+		<ng-container matColumnDef="ModificadoEm">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Modificado Em</th>
+			<td mat-cell *matCellDef="let element" class="column-max-width">{{
+				element.dtHrModificado | date:"dd/MM/yyyy HH:mm"}}</td>
+		</ng-container>
+
+		<ng-container matColumnDef="semRegistro">
+			<th class="text-center feedBack pt-1" mat-cell *matFooterCellDef colspan="11">
+				<img src="./../../../../../../../../../../assets/img/custom-icons/icon-vazio-artigos.svg"
+					alt="Não há registros." />
+				<p class="desk bold text-gray-700"> Não há registros. </p>
+			</th>
+		</ng-container>
+
+		<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+		<tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+	</table>
+</div>

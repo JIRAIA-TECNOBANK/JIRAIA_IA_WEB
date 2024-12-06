@@ -1,0 +1,116 @@
+<div class="px-2">
+
+  <mat-card class="mb-4 mat-elevation-z8">
+
+    <form [formGroup]="createImagemForm" (ngSubmit)="submit()" class="mt-2">
+      <div fxLayout="row">
+        <mat-form-field appearance="outline" fxFlex="10" >
+          <mat-label>Detran </mat-label>
+          <mat-select formControlName="detran" required [id]="getElementId(5, 'detran')" [disabled]="imagemId">
+            <mat-option [value]="editDetranID" *ngIf="isEditLoaded"> {{ editDetranUF[0] }}</mat-option>
+            <mat-option> Detran</mat-option>
+            <mat-option *ngFor="let detran of detrans" [value]="detran.id" [id]="getElementId(7, 'detran-option', detran.id)">
+              {{detran.uf}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="createImagemForm.controls['detran'].hasError('required')">Campo obrigatório</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="d-flex justify-content-between align-items-center mt-2">
+        <div class="fw-bold">Parâmetros de Imagem (TBK)</div>
+      </div>
+      <div fxLayout="row wrap" fxLayoutGap="10px grid" class="mt-2" fxLayoutAlign="start center">
+        <mat-form-field appearance="outline" fxFlex="15">
+          <mat-label>Tamanho por arquivo </mat-label>
+          <input matInput placeholder="00" formControlName="tamanhoPorArquivoTBK" required [id]="getElementId(0, 'tamanho-arquivo-tbk')" numbers-only />
+          <div matSuffix style="position: relative; bottom: 8px;">MB</div>
+          <mat-error *ngIf="createImagemForm.controls['tamanhoPorArquivoTBK'].hasError('required')">Campo obrigatório
+          </mat-error>
+          <mat-error *ngIf="createImagemForm.controls['tamanhoPorArquivoTBK'].hasError('max')"> O arquivo deve conter menos que 10MB </mat-error>
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="20">
+          <mat-label>Tipo do arquivo </mat-label>
+          <mat-select formControlName="tipoDoArquivoTBK" name="tipoArquivoTBK" [id]="getElementId(5, 'tipo-arquivo-tbk')" multiple>
+
+            <mat-option value="jpg">
+              JPG
+            </mat-option>
+            <mat-option value="pdf">
+              PDF
+            </mat-option>
+            <mat-option value="png">
+              PNG
+            </mat-option>
+            <mat-option value="jpeg">
+              JPEG
+            </mat-option>
+            <mat-option value="tiff">
+              TIFF
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="createImagemForm.controls['tipoDoArquivoTBK'].hasError('required')">Campo obrigatório</mat-error>
+        </mat-form-field>
+
+        <div fxFlex="20">
+          <mat-slide-toggle formControlName="envioDetran" [id]="getElementId(8, 'envio-detran')">Envio Detran</mat-slide-toggle>
+        </div>
+
+        <div fxFlex="20">
+          <mat-slide-toggle formControlName="converterExtensaoTBK" [id]="getElementId(8, 'converter-extensao-tbk')">Converter Extensão</mat-slide-toggle>
+        </div>
+
+        <div fxFlex="20">
+          <mat-slide-toggle formControlName="converterTamanhoTBK" [id]="getElementId(8, 'converter-tamanho-tbk')">Converter Tamanho</mat-slide-toggle>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center mt-2">
+        <div class="fw-bold">Parâmetros de Imagem (Detran)</div>
+      </div>
+
+      <div fxLayout="row wrap" fxLayoutGap="10px grid" class="mt-2" fxLayoutAlign="start center">
+        <mat-form-field appearance="outline" fxFlex="15">
+          <mat-label>Tamanho por arquivo </mat-label>
+          <input matInput placeholder="00" formControlName="tamanhoPorArquivoDetran" required [id]="getElementId(0, 'tamanho-arquivo-detran')" />
+          <div matSuffix style="position: relative; bottom: 8px;">MB</div>
+          <mat-error *ngIf="createImagemForm.controls['tamanhoPorArquivoDetran'].hasError('required')">Campo obrigatório
+          </mat-error>
+          <mat-error *ngIf="createImagemForm.controls['tamanhoPorArquivoDetran'].hasError('max')">O arquivo deve conter menos que 10MB</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="20">
+          <mat-label>Tipo do arquivo </mat-label>
+          <mat-select formControlName="tipoDoArquivoDetran" name="tipoArquivoDetran" required [id]="getElementId(5, 'tipo-arquivo-detran')" multiple>
+
+            <mat-option value="jpg">
+              JPG
+            </mat-option>
+            <mat-option value="pdf">
+              PDF
+            </mat-option>
+            <mat-option value="png">
+              PNG
+            </mat-option>
+            <mat-option value="jpeg">
+              JPEG
+            </mat-option>
+            <mat-option value="tiff">
+              TIFF
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="createImagemForm.controls['tipoDoArquivoDetran'].hasError('required')">Campo obrigatório</mat-error>
+        </mat-form-field>
+      </div>
+
+
+      <div class="d-flex justify-content-end">
+        <button mat-flat-button color="primary" type="submit" [disabled]="!createImagemForm.valid" [id]="getElementId(2, 'confirmar')">
+          Confirmar
+        </button>
+      </div>
+    </form>
+  </mat-card>
+
+</div>

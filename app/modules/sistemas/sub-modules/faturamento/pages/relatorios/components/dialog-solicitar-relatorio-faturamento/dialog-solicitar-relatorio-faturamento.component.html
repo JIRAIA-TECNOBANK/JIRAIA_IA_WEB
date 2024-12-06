@@ -1,0 +1,90 @@
+<p class="bold desk mt-0">Solicitar relatório</p>
+
+<form [formGroup]="formulario" fxLayout="column" fxLayoutGap="10px" fxLayoutAlign="space-between" class="w-100">
+    <mat-form-field appearance="outline" fxFlex="100" [id]="utility.getElementId(5, 'modelo')">
+        <mat-label>Modelo de relatório </mat-label>
+        <mat-select formControlName="modelo" required>
+            <mat-option *ngFor="let modelo of modelosRelatorios" [value]="modelo.value"> {{ modelo.descricao }}
+            </mat-option>
+        </mat-select>
+        <mat-hint>Obrigatório</mat-hint>
+        <mat-error *ngIf="formulario.controls['modelo'].hasError('required')">Obrigatório
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" fxFlex="100">
+        <mat-label>Selecione a empresa </mat-label>
+        <input type="text" matInput [id]="utility.getElementId(5, 'empresa')" name="empresaNome"
+            formControlName="empresaNome" placeholder="Digite a empresa" (blur)="selecionaEmpresaId()"
+            (input)="carregarEmpresas($event.target.value)" [matAutocomplete]="empresasselect">
+        <mat-autocomplete #empresasselect="matAutocomplete">
+            <mat-option *ngFor="let empresa of empresasFiltradas" [value]="empresa.nomeFantasia + ' - ' + empresa.cnpj"
+                class="usuario-email" [matTooltip]="empresa.nomeFantasia + ' - ' + empresa.cnpj">{{
+                empresa.nomeFantasia }} - {{ empresa.cnpj }}
+            </mat-option>
+        </mat-autocomplete>
+        <mat-hint *ngIf="verificarCampoObrigatorio('empresaId')">Obrigatório</mat-hint>
+        <mat-error *ngIf="formulario.controls['empresaId'].hasError('required')">Campo obrigatório
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" fxFlex="100" [id]="utility.getElementId(5, 'formato')">
+        <mat-label>Formato </mat-label>
+        <mat-select formControlName="formato" required>
+            <mat-option *ngFor="let formato of formatos" [value]="formato.value"> {{ formato.descricao }}
+            </mat-option>
+        </mat-select>
+        <mat-hint *ngIf="verificarCampoObrigatorio('formato')">Obrigatório</mat-hint>
+        <mat-error *ngIf="formulario.controls['formato'].hasError('required')">Obrigatório
+        </mat-error>
+    </mat-form-field>
+
+    <div fxFlexLayout="row" fxLayoutGap="10px" fxLayoutAlign="space-between" *ngIf="habilitaDataCompetencia()">
+        <mat-form-field appearance="outline" class="fix-prefix" fxFlex="100">
+            <mat-label>Mês/ano competência</mat-label>
+            <input matInput [matDatepicker]="dp" formControlName="dataCompetencia"
+                [id]="utility.getElementId(0, 'mes-ano-competencia')" [max]="date.value" required>
+            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+            <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
+                (monthSelected)="chosenMonthHandler($event, dp)">
+            </mat-datepicker>
+            <mat-hint *ngIf="verificarCampoObrigatorio('dataCompetencia')">Obrigatório</mat-hint>
+        </mat-form-field>
+    </div>
+
+    <div fxFlexLayout="row" fxLayoutGap="10px" fxLayoutAlign="space-between">
+        <mat-form-field appearance="outline" fxFlex="100">
+            <mat-label>UF </mat-label>
+            <mat-select formControlName="uf" required [id]="utility.getElementId(5, 'uf')">
+                <mat-option value="todas" *ngIf="formulario.get('modelo').value == 1
+                || formulario.get('modelo').value == 2">Todas</mat-option>
+                <mat-option *ngFor="let detran of detrans" [value]="detran.ufDetran"> {{ detran.ufDetran }}
+                </mat-option>
+            </mat-select>
+            <mat-hint *ngIf="verificarCampoObrigatorio('uf')">Obrigatório</mat-hint>
+            <mat-error *ngIf="formulario.controls['uf'].hasError('required')">Obrigatório
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="100">
+            <mat-label>Extensão </mat-label>
+            <mat-select formControlName="extensao" required [id]="utility.getElementId(5, 'extensao')">
+                <mat-option *ngFor="let extensao of extensoes" [value]="extensao.value"> {{ extensao.descricao }}
+                </mat-option>
+            </mat-select>
+            <mat-hint *ngIf="verificarCampoObrigatorio('extensao')">Obrigatório</mat-hint>
+            <mat-error *ngIf="formulario.controls['extensao'].hasError('required')">Obrigatório
+            </mat-error>
+        </mat-form-field>
+    </div>
+
+    <mat-dialog-actions class="d-flex justify-content-end">
+        <button mat-stroked-button class="btn-outline-primary" color="primary" type="button" [mat-dialog-close]="null"
+            [id]="utility.getElementId(2, 'solicitar-relatorio-cancelar')">Fechar</button>
+
+        <button mat-flat-button color="primary" type="button" [mat-dialog-close]="retornarRequest()"
+            [disabled]="!formulario.valid" [id]="utility.getElementId(2, 'solicitar-relatorio-confirmar')">
+            Solicitar
+        </button>
+    </mat-dialog-actions>
+</form>

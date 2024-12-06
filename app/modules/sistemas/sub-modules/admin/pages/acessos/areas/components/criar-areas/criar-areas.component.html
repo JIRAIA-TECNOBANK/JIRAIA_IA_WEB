@@ -1,0 +1,40 @@
+<mat-card class="mat-elevation-z8 card__form">
+    <h3 class="card__title">Dados da área</h3>
+    <form [formGroup]="formularioCriarArea" (submit)="submitForm()">
+        <div fxLayout="row" fxLayoutGap="10px">
+            <div fxFlex="50">
+                <mat-form-field appearance="outline" fxFlex="auto">
+                    <mat-label>Nome da área</mat-label>
+                    <input matInput placeholder="Nome da área" formControlName="nomeArea" (keyup)="exibeErroNome = false" required />
+                    <mat-error class="text-danger bold"
+                        *ngIf="formularioCriarArea.get('nomeArea').hasError('required')">Campo obrigatório</mat-error>
+                    <mat-error class="text-danger bold"
+                        *ngIf="formularioCriarArea.get('nomeArea').hasError('minlength')">Digite ao menos {{
+                        formularioCriarArea.get('nomeArea').errors.minlength.requiredLength }} caracteres</mat-error>
+                    <mat-hint class="text-danger bold" *ngIf="exibeErroNome">Este nome já pertence a uma área, tente
+                        novamente.</mat-hint>
+                </mat-form-field>
+            </div>
+            <div fxFlex="50">
+                <mat-form-field appearance="outline" fxFlex="auto">
+                    <mat-label>E-mail da área</mat-label>
+                    <input matInput placeholder="E-mail da área" formControlName="emailArea" (keyup)="exibeErroEmail = false" />
+                    <mat-error class="text-danger bold"
+                        *ngIf="formularioCriarArea.get('emailArea').hasError('required')">Campo obrigatório</mat-error>
+                    <mat-error class="text-danger bold"
+                        *ngIf="formularioCriarArea.get('emailArea').hasError('pattern')"> E-mail inválido </mat-error>
+                    <mat-hint class="text-danger bold" *ngIf="exibeErroEmail">Este e-mail já pertence a uma área, tente
+                        novamente.</mat-hint>
+                    <mat-error class="bold"
+                        *ngIf="!formularioCriarArea.get('emailArea').hasError('pattern') && formularioCriarArea.get('emailArea').hasError('emailTBKInvalid')">
+                        Apenas e-mails do domínio @tecnobank.com.br podem ser adicionados </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <mat-slide-toggle formControlName="ativo">Ativo?</mat-slide-toggle>
+        <button mat-flat-button color="primary" class="card__button" type="submit"
+            [disabled]="!formularioCriarArea.valid">
+            Confirmar
+        </button>
+    </form>
+</mat-card>

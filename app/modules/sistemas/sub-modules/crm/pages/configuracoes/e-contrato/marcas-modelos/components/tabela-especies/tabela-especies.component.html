@@ -1,0 +1,105 @@
+<mat-card class="mat-elevation-z8 mt-2 p-0">
+  <section class="text-paginator">
+    <div class="row d-flex">
+      <section class="default-text" *ngIf="paginator">
+        Mostrando
+        {{
+          paginator?.pageSize > totalItems ? totalItems : paginator?.pageSize
+        }}
+        de {{ totalItems }} resultados
+      </section>
+    </div>
+  </section>
+  <mat-paginator
+    [pageSizeOptions]="[25, 50, 75, 100]"
+    [length]="totalItems"
+    aria-label="Itens por página"
+    #paginator
+  >
+  </mat-paginator>
+  <div>
+    <table
+      mat-table
+      aria-describedby="especie_table_desc"
+      [dataSource]="items$ | async"
+      #tableMarcas="matSort"
+      matSort
+    >
+      <ng-container matColumnDef="nome">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Nome</th>
+        <td mat-cell *matCellDef="let element">{{ element.nome }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="ativo">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+        <td mat-cell *matCellDef="let element">
+          <div
+            class="status-pill"
+            [ngClass]="
+            element.status == 1 ? 'status-pill__active' : 'status-pill__inactive'
+            "
+          >
+            {{ element.status == 1 ? "Ativo" : "Inativo" }}
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="opcoes">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+          <div>
+            <button
+              mat-button
+              [matMenuTriggerFor]="menu"
+              [id]="utility.getElementId(2, 'especie-acoes', element.id)"
+            >
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button
+                mat-menu-item
+                [id]="utility.getElementId(2, 'especie-editar')"
+                (click)="openDialogEditarEspecie(element)"
+              >
+                Editar
+              </button>
+              <button
+                mat-menu-item
+                [id]="utility.getElementId(2, 'especie-ativar-inativar')"
+                (click)="alterarStatus(element)"
+              >
+              {{ element.status == 1 ? "Inativar" : "Ativar" }}
+              </button>
+            </mat-menu>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+    <div class="no-items" *ngIf="totalItems === 0">
+      <mat-icon>report</mat-icon>
+      <p>Não há espécie!</p>
+    </div>
+    <section class="text-paginator">
+      <div class="row d-flex">
+        <section class="default-text">
+          Mostrando
+          {{
+            paginator?.pageSize > totalItems ? totalItems : paginator?.pageSize
+          }}
+          de {{ totalItems }} resultados
+        </section>
+      </div>
+    </section>
+    <mat-paginator
+      (page)="syncPrimaryPaginator($event)"
+      [pageSize]="paginator.pageSize"
+      [pageIndex]="paginator.pageIndex"
+      [length]="paginator.length"
+      [pageSizeOptions]="paginator?.pageSizeOptions"
+    >
+    </mat-paginator>
+  </div>
+</mat-card>

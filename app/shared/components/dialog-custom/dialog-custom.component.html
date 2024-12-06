@@ -1,0 +1,14 @@
+<div class="dialog">
+    <h2 mat-dialog-title class="mb-0" [ngClass]="titleClass">{{ data.title }}&nbsp;</h2>
+    <mat-dialog-content class="px-0">
+        <ng-template #target></ng-template>
+    </mat-dialog-content>
+    <mat-dialog-actions [align]="buttonsAlign" *ngIf="showActionButtons">
+        <button mat-stroked-button class="btn-outline-primary" color="primary" *ngIf="data.buttonCancel"
+            [ngClass]="{ 'd-none': disableCancelBtn }" [mat-dialog-close]="data.buttonCancel?.value"
+            [id]="utility.getElementId(2, 'cancelar')">{{ data.buttonCancel?.text }}</button>
+        <button *ngIf="!disableSave" mat-flat-button color="primary" [mat-dialog-close]="data.buttonConfirm.value"
+            cdkFocusInitial [id]="utility.getElementId(2, 'confirmar')" [ngClass]="{ 'w-100': disableCancelBtn }">{{
+            data.buttonConfirm.text }}</button>
+    </mat-dialog-actions>
+</div>

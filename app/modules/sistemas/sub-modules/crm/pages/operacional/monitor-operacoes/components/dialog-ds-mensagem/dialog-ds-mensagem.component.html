@@ -1,0 +1,26 @@
+<p class="bold d-flex justify-content-between mb-0">Mensagem DS <span class="copiado"
+    [ngClass]="{ 'd-none': !copiado }">Copiado!</span></p>
+
+<mat-dialog-content>
+  <section class="bloco-ds pb-0">
+    <p class="bold mb-0">DS envio</p>
+    <section *ngFor="let transacao of transacaoProtocoloDsMensagem">
+      <p class="d-flex mb-0">{{ transacao.evento }} &nbsp;<i class="fa-solid fa-copy"
+          (click)="copiarDsMensagem(transacao.dsEnvio)" matTooltip="Copiar"></i></p>
+      <p class="mensagem">{{ transacao.dsEnvio }}</p>
+    </section>
+  </section>
+
+  <section class="bloco-ds">
+    <p class="bold my-0">DS retorno</p>
+    <section *ngFor="let transacao of transacaoProtocoloDsMensagem">
+      <p class="d-flex mb-0">{{ transacao.evento }} &nbsp;<i class="fa-solid fa-copy"
+          (click)="copiarDsMensagem(transacao.dsRetorno)"></i></p>
+      <p class="mensagem">{{ transacao.dsRetorno }}</p>
+    </section>
+  </section>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button class="btn-outline-primary" color="primary" [mat-dialog-close]="true">Fechar</button>
+</mat-dialog-actions>

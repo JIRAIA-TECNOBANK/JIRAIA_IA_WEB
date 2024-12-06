@@ -1,0 +1,252 @@
+<div>
+  <section class="text-paginator">
+    <div class="row d-flex">
+      <section class="select-options mr-4 d-flex" *ngIf="selection.selected.length > 0">
+        {{ selection.selected.length }} operaç{{
+        selection.selected.length > 1 ? "ões" : "ão"
+        }}
+        selecionada{{ selection.selected.length > 1 ? "s" : "" }}
+
+        <div class="btn-wrapper" (click)="exportarTodos(selection.selected)" matTooltip="Exportar"
+          [id]="utility.getElementId(2, 'exportar-arquivos-faturado')">
+          <i class="fa-regular fa-file-export"></i>
+        </div>
+
+        <div class="btn-wrapper" matTooltip="Exportar relatório de fechamento"
+          (click)="onExportarRelatorioFechamento(selection.selected)"
+          [id]="utility.getElementId(2, 'exportar-relatorio-fechamento')">
+          <i class="fa-regular fa-file-invoice-dollar"></i>
+        </div>
+      </section>
+
+      <section class="default-text" *ngIf="paginator">
+        Mostrando
+        {{
+        paginator?.pageSize > totalItens ? totalItens : paginator?.pageSize
+        }}
+        de {{ totalItens }} resultados
+      </section>
+    </div>
+  </section>
+  <mat-paginator [pageSizeOptions]="[25, 50, 75, 100, 1000]" [length]="totalItens" #paginator></mat-paginator>
+
+  <div>
+    <table mat-table [dataSource]="items$ | async" (matSortChange)="sortData($event)" #table="matSort"
+      aria-describedby="A faturar" matSort>
+      <ng-container matColumnDef="selecionar">
+        <th mat-header-cell *matHeaderCellDef class="pr-1">
+          <mat-checkbox [id]="utility.getElementId(4, 'select-all-op-faturado')"
+            (change)="$event ? utility.toggleAllRows(selection, dataSource, 'id') : null"
+            [checked]="utility.verifyPageSelection(selection, dataSource, 'id') == 1"
+            [indeterminate]="utility.verifyPageSelection(selection, dataSource, 'id') == 2">
+          </mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <mat-checkbox [id]="utility.getElementId(4, element.id)" (click)="$event.stopPropagation()"
+            (change)="$event ? utility.check(selection, element, 'id') : null"
+            [checked]="utility.isSelected(selection, element, 'id')">
+          </mat-checkbox>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="empresa">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Empresa</th>
+        <td mat-cell *matCellDef="let element" [matTooltip]="element.empresa" class="column-max-width">
+          {{ element.empresa }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="clienteId">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Código do cliente
+        </th>
+        <td mat-cell *matCellDef="let element" class="column-max-width">
+          {{ element.clienteId }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="uf">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>UF</th>
+        <td mat-cell *matCellDef="let element" class="column-max-width">
+          {{ element.uf }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="mesCompetencia">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Mês de competência
+        </th>
+        <td mat-cell *matCellDef="let element" class="column-max-width">
+          {{ element.mesCompetencia | date : "MM/yyyy" }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="valorNotaFiscal">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Valor da Nota Fiscal
+        </th>
+        <td mat-cell *matCellDef="let element" class="column-max-width">
+          {{ element.valorNotaFiscal || 0 | currency : "BRL" }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="valorNotaDebito">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Valor da Nota de Débito
+        </th>
+        <td mat-cell *matCellDef="let element" class="column-max-width">
+          {{ element.valorNotaDebito || 0 | currency : "BRL" }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>
+          Status
+          <i id="icon-tooltip-status" class="fa-regular fa-circle-info text-primary info"
+            matTooltipClass="tooltip-grid-header" #tooltip="matTooltip"
+            [id]="utility.getElementId(14, 'status', 'faturado')"
+            matTooltip="Conciliado: Os contratos registrados e elegíveis para faturamento foram validados com sucesso através da conciliação entre DETRAN e Tecnobank.
+
+												Não conciliado: Até o momento o DETRAN não disponibilizou seu relatório de fechamento para validação, portanto para cobrança consideramos as operações apuradas internamente pela Tecnobank e que são elegíveis para faturamento."></i>
+        </th>
+        <td mat-cell *matCellDef="let element" class="column-max-width">
+          <span *ngIf="element.isConciliadoForaPrazo" class="icone-informacao-grid"
+            matTooltipClass="tooltip-grid-header"
+            matTooltip="Arquivo conciliado fora do prazo esperado, posterior ao 3º dia do mês.">i</span>
+          {{ element.statusFaturamentoConciliado?.descricao }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="notaFiscal">
+        <th mat-header-cell *matHeaderCellDef>
+          Nota fiscal
+          <i class="fa-regular fa-circle-info text-primary info" [id]="utility.getElementId(14, 'nota-fiscal')"
+            matTooltipClass="tooltip-grid-header" #tooltip="matTooltip" matTooltip="Aguardando emissão: Protheus irá emitir as notas de cobrança.
+						
+																		Erro na emissão: As notas de cobrança não foram emitidas e estão pendentes no Protheus.
+						
+																		Aguardando pagamento: Aguardando o cliente efetuar o pagamento das notas de cobrança.
+						
+																		Paga: As notas de cobrança foram pagas pelo cliente.
+                                    
+                                    Cancelada: Nota Fiscal cancelada."></i>
+        </th>
+        <td mat-cell *matCellDef="let element" class="column-max-width"
+          [matTooltip]="element.notaFiscal">
+          {{ element.notaFiscal }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="notaDebito">
+        <th mat-header-cell *matHeaderCellDef>
+          Nota de débito
+          <i class="fa-regular fa-circle-info text-primary info" [id]="utility.getElementId(14, 'nota-debito')"
+            matTooltipClass="tooltip-grid-header" #tooltip="matTooltip" matTooltip="
+                        Não se aplica: Para essa cobrança não há Nota de Débito.
+            
+                        Aguardando emissão: Protheus irá emitir as notas de cobrança.
+
+												Erro na emissão: As notas de cobrança não foram emitidas e estão pendentes no Protheus.
+
+												Aguardando pagamento: Aguardando o cliente efetuar o pagamento das notas de cobrança.
+
+												Paga: As notas de cobrança foram pagas pelo cliente.
+                        
+                        Cancelada: Nota de Débito cancelada."></i>
+        </th>
+        <td mat-cell *matCellDef="let element" class="column-max-width"
+          [matTooltip]="element.notaDebito">
+          {{ element.notaDebito }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="acoes">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element" class="min-width">
+          <div>
+            <button mat-button [matMenuTriggerFor]="menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item [id]="utility.getElementId(2, 'faturado-baixar-nota-fiscal', element.id)"
+                (click)="baixarNotaFiscal(element.id, element.mesCompetencia, element.cnpj, element.uf)"
+                [disabled]="element.notaFiscal == 0 || element.notaFiscal == 1">
+                Baixar nota fiscal
+              </button>
+              <button mat-menu-item [id]="utility.getElementId(2, 'faturado-baixar-nota-debito', element.id)"
+                (click)="baixarNotaDebito(element.id, element.mesCompetencia, element.cnpj, element.uf)"
+                [disabled]="element.notaDebito == 0 || element.notaDebito == 1 || element.notaDebito == null">
+                Baixar nota de débito
+              </button>
+              <button mat-menu-item [id]="utility.getElementId(2, 'faturado-baixar-relatorio', element.id)"
+                (click)="onBaixarRelatorioFechamento(element.id)">
+                Baixar relatório
+              </button>
+              <button mat-menu-item [id]="utility.getElementId(2, 'faturado-baixar-todos', element.id)"
+                (click)="baixarKitCliente(element)">
+                Baixar todos
+              </button>
+              <button mat-menu-item [disabled]="element.descontoNf === 0 && element.descontoNd === 0"
+                (click)="consultarDesconto(element)"
+                [id]="utility.getElementId(2, 'faturado-consultar-desconto', element.id)">
+                Consultar desconto
+              </button>
+              <button mat-menu-item [id]="utility.getElementId(2, 'faturado-consultar-obs-nf-nd', element.id)"
+                (click)="observacaoNFND(element)">
+                Consultar OBS NF/ND
+              </button>
+              <button mat-menu-item (click)="consultarStatus(element)"
+                [id]="utility.getElementId(2, 'consultar-desconto', element.id)"
+                [disabled]="checkNaoTemStatus(element.statusProtheus)">
+                Consultar status do pedido
+              </button>
+              <button mat-menu-item (click)="cancelarNF(element.id)"
+                [id]="utility.getElementId(2, 'cancelar-nf', element.id)">
+                Cancelar NF
+              </button>
+              <button mat-menu-item (click)="cancelarND(element.id)"
+                [id]="utility.getElementId(2, 'cancelar-nd', element.id)">
+                Cancelar ND
+              </button>
+              <button mat-menu-item (click)="reenviarNF(element.id)"
+                [id]="utility.getElementId(2, 'reenviar-nf', element.id)">
+                Reenviar pedido NF
+              </button>
+              <button mat-menu-item (click)="reenviarND(element.id)"
+                [id]="utility.getElementId(2, 'reenviar-nd', element.id)">
+                Reenviar pedido ND
+              </button>
+            </mat-menu>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="semRegistro">
+        <th class="text-center feedBack pt-1" mat-cell *matFooterCellDef colspan="11">
+          <img src="./../../../../../../../../../../assets/img/custom-icons/icon-vazio-artigos.svg"
+            alt="Não há registros." />
+          <p class="desk bold text-gray-700">Não há registros.</p>
+        </th>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      <tr mat-row *matFooterRowDef="['semRegistro']" [ngClass]="{ 'd-none': totalItens > 0 }"></tr>
+    </table>
+
+    <section class="text-paginator">
+      <div class="row d-flex">
+        <section class="default-text">
+          Mostrando
+          {{
+          paginator?.pageSize > totalItens ? totalItens : paginator?.pageSize
+          }}
+          de {{ totalItens }} resultados
+        </section>
+      </div>
+    </section>
+    <mat-paginator (page)="syncPrimaryPaginator($event)" [pageSize]="paginator.pageSize"
+      [pageIndex]="paginator.pageIndex" [length]="paginator.length" [pageSizeOptions]="paginator?.pageSizeOptions">
+    </mat-paginator>
+  </div>
+</div>

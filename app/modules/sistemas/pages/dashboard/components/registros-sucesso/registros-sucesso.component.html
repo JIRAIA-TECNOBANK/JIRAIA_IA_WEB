@@ -1,0 +1,44 @@
+<div class="registros-sucesso" fxLayout="column" fxLayoutAlign="space-between" *ngIf="!loading && total > 0">
+    <p class="bold mt-0">Registros com sucesso</p>
+
+    <div fxLayout="row" fxLayoutAlign="space-between">
+        <section class="total" fxLayout="row" fxLayoutGap="24px" fxLayoutAlign="space-between center">
+            <p class="bold">Total</p>
+            <span class="bold">{{ totalFormatado }}</span>
+        </section>
+
+        <div fxLayout="column" fxLayoutAlign="center center" fxFlex="10">
+            <div class="expandir-registros" [id]="utility.getElementId(2, 'expandir-registros-sucesso')"
+                (click)="expandirDetalhes()">
+                <i class="fa-solid" [ngClass]="mostrarDetalhes ? 'fa-angle-up' : 'fa-angle-down'"></i>
+            </div>
+        </div>
+    </div>
+
+    <section class="detalhes mt-1 px-1" *ngIf="mostrarDetalhes" fxLayout="column">
+        <div fxLayout="row" fxLayoutAlign="space-between" class="titulo">
+            <span fxFlex="16">UF</span>
+            <span fxFlex="16">PORTAL</span>
+            <span fxFlex="16">LOTE</span>
+            <span fxFlex="16">SIS</span>
+            <span fxFlex="16">SRD</span>
+            <span fxFlex="16" class="total-col">TOTAL</span>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="space-between" class="valores"
+            *ngFor="let registrosUF of registrosComSucesso">
+            <span fxFlex="16">{{ registrosUF.uf?.toLocaleString() }}</span>
+            <span fxFlex="16">{{ registrosUF.totalPortal?.toLocaleString() }}</span>
+            <span fxFlex="16">{{ registrosUF.totalLote?.toLocaleString() }}</span>
+            <span fxFlex="16">{{ registrosUF.totalSis?.toLocaleString() }}</span>
+            <span fxFlex="16">{{ registrosUF.totalSrd?.toLocaleString() }}</span>
+            <span fxFlex="16" class="total-uf">{{ registrosUF.total?.toLocaleString() }}</span>
+        </div>
+    </section>
+</div>
+
+<app-bloco-vazio [options]="blocoVazio" *ngIf="!loading && total === 0"></app-bloco-vazio>
+
+<section class="w-100 h-100 d-flex align-items-center justify-content-center" *ngIf="loading">
+    <mat-spinner [diameter]="50"></mat-spinner>
+</section>

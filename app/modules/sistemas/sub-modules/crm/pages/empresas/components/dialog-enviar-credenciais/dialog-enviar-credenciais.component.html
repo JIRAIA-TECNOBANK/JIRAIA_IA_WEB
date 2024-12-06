@@ -1,0 +1,29 @@
+<div class="content">
+  <p class="text-center">Adicione ao menos um e-mail para receber as credenciais:</p>
+
+  <form [formGroup]="formulario">
+    <div class="row mt-2">
+      <mat-chip-list #chipList aria-label="Seleção de e-mails" fxFlex="100">
+        <mat-chip *ngFor="let email of emails" [selectable]="selectable" [removable]="removable"
+          (removed)="remove(email)">
+          {{email}}
+          <button matChipRemove *ngIf="removable">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip>
+      </mat-chip-list>
+    </div>
+
+    <div class="row mt-2">
+      <mat-form-field class="emails-chip-list" appearance="outline" fxFlex="100">
+        <mat-label>E-mails que receberão as credenciais</mat-label>
+        <input matInput placeholder="Digite os e-mails" formControlName="emails" class="email-input" required
+          type="email" name="email" [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="add($event)" />
+        <mat-error *ngIf="formulario.controls['emails'].hasError('required')">Este campo é obrigatório</mat-error>
+        <mat-error *ngIf="formulario.controls['emails'].hasError('email')">E-mail inválido</mat-error>
+        <mat-hint>Digite um e-mail válido e pressione Enter</mat-hint>
+      </mat-form-field>
+    </div>
+  </form>
+</div>

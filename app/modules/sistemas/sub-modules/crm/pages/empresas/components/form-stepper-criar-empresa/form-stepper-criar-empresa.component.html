@@ -1,0 +1,206 @@
+<mat-stepper orientation="horizontal" [linear]="true" #stepper (selectionChange)="onStepChange($event)"
+  class="form-stepper-{{ etapaAtual }} form-stepper__plus-etapaAtual">
+  <!-- Step 1 - Criar empresa -->
+  <mat-step state="dadosEmpresa">
+    <ng-template matStepLabel>Dados da empresa</ng-template>
+    <ng-template matStepContent class="mt-2">
+      <div fxLayout="row" fxLayoutGap="15px" class="mt-2" fxLayoutAlign="space-between">
+        <mat-card fxFlex="75">
+          <div>
+            <ng-container *ngIf="
+                menuButton.id === FormsCreateCompany.DadosDeEmpresa;
+                then dadosEmpresaTemplate
+              "></ng-container>
+            <ng-container *ngIf="
+                menuButton.id === FormsCreateCompany.Contatos;
+                then adicionarContatosTemplate
+              "></ng-container>
+            <ng-container *ngIf="
+                menuButton.id === FormsCreateCompany.Enderecos;
+                then adicionarEnderecosTemplate
+              "></ng-container>
+            <ng-container *ngIf="
+                menuButton.id === FormsCreateCompany.Documentos;
+                then adicionarDocumentosTemplate
+              "></ng-container>
+
+            <ng-template #dadosEmpresaTemplate>
+              <app-dados-empresa [companyId]="getCompanyId()" (empresaId)="getEmpresaId($event)"
+                (nextStep)="goToNextStep($event)"></app-dados-empresa>
+            </ng-template>
+
+            <ng-template #adicionarContatosTemplate>
+              <app-contatos-adicionais [companyId]="getCompanyId()"
+                (nextStep)="goToNextStep($event)"></app-contatos-adicionais>
+            </ng-template>
+
+            <ng-template #adicionarEnderecosTemplate>
+              <app-enderecos-adicionais [companyId]="getCompanyId()"
+                (nextStep)="goToNextStep($event)"></app-enderecos-adicionais>
+            </ng-template>
+
+            <ng-template #adicionarDocumentosTemplate>
+              <app-documentos [companyId]="getCompanyId()" (nextTab)="stepper.next()"
+                (nextStep)="goToNextStep($event)"></app-documentos>
+            </ng-template>
+          </div>
+        </mat-card>
+        <div fxLayout="column" fxFlex="25">
+          <app-stepper-buttons class="mb-2" [buttons]="buttonsListCompany" [emmiter]="testeEmitter"
+            (stepAction)="changeForm($event)"></app-stepper-buttons>
+          <app-bloco-informacoes [options]="boxInfo.dadosEmpresa"></app-bloco-informacoes>
+        </div>
+      </div>
+    </ng-template>
+  </mat-step>
+
+  <!-- Step 2 - Selecionar produto -->
+  <mat-step state="selecionarProduto">
+    <ng-template matStepLabel>Selecione o produto</ng-template>
+    <ng-template matStepContent class="mt-2">
+      <div fxLayout="row" fxLayoutGap="15px" class="mt-2">
+        <mat-card fxFlex="75">
+          <div class="loading" *ngIf="submitLoading">
+            <mat-spinner></mat-spinner>
+          </div>
+          <div>
+            <app-selecionar-produto [companyId]="getCompanyId()" (nextTab)="stepper.next()"></app-selecionar-produto>
+          </div>
+        </mat-card>
+        <div fxFlex="25">
+          <app-bloco-informacoes [options]="boxInfo.selecionarProduto"></app-bloco-informacoes>
+        </div>
+      </div>
+    </ng-template>
+  </mat-step>
+
+  <!-- Step 3 - Configurar produto -->
+  <mat-step state="configurarProduto">
+    <ng-template matStepLabel>Configuração dos produtos</ng-template>
+    <ng-template matStepContent class="mt-2">
+      <div fxLayout="row" fxLayoutGap="15px" class="mt-2">
+        <mat-card fxFlex="75">
+          <div class="loading" *ngIf="submitLoading">
+            <mat-spinner></mat-spinner>
+          </div>
+          <div>
+            <app-configurar-produto [companyId]="getCompanyId()"
+              (isEditionBlock)="viewComplementaryInfo($event)"></app-configurar-produto>
+          </div>
+        </mat-card>
+
+        <div fxLayout="column" fxFlex="25">
+          <app-stepper-buttons class="mb-2" [buttons]="buttonsListProduct"></app-stepper-buttons>
+        </div>
+      </div>
+
+      <div *ngIf="!productBlockEdition" fxLayout="row" fxLayoutGap="15px" class="mt-2">
+        <mat-card fxFlex="75">
+          <div class="loading" *ngIf="submitLoading">
+            <mat-spinner></mat-spinner>
+          </div>
+          <div>
+            <app-gerar-info-contabeis [empresaId]="getCompanyId()"></app-gerar-info-contabeis>
+          </div>
+        </mat-card>
+        <div fxFlex="25"></div>
+      </div>
+
+      <div *ngIf="!productBlockEdition" fxLayout="row" fxLayoutGap="15px" class="mt-2">
+        <mat-card fxFlex="75">
+          <div class="loading" *ngIf="submitLoading">
+            <mat-spinner></mat-spinner>
+          </div>
+          <div>
+            <app-dados-cobranca [empresaId]="getCompanyId()"></app-dados-cobranca>
+          </div>
+        </mat-card>
+        <div fxFlex="25"></div>
+      </div>
+
+      <div *ngIf="!productBlockEdition" fxLayout="row" fxLayoutGap="15px" class="mt-2">
+        <mat-card fxFlex="75">
+          <div class="loading" *ngIf="submitLoading">
+            <mat-spinner></mat-spinner>
+          </div>
+          <div>
+            <app-dados-pagador-cobranca [empresaId]="getCompanyId()"></app-dados-pagador-cobranca>
+          </div>
+        </mat-card>
+        <div fxFlex="25"></div>
+      </div>
+
+      <div *ngIf="!productBlockEdition" fxLayout="row" fxLayoutGap="15px" class="mt-2">
+        <mat-card fxFlex="75">
+          <div class="loading" *ngIf="submitLoading">
+            <mat-spinner></mat-spinner>
+          </div>
+          <div>
+            <app-consolidacao-notas [empresaId]="getCompanyId()"></app-consolidacao-notas>
+          </div>
+        </mat-card>
+        <div fxFlex="25"></div>
+      </div>
+
+      <div *ngIf="!productBlockEdition" fxLayout="row" fxLayoutGap="15px" class="mt-2">
+        <mat-card fxFlex="75">
+          <div class="loading" *ngIf="submitLoading">
+            <mat-spinner></mat-spinner>
+          </div>
+          <div>
+            <app-gerenciar-notificacoes [empresaId]="getCompanyId()"></app-gerenciar-notificacoes>
+          </div>
+        </mat-card>
+        <div fxFlex="25"></div>
+      </div>
+
+      <div *ngIf="!productBlockEdition" fxLayout="row" fxLayoutGap="15px" class="mt-2">
+        <mat-card fxFlex="75">
+          <div class="loading" *ngIf="submitLoading">
+            <mat-spinner></mat-spinner>
+          </div>
+          <div>
+            <app-informacoes-complementares [companyId]="getCompanyId()"
+              (nextTab)="stepper.next()"></app-informacoes-complementares>
+          </div>
+        </mat-card>
+        <div fxFlex="25"></div>
+      </div>
+    </ng-template>
+  </mat-step>
+
+  <!-- Step 4 - Usuario master -->
+  <mat-step *ngIf="companyIdByRouter" state="usuarioMaster">
+    <ng-template matStepLabel>Usuário Master</ng-template>
+    <ng-template matStepContent class="mt-2">
+      <div fxLayout="row" fxLayoutGap="15px" class="mt-2">
+        <mat-card fxFlex="75">
+          <div class="loading" *ngIf="submitLoading">
+            <mat-spinner></mat-spinner>
+          </div>
+          <div>
+            <app-usuario-master [companyId]="getCompanyId()"></app-usuario-master>
+          </div>
+        </mat-card>
+
+        <div fxFlex="25">
+          <app-bloco-informacoes [options]="boxInfo.usuarioMaster"></app-bloco-informacoes>
+        </div>
+      </div>
+    </ng-template>
+  </mat-step>
+
+  <!-- troca de icons do stepper -->
+  <ng-template matStepperIcon="dadosEmpresa">
+    <i class="fa-solid fa-buildings"></i>
+  </ng-template>
+  <ng-template matStepperIcon="selecionarProduto">
+    <i class="fa-solid fa-boxes-stacked"></i>
+  </ng-template>
+  <ng-template matStepperIcon="configurarProduto">
+    <i class="fa-solid fa-folder-gear"></i>
+  </ng-template>
+  <ng-template matStepperIcon="usuarioMaster">
+    <i class="fa-solid fa-user-tie"></i>
+  </ng-template>
+</mat-stepper>

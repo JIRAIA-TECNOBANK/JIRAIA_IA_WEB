@@ -1,0 +1,32 @@
+<p class="bold mt-0">Exportar</p>
+<p class="desk">Escolha como gostaria de receber os arquivos:</p>
+
+<section class="opcoes w-100">
+    <mat-radio-group [formControl]="formulario.get('tipo')" [id]="utility.getElementId(3, 'exportar-arquivos')"
+        class="w-100">
+        <mat-radio-button [value]="0">
+            <p class="bold my-0 text-gray-800"> Receber arquivos separadamente </p>
+        </mat-radio-button>
+        <p class="my-0 ml-3">No resultado da exportação será baixado um arquivo .zip contendo os arquivos
+            separadamente.
+        </p>
+        <br>
+        <mat-radio-button [value]="1">
+            <p class="bold my-0 text-gray-800"> Receber em arquivo único </p>
+        </mat-radio-button>
+        <p class="my-0 ml-3">No resultado da exportação será baixado um arquivo .xlsx contendo o conteúdo de todos os
+            arquivos.</p>
+    </mat-radio-group>
+</section>
+
+<mat-dialog-actions class="d-flex justify-content-end w-100">
+    <button mat-stroked-button class="btn-outline-primary" color="primary" type="button" [mat-dialog-close]="null"
+        [id]="utility.getElementId(2, 'cancelar-exportar-arquivo')">
+        Fechar
+    </button>
+
+    <button mat-flat-button color="secondary" type="button" [mat-dialog-close]="formulario.get('tipo').value"
+        [id]="utility.getElementId(2, 'exportar-arquivo')">
+        Exportar
+    </button>
+</mat-dialog-actions>

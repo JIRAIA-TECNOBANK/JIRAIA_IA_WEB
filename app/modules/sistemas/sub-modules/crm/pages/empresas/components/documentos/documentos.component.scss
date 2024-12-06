@@ -1,0 +1,131 @@
+@import '$tools';
+@import '$settings';
+
+div {
+  h6 {
+    @include fontMontserratBold;
+    font-size: 16px;
+    color: $gray-800;
+    margin: 8px 0 8px 0;
+  }
+
+  h4 {
+    @include fontMontserratBold;
+    margin: 0;
+    align-self: center;
+    font-size: 12px;
+  }
+
+  .file-size {
+    margin: 2px 0 0 0;
+    align-self: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: #8E8E8E;
+  }
+
+  button {
+    background-color: #E0EFFF;
+    color: #70B2E7;
+  }
+
+  .btn {
+    color: white;
+  }
+
+  .cancel {
+    background-color: #FFE2EB;
+    color: #F47298;
+  }
+
+  .fileList {
+    margin-top: 30px;
+  }
+
+  .dropzone {
+    @include border-radius(5px);
+    text-align: center;
+    border: 2px dashed #5B94C7;
+    cursor: pointer;
+    max-height: 41px;
+  }
+
+  .dropzone-label {
+    i {
+      color: #377AB7;
+      align-self: center;
+      padding-right: 10px;
+    }
+
+    p {
+      @include fontMontserratRegular();
+      font-weight: 700;
+      font-size: 12px;
+      color: #818A93;
+
+      &:last-child {
+        color: #1666AE;
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .dropzone-hint {
+    margin-top: 5px;
+
+    mat-hint {
+      font-size: 12px;
+      color: #626E78;
+    }
+  }
+
+  .no-flex {
+    display: block !important;
+    width: auto;
+  }
+
+  .fileForm {
+    margin-top: 30px;
+  }
+
+  .file {
+    margin: 2px 0 2px 0;
+    min-height: 72px;
+    border: 2px solid #ECEEEF;
+    border-radius: 5px;
+
+    div:first-child {
+      padding-left: 10px;
+    }
+
+    div:last-child {
+      padding-right: 22px;
+
+      button {
+        margin-left: 15px;
+        background-color: #E0EFFF;
+        color: #1666AE;
+      }
+
+      .deleteButton {
+        background-color: #FFE2EB;
+        color: #EC1453;
+      }
+    }
+
+    span {
+      @include fontMontserratBold;
+      font-size: 14px;
+      color: $gray-800;
+      align-self: center;
+    }
+  }
+
+  .mat-flat-button {
+    min-width: 30px !important;
+  }
+
+  .edition-block {
+    min-height: 60vh;
+  }
+}

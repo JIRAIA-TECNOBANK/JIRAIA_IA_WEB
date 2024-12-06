@@ -1,0 +1,66 @@
+<div class="px-2">
+  <mat-card class="mb-4 mat-elevation-z8">
+    <div class="fw-bold">Protocolo {{ protocoloId ?  ': '+protocoloId : '' }}</div>
+    <form [formGroup]="createProtocoloForm" class="mt-2" (ngSubmit)="submitProtocolo()">
+      <div fxLayout="column" fxLayoutGap="20px">
+
+        <!-- Dados do Protocolo -->
+        <div class="div-section">
+          <div class="fw-bold subtitle">Dados do protocolo</div>
+          <div class="protocol-data mt-2">
+            <div fxLayout="row" fxLayoutAlign="space-between start">
+              <div>
+                <div class="label-title">NSU</div>
+                <div class="value bold">{{ protocolo?.nsu || '0000000000000000' }}</div>
+              </div>
+              <div>
+                <div class="label-title">Status</div>
+                <div class="value bold">{{ protocolo?.status }}</div>
+              </div>
+              <div>
+                <div class="label-title">Número do Contrato</div>
+                <div class="value bold">{{ protocolo?.numeroContrato }}</div>
+              </div>
+              <div>
+                <div class="label-title">Aplicação</div>
+                <div class="value bold">{{ protocolo?.aplicacaoNome }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Histórico de Transações -->
+        <div class="div-section">
+          <div class="fw-bold subtitle">Histórico de transações</div>
+          <div class="transaction-history mt-2">
+            <table class="transaction-table">
+              <thead>
+                <tr>
+                  <th>Nome da transação</th>
+                  <th>Data/hora</th>
+                  <th>Nº de tentativas de processamento da transação</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let transacao of transacoes">
+                  <td>{{ transacao.tipoDescricao }}</td>
+                  <td>{{ formatarData(transacao.atualizadoEm) }}</td>
+                  <td>{{ transacao.numeroTentativas }}</td>
+                  <td>{{ transacao.statusDescricao }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botão de Voltar -->
+      <div class="d-flex justify-content-end mt-3">
+        <button mat-flat-button color="primary" type="button" (click)="voltar()">
+          Voltar
+        </button>
+      </div>
+    </form>
+  </mat-card>
+</div>

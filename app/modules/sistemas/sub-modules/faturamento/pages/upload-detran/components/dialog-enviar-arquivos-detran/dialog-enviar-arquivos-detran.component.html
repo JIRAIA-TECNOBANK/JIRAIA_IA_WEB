@@ -1,0 +1,169 @@
+<div class="p-2">
+  <h2>Enviar arquivos</h2>
+  <div fxLayout="row" fxLayoutGap="10px">
+    <div class="pt-1 toggle-default" fxFlex="100">
+      <input type="file" hidden #fileDropRef id="fileDropRef" [multiple]="uf === 'AP'"
+        (change)="fileBrowseHandler($event.target.files)" [accept]="acceptFiles" accept="text/plain"
+        [disabled]="desabilitarEnvioArquivo(files)" />
+
+      <div class="dropzone" [ngClass]="{ 'disabled': desabilitarEnvioArquivo(files) }" appDragAndDrop
+        (fileDropped)="onFileDropped($event)" (click)="onClickFile(fileDropRef)"
+        [id]="utility.getElementId(2, 'carregar-txt-xlsx')">
+        <p class="desk bold">
+          <i class="fa-solid fa-folder-open text-primary"></i> Arraste o arquivo
+          aqui, ou <u class="text-primary">procure no seu dispositivo</u>
+        </p>
+      </div>
+
+      <div fxLayout="row" fxLayoutGap="15px" fxLayoutAlign="space-between" class="mt-1">
+        <span class="legenda">Formatos TXT, XLSX, CSV ou PDF.</span>
+      </div>
+    </div>
+  </div>
+
+  <section *ngIf=" uf === 'SP' || uf === 'PB' || uf === 'MG'" class="mt-2">
+    <h2>Enviar {{ retornarNomeArquivo() }}</h2>
+    <div fxLayout="row" fxLayoutGap="10px">
+      <div class="pt-1 toggle-default" fxFlex="100">
+        <input type="file" hidden #fileDropRef2 id="fileDropRef2" (change)="fileBrowseHandler($event.target.files, true)"
+          [accept]="acceptFiles2" [disabled]="desabilitarEnvioArquivo(filesPdf)" />
+
+        <div class="dropzone" [ngClass]="{ 'disabled': desabilitarEnvioArquivo(filesPdf) }" appDragAndDrop
+          (fileDropped)="onFileDropped($event, true)" (click)="onClickFile(fileDropRef2, true)"
+          [id]="utility.getElementId(2, 'carregar-pdf')">
+          <p class="desk bold">
+            <i class="fa-solid fa-folder-open text-primary"></i> Arraste o arquivo
+            aqui, ou <u class="text-primary">procure no seu dispositivo</u>
+          </p>
+        </div>
+
+        <div fxLayout="row" fxLayoutGap="15px" fxLayoutAlign="space-between" class="mt-1">
+          <span class="legenda">Formato PDF.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="files-list" fxLayout="column" [ngClass]="{ 'mt-3': files?.length > 0 || filesPdf?.length > 0 }">
+    <div class="single-file" *ngFor="let file of files; let i = index">
+      <div class="d-flex justify-content-between" fxLayout="row">
+        <div class="file-name">
+          <div [ngSwitch]="getExtension(file)">
+            <div class="icon" *ngSwitchCase="'PDF'">
+              <img src="./../../../../assets/img/custom-icons/icon-file-pdf.svg" alt="icon file PDF" />
+            </div>
+            <div class="icon" *ngSwitchDefault>
+              <img src="./../../../../assets/img/custom-icons/icon-file-none.svg" alt="icon file NONE" />
+            </div>
+          </div>
+          <div class="info">
+            <h4 class="name">
+              {{ file.nome }} &nbsp;
+              <span [ngSwitch]="file.statusArquivo">
+                <i *ngSwitchCase="5" class="fas fa-check-circle text-success"></i>
+                <i *ngSwitchCase="1" class="fas fa-times-circle text-danger"></i>
+                <i *ngSwitchCase="2" class="fa-solid fa-circle-exclamation text-warning"></i>
+                <i *ngSwitchCase="3" class="fa-solid fa-circle-exclamation text-warning"></i>
+                <i *ngSwitchCase="4" class="fas fa-times-circle text-danger"></i>
+              </span>
+            </h4>
+            <p class="size" *ngIf="file.statusArquivo == 5">
+              {{ formatDate(file.dataEnvio) }} tamanho
+              {{ formatBytes(file.tamanho, 2) }}
+            </p>
+            <div [ngSwitch]="file.statusArquivo">
+              <div *ngSwitchCase="1" class="error text-danger">
+                Falha no upload, o formato é incompatível.
+              </div>
+              <div *ngSwitchCase="2" class="error text-warning">
+                Falha no upload, o tamanho é superior ao permitido.
+              </div>
+              <div *ngSwitchCase="3" class="error text-warning">
+                Falha no upload, o nome do arquivo é inválido.
+              </div>
+              <div *ngSwitchCase="4" class="error text-danger">
+                Falha no upload, tente novamente.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="file-actions">
+          <button mat-stroked-button class="btn-tentar-novamente" *ngIf="file.statusArquivo == 4"
+            (click)="onClickTenteNovamente(file)">
+            <i class="fa-solid fa-arrow-rotate-right"></i>
+            tente novamente
+          </button>
+          <div class="left-info">
+            <div class="d-flex justify-content-end">
+              <div class="file-delete" (click)="onClickDelete(file)" matTooltip="Deletar arquivo"
+                title="Deletar arquivo">
+                <i class="fa-solid fa-trash-alt"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="single-file" *ngFor="let file of filesPdf; let i = index">
+      <div class="d-flex justify-content-between" fxLayout="row">
+        <div class="file-name">
+          <div [ngSwitch]="getExtension(file)">
+            <div class="icon" *ngSwitchCase="'PDF'">
+              <img src="./../../../../assets/img/custom-icons/icon-file-pdf.svg" alt="icon file PDF" />
+            </div>
+            <div class="icon" *ngSwitchDefault>
+              <img src="./../../../../assets/img/custom-icons/icon-file-none.svg" alt="icon file NONE" />
+            </div>
+          </div>
+          <div class="info">
+            <h4 class="name">
+              {{ file.nome }} &nbsp;
+              <span [ngSwitch]="file.statusArquivo">
+                <i *ngSwitchCase="5" class="fas fa-check-circle text-success"></i>
+                <i *ngSwitchCase="1" class="fas fa-times-circle text-danger"></i>
+                <i *ngSwitchCase="2" class="fa-solid fa-circle-exclamation text-warning"></i>
+                <i *ngSwitchCase="3" class="fa-solid fa-circle-exclamation text-warning"></i>
+                <i *ngSwitchCase="4" class="fas fa-times-circle text-danger"></i>
+              </span>
+            </h4>
+            <p class="size" *ngIf="file.statusArquivo == 5">
+              {{ formatDate(file.dataEnvio) }} tamanho
+              {{ formatBytes(file.tamanho, 2) }}
+            </p>
+            <div [ngSwitch]="file.statusArquivo">
+              <div *ngSwitchCase="1" class="error text-danger">
+                Falha no upload, o formato é incompatível.
+              </div>
+              <div *ngSwitchCase="2" class="error text-warning">
+                Falha no upload, o tamanho é superior ao permitido.
+              </div>
+              <div *ngSwitchCase="3" class="error text-warning">
+                Falha no upload, o nome do arquivo é inválido.
+              </div>
+              <div *ngSwitchCase="4" class="error text-danger">
+                Falha no upload, tente novamente.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="file-actions">
+          <button mat-stroked-button class="btn-tentar-novamente" *ngIf="file.statusArquivo == 4"
+            (click)="onClickTenteNovamente(file)">
+            <i class="fa-solid fa-arrow-rotate-right"></i>
+            tente novamente
+          </button>
+          <div class="left-info">
+            <div class="d-flex justify-content-end">
+              <div class="file-delete" (click)="onClickDelete(file, true)" matTooltip="Deletar arquivo"
+                title="Deletar arquivo">
+                <i class="fa-solid fa-trash-alt"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

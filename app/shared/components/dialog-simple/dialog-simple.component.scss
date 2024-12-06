@@ -1,0 +1,7 @@
+@import '$settings';
+@import '$tools';
+
+.title-dialog {
+    @include fontMontserratBold;
+    font-size: 16px;
+}

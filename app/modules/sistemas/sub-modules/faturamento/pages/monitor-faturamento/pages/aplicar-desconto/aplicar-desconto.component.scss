@@ -1,0 +1,10 @@
+@import "$settings";
+@import "$tools";
+
+.value-mat-chip {
+	font-size: 14px;
+}
+
+.divisor {
+	border-right: 1px solid $gray-500;
+}

@@ -1,0 +1,153 @@
+<div *ngIf="!layoutAlternativo" class="lista-regulamentos" fxLayout="column" fxLayoutGap="24px">
+  <div class="mt-2">
+    <div class="mb-1" fxLayout="column" fxLayoutAlign="space-between">
+      <div class="mb-1" fxLayout="row" fxLayoutAlign="space-between center">
+        <p class="bold mt-1">Principais normativos</p>
+
+        <button mat-flat-button type="button" class="bold periodo" [id]="utility.getElementId(2, 'filtro-normativo')"
+          (click)="openDialog()">
+          <i class="fa-solid fa-sliders"></i> Filtrar
+        </button>
+      </div>
+    </div>
+
+    <section [hidden]="!(regulamentosFiltrados.length > 0 && !skeletonGrid)">
+      <div *ngFor="let normativo of regulamentosFiltrados; let i = index" class="normativo mb-1">
+        <figure class="icon">
+          <img src="./../../../../assets/img/custom-icons/icon-file-pdf.svg" />
+        </figure>
+
+        <div class="conteudo-normativo">
+          <span (click)="downloadNormativo(normativo)">
+            {{ normativo.nomePortaria }}
+          </span>
+
+          <p>
+            {{ normativo.nomeArquivo }}
+          </p>
+
+          <p *ngIf="normativo.dataVigencia != null"> 
+            Vigente desde: {{ normativo.dataVigencia | date:'dd/MM/yyyy'}}
+          </p>
+        </div>
+
+        <aside>
+          <figure *ngIf="validarArquivoNovo(normativo.criadoEm)">
+            <mat-icon class="icone-novo-verde" svgIcon="icone-novo-verde"></mat-icon>
+          </figure>
+        
+          <figure (click)="downloadNormativo(normativo)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <g clip-path="url(#clip0_18500_159418)">
+                <path
+                  d="M8 16C5.87827 16 3.84344 15.1571 2.34315 13.6569C0.842855 12.1566 0 10.1217 0 8C0 5.87827 0.842855 3.84344 2.34315 2.34315C3.84344 0.842855 5.87827 0 8 0C10.1217 0 12.1566 0.842855 13.6569 2.34315C15.1571 3.84344 16 5.87827 16 8C16 10.1217 15.1571 12.1566 13.6569 13.6569C12.1566 15.1571 10.1217 16 8 16ZM12 8H9.5V4H6.5V8H4V9L8 13L12 9V8Z"
+                  fill="#377AB7" />
+              </g>
+              <defs>
+                <clipPath id="clip0_18500_159418">
+                  <rect width="16" height="16" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
+          </figure>
+        </aside>
+      </div>
+
+      <mat-paginator 
+        (page)="syncPaginatorNacional($event)" 
+        [pageSizeOptions]="[5, 10, 25, 50]"
+        [length]="totalRegistrosNacional" 
+        #paginator
+      ></mat-paginator>
+    </section>
+  </div>
+
+  <div fxLayout="column" fxLayoutGap="20px" *ngIf="skeletonGrid">
+    <div fxLayout="row" fxLayoutGap="10px" *ngFor="let row of [0, 1, 2, 3, 4]">
+      <div *skeleton="true; className: 'mr-1'; height: '23px'; width: '96%'"></div>
+      <div *skeleton="true; className: 'mr-1'; height: '23px'; width: '4%'"></div>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-center" *ngIf="regulamentos.length == 0 && !skeletonGrid">
+    <div class="feedBack pt-1">
+      <img src="/assets/img/custom-icons/icon-vazio-artigos.svg" alt="Não há registros." />
+      <p class="desk bold text-gray-700"> Não há regulamentos. </p>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="layoutAlternativo" class="lista-regulamentos" fxLayout="column" fxLayoutGap="24px">
+  <div fxLayout="column" fxLayoutAlign="space-between">
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <p class="bold mt-1">Principais normativos</p>
+      <button mat-flat-button type="button" class="bold periodo" [id]="utility.getElementId(2, 'filtro-normativo-alternativo')" (click)="openDialog()">
+            <i class="fa-solid fa-sliders"></i> Filtrar
+      </button>
+    </div>
+  </div>
+
+  <section [hidden]="!(regulamentosFiltrados.length > 0 && !skeletonGrid)">
+    <div *ngFor="let normativo of regulamentosFiltrados; let i = index" class="normativo mb-1">
+      <figure class="icon">
+        <img src="./../../../../assets/img/custom-icons/icon-file-pdf.svg" />
+      </figure>
+
+      <div class="conteudo-normativo">
+        <span (click)="downloadNormativo(normativo)">
+          {{ normativo.nomePortaria }}
+        </span>
+
+        <p>
+          {{ normativo.nomeArquivo }}
+        </p>
+
+        <p *ngIf="normativo.dataVigencia != null"> 
+          Vigente desde: {{ normativo.dataVigencia | date:'dd/MM/yyyy'}}
+        </p>
+      </div>
+
+      <aside>
+        <figure *ngIf="validarArquivoNovo(normativo.criadoEm)">
+          <mat-icon class="icone-novo-verde" svgIcon="icone-novo-verde"></mat-icon>
+        </figure>
+      
+        <figure (click)="downloadNormativo(normativo)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <g clip-path="url(#clip0_18500_159418)">
+              <path
+                d="M8 16C5.87827 16 3.84344 15.1571 2.34315 13.6569C0.842855 12.1566 0 10.1217 0 8C0 5.87827 0.842855 3.84344 2.34315 2.34315C3.84344 0.842855 5.87827 0 8 0C10.1217 0 12.1566 0.842855 13.6569 2.34315C15.1571 3.84344 16 5.87827 16 8C16 10.1217 15.1571 12.1566 13.6569 13.6569C12.1566 15.1571 10.1217 16 8 16ZM12 8H9.5V4H6.5V8H4V9L8 13L12 9V8Z"
+                fill="#377AB7" />
+            </g>
+            <defs>
+              <clipPath id="clip0_18500_159418">
+                <rect width="16" height="16" fill="white" />
+              </clipPath>
+            </defs>
+          </svg>
+        </figure>
+      </aside>
+    </div>
+
+    <mat-paginator 
+      (page)="syncPaginatorNacional($event)" 
+      [pageSizeOptions]="[5, 10, 25, 50]"
+      [length]="totalRegistrosNacional" 
+      #paginator
+    ></mat-paginator>
+  </section>
+
+  <div fxLayout="column" fxLayoutGap="20px" *ngIf="skeletonGrid">
+    <div fxLayout="row" fxLayoutGap="10px" *ngFor="let row of [0, 1, 2, 3, 4]">
+      <div *skeleton="true; className: 'mr-1'; height: '23px'; width: '96%'"></div>
+      <div *skeleton="true; className: 'mr-1'; height: '23px'; width: '4%'"></div>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-center" *ngIf="regulamentos.length == 0 && !skeletonGrid">
+    <div class="feedBack pt-1">
+      <img src="/assets/img/custom-icons/icon-vazio-artigos.svg" alt="Não há registros." />
+      <p class="desk bold text-gray-700"> Não há regulamentos. </p>
+    </div>
+  </div>
+</div>

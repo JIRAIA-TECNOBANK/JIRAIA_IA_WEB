@@ -1,0 +1,100 @@
+<section class="text-paginator">
+  <div class="row d-flex">
+    <section class="default-text" *ngIf="paginator">
+      Mostrando {{ paginator?.pageSize > totalItems ? totalItems : paginator?.pageSize }} de {{
+      totalItems }} resultados
+    </section>
+  </div>
+</section>
+<mat-paginator #paginator [pageSizeOptions]="[25, 50, 75, 100]" [length]="totalItems"></mat-paginator>
+
+<div>
+  <table mat-table [dataSource]="items$ | async" #tableUsuarios="matSort" (matSortChange)="sortData($event)" matSort>
+    <ng-container matColumnDef="nomeCompleto">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Nome</th>
+      <td mat-cell *matCellDef="let element">{{ element.nomeCompleto }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="cpf">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>CPF</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.documento | mask: formatDocumento() }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>E-Mail</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.email }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="criadoEm">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Data cadastro</th>
+      <td mat-cell *matCellDef="let element">
+        {{ formatDate(element.criadoEm) }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="modificadoEm">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Data atualização</th>
+      <td mat-cell *matCellDef="let element">
+        {{ formatDate(element.modificadoEm) }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+      <td mat-cell *matCellDef="let element">
+        <div class="status-pill" [ngClass]="
+              element.ativo ? 'status-pill__active' : 'status-pill__inactive'
+            ">
+          {{ element.ativo ? "Ativo" : "Inativo" }}
+        </div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="opcoes">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element">
+        <div>
+          <button mat-button [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="editarUsuario(element.id)" [id]="getElementId(2, 'editar', element.id)">
+              Editar/consultar
+            </button>
+            <button mat-menu-item (click)="inativarUsuario(element.usuarioGuid, element.ativo)"
+              [id]="getElementId(2, 'ativar-inativar', element.id)"
+              [disabled]="!utility.getPermission([Permissoes.GESTAO_USUARIO_INTERNO_CADASTRAR])">
+              {{ element.ativo ? "Inativar" : "Ativar" }}
+            </button>
+          </mat-menu>
+        </div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="semRegistro">
+      <th class="text-center feedBack pt-1" mat-cell *matFooterCellDef colspan="11">
+        <img src="./../../../../../../../../../../assets/img/custom-icons/icon-vazio-artigos.svg" />
+        <p class="desk bold text-gray-700"> Não há registros. </p>
+      </th>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    <tr mat-row *matFooterRowDef="['semRegistro']" [ngClass]="{'d-none': totalItems > 0 }"></tr>
+  </table>
+  <section class="text-paginator">
+    <div class="row d-flex">
+      <section class="default-text">
+        Mostrando {{ paginator?.pageSize > totalItems ? totalItems : paginator?.pageSize }} de {{
+        totalItems }} resultados
+      </section>
+    </div>
+  </section>
+  <mat-paginator (page)="syncPrimaryPaginator($event)" [pageSize]="paginator.pageSize" [pageIndex]="paginator.pageIndex"
+    [length]="paginator.length" [pageSizeOptions]="paginator?.pageSizeOptions">
+  </mat-paginator>
+</div>

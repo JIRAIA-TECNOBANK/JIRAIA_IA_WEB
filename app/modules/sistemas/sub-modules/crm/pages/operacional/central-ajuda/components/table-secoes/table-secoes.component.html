@@ -1,0 +1,161 @@
+<div>
+  <section class="text-paginator">
+    <div class="row d-flex">
+      <section class="default-text" *ngIf="paginatorSecao">
+        Mostrando
+        {{
+        paginatorSecao?.pageSize > totalItems
+        ? totalItems
+        : paginatorSecao?.pageSize
+        }}
+        de {{ totalItems }} resultados
+      </section>
+    </div>
+  </section>
+  <mat-paginator [pageSizeOptions]="[25, 50, 75, 100]" [length]="totalItems" aria-label="Itens por página"
+    #paginatorSecao>
+  </mat-paginator>
+
+  <div>
+    <table mat-table [dataSource]="itemsSecao$ | async" #table="matSort" matSort multiTemplateDataRows>
+      <ng-container matColumnDef="titulo">
+        <th mat-header-cell *matHeaderCellDef>
+          Título
+        </th>
+        <td mat-cell *matCellDef="let element" [title]="element.titulo" class="column-title-max">{{ element.titulo
+          }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="criadoPor">
+        <th mat-header-cell *matHeaderCellDef>Criado por</th>
+        <td mat-cell *matCellDef="let element" [title]="element.criadoPor" class="column-max-width">{{
+          element.criadoPor }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="artigos">
+        <th mat-header-cell *matHeaderCellDef>
+          Artigos
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.artigos }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="dataCadastro">
+        <th mat-header-cell *matHeaderCellDef>
+          Data cadastro
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ formatDate(element.dataCadastro) ?? '-' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="dataPublicacao">
+        <th mat-header-cell *matHeaderCellDef>
+          Data publicação
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ formatDate(element.dataPublicacao) ?? '-' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>
+          Status
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.status }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="acoes">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+          <div>
+            <button mat-button [matMenuTriggerFor]="menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="editarSecao(element.id)"
+                [id]="utility.getElementId(2, 'editar-consultar', element.id)"
+                [disabled]="!utility.getPermission([Permissoes.GESTAO_CENTRAL_AJUDA_CONSULTAR, Permissoes.GESTAO_CENTRAL_AJUDA_CADASTRAR])">
+                Editar/Consultar
+              </button>
+              <button mat-menu-item [id]="utility.getElementId(2, 'arquivar-desarquivar', element.id)"
+                *ngIf="element.status == 'Publicado' || element.status == 'Arquivado'"
+                (click)="arquivarOuDesarquivarSecao(element.id, element.status == 'Publicado')"
+                [disabled]="!utility.getPermission([Permissoes.GESTAO_CENTRAL_AJUDA_CADASTRAR])">
+                {{ element.status == 'Publicado' ? "Arquivar" : "Desarquivar" }}
+              </button>
+            </mat-menu>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="semRegistro">
+        <th class="text-center feedBack pt-1" mat-cell *matFooterCellDef colspan="11">
+          <img src="./../../../../../../../../../../assets/img/custom-icons/icon-vazio-artigos.svg" />
+          <p class="desk bold text-gray-700"> Não há registros. </p>
+        </th>
+      </ng-container>
+
+      <ng-container matColumnDef="expand">
+        <th mat-header-cell *matHeaderCellDef aria-label="row actions"></th>
+        <td mat-cell *matCellDef="let element">
+          <button [id]="utility.getElementId(2, 'expand', element.id)" mat-icon-button aria-label="expand row"
+            (click)="(expandedElement = expandedElement === element ? null : element); expandDetail(element.id, expandedElement === element); $event.stopPropagation(); ">
+            <div class="wrapper">
+              <i [ngClass]="expandedElement !== element ? 'fa-solid fa-chevron-down' : 'fa-solid fa-chevron-up' "
+                aria-hidden="true"> </i>
+            </div>
+          </button>
+        </td>
+      </ng-container>
+
+      <!-- Expanded Content Column -->
+      <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
+          <div class="example__element--detail text-center" fxLayout.sm="column" fxFlexLayout="column"
+            [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+            <app-listar-artigos [artigos]="artigos" *ngIf="element.artigos > 0"></app-listar-artigos>
+
+            <div class="example__element--boxLeft py-1" *ngIf="element.artigos == 0">
+              <section class="detalhes-registro">
+                <img src="./../../../../../../../../../../assets/img/custom-icons/icon-vazio-artigos.svg" />
+                <p class="desk bold text-gray-700">Nenhum artigo foi adicionado a esta seção. </p>
+                <button mat-flat-button color="secondary" type="button" (click)="incluirArtigo(element.id)"
+                  [id]="utility.getElementId(2, 'incluir-artigo')">Incluir artigo</button>
+              </section>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
+      <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand;" class="example-element-row"
+        [class.example-expanded-row]="expandedElement === element"
+        (click)="expandedElement = expandedElement === element ? null : element; expandDetail(element.id, expandedElement === element)">
+      </tr>
+      <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+      <tr mat-row *matFooterRowDef="['semRegistro']" [ngClass]="{'d-none': totalItems > 0 }"></tr>
+    </table>
+
+    <section class="text-paginator">
+      <div class="row d-flex">
+        <section class="default-text">
+          Mostrando
+          {{
+          paginatorSecao?.pageSize > totalItems
+          ? totalItems
+          : paginatorSecao?.pageSize
+          }}
+          de {{ totalItems }} resultados
+        </section>
+      </div>
+    </section>
+    <mat-paginator (page)="syncPrimaryPaginator($event)" [pageSize]="paginatorSecao.pageSize"
+      [pageIndex]="paginatorSecao.pageIndex" [length]="paginatorSecao.length"
+      [pageSizeOptions]="paginatorSecao?.pageSizeOptions">
+    </mat-paginator>
+  </div>
+</div>

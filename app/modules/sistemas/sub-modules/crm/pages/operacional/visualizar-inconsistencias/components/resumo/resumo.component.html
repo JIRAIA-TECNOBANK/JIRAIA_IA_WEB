@@ -1,0 +1,42 @@
+<div fxLayout="row" fxLayoutAlign="space-between">
+    <div fxFlex>
+        <div *ngIf="isLoading" class="d-flex" fxLayout="row" fxLayoutAlign="space-between none">
+            <div *skeleton="
+              isLoading;
+              className: 'mr-1';
+              height: '36px';
+              width: '10%';"></div>
+            <div *skeleton="
+              isLoading;
+              className: 'mr-1';
+              height: '36px';
+              width: '80%';"></div>
+            <div *skeleton="
+              isLoading;
+              className: 'mr-1';
+              height: '36px';
+              width: '10%';"></div>
+        </div>
+
+        <div fxLayout="column" fxLayoutGap="15px">
+            <div fxLayout="row" class="property-row" *ngIf="!isLoading">
+                <section fxFlex="20" fxLayout="column" class="mr-2">
+                    <div class="nome-exibicao"> Código do validador </div>
+                </section>
+
+                <section fxFlex="auto" fxLayout="column">
+                    <div class="nome-exibicao"> Mensagem do validador </div>
+                </section>
+            </div>
+            <div fxLayout="row" class="property-row" *ngFor="let inconsistencia of mensagensInconsistencias">
+                <section fxFlex="20" fxLayout="column" class="mr-2">
+                    <div> {{ inconsistencia.code }} </div>
+                </section>
+
+                <section fxFlex="auto" fxLayout="column">
+                    <div fxFlex="auto"> {{ inconsistencia.message }} </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,42 @@
+<div fxLayout="row" fxLayoutGap="15px" class="pb-2" fxLayoutAlign="space-between" *ngIf="contrato != null">
+  <mat-card fxFlex="auto">
+    <app-dados-veiculo [contrato]="contrato"></app-dados-veiculo>
+    <app-dados-contrato [contrato]="contrato" (form)="habilitaProximoFinalizar($event)"></app-dados-contrato>
+    <app-dados-complementares [contrato]="contrato"></app-dados-complementares>
+    <app-dados-financiamento [contrato]="contrato"></app-dados-financiamento>
+    <app-dados-credor [contrato]="contrato"></app-dados-credor>
+    <app-dados-devedor [contrato]="contrato"></app-dados-devedor>
+
+    <div fxLayoutAlign="end center">
+      <div class="info-primary mr-2" fxLayout="row" fxLayoutGap="15px"><i class="fa-regular fa-memo-circle-info"></i>
+        <p>Atenção, ao avançar para o próximo, iremos automaticamente realizar o reenvio desta operação ao
+          Detran.</p>
+      </div>
+      <button mat-flat-button color="primary" type="button" (click)="onClickProximo()"
+        [id]="utility.getElementId(2, 'proximo')" *ngIf="protocolos.length > posicaoProtocolo + 1"
+        [disabled]="!habilitaBtn">
+        Próximo
+      </button>
+
+      <button mat-flat-button color="primary" type="button" (click)="onClickFinalizar()"
+        [id]="utility.getElementId(2, 'finalizar')" *ngIf="protocolos.length == posicaoProtocolo + 1"
+        [disabled]="!habilitaBtn">Finalizar</button>
+    </div>
+  </mat-card>
+  <div fxFlex="25">
+    <div class="info" fxLayout="row" fxLayoutGap="15px" fxLayoutAlign="space-between">
+      <i class="fa-regular fa-triangle-exclamation" fxFlex="10"></i>
+      <p class="fw-bold text-gray-700 m-0" fxFlex="auto">Revise as inconsistências apresentadas em vermelho <br>
+        e tente novamente. </p>
+    </div>
+    <div class="d-flex mt-1">
+      <button mat-raised-button matStepperNext class="btn btn-primary btn-lg bold w-100"
+        [id]="utility.getElementId(2, 'proximo')" type="button" (click)="onClickProximo()"
+        *ngIf="protocolos.length > posicaoProtocolo + 1" [disabled]="!habilitaBtn">Próximo</button>
+
+      <button mat-raised-button matStepperNext class="btn btn-primary btn-lg bold w-100"
+        [id]="utility.getElementId(2, 'finalizar')" type="button" (click)="onClickFinalizar()"
+        *ngIf="protocolos.length == posicaoProtocolo + 1" [disabled]="!habilitaBtn">Finalizar</button>
+    </div>
+  </div>
+</div>

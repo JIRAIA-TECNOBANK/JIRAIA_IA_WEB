@@ -1,0 +1,13 @@
+<div class="dialog">
+  <h2 mat-dialog-title *ngIf="title !== ''" class="text-center title-dialog">{{title}}</h2>
+  <mat-dialog-content align="center">
+    <app-icone-sucesso *ngIf="iconType == 'success'"></app-icone-sucesso>
+    <app-icone-falha *ngIf="iconType == 'fail'"></app-icone-falha>
+    <p> {{message}} </p>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close mat-raised-button class="btn btn-outline-primary btn-lg">Fechar</button>
+    <button mat-button class="btn btn-primary btn-lg" [mat-dialog-close]="true" cdkFocusInitial>{{ textButton
+      }}</button>
+  </mat-dialog-actions>
+</div>

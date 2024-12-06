@@ -1,0 +1,46 @@
+<div class="description px-2">
+  <h4>Lembre-se</h4>
+  <p>
+    Esses dados são restritos em função da LGPD. Portanto, para consulta-los,
+    justifique selecionando o solicitante e seus dados para prosseguir:
+  </p>
+</div>
+
+<form [formGroup]="liberacaoAcessoForm" class="px-2">
+  <div fxLayout="row" fxLayoutGap="10px">
+    <mat-form-field appearance="outline" fxFlex="auto">
+      <mat-label>Solicitante </mat-label>
+      <mat-select formControlName="solicitanteId" required [id]="utility.getElementId(5, 'liberacao-solicitante')">
+        <mat-option> Escolha o solicitante</mat-option>
+        <mat-option *ngFor="let tipoSolicitante of tipoSolicitantes" [value]="tipoSolicitante.id"
+          [id]="utility.getElementId(7, 'liberacao-solicitante', tipoSolicitante.id)"> {{
+          tipoSolicitante.valor }} </mat-option>
+      </mat-select>
+      <mat-error *ngIf="liberacaoAcessoForm.controls['solicitanteId'].hasError('required')">Campo obrigatório
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div fxLayout="row" fxLayoutGap="10px">
+    <mat-form-field appearance="outline" fxFlex="auto" *ngIf="liberacaoAcessoForm.controls['solicitanteId'].value == 1">
+      <mat-label>Código do atendimento </mat-label>
+      <input matInput placeholder="Digite o código do atendimento" formControlName="descricao" required
+        [id]="utility.getElementId(0, 'liberacao-valor')" />
+      <mat-error *ngIf="liberacaoAcessoForm.controls['descricao'].hasError('required')">Campo obrigatório</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" fxFlex="auto" *ngIf="liberacaoAcessoForm.controls['solicitanteId'].value == 2">
+      <mat-label>E-mail do comercial responsável </mat-label>
+      <input matInput placeholder="Digite o e-mail do comercial responsável" formControlName="descricao" required email
+        [id]="utility.getElementId(0, 'liberacao-valor')" />
+      <mat-error *ngIf="liberacaoAcessoForm.controls['descricao'].hasError('required')">Campo obrigatório</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" fxFlex="auto" *ngIf="liberacaoAcessoForm.controls['solicitanteId'].value == 3">
+      <mat-label>E-mail da diretoria responsável </mat-label>
+      <input matInput placeholder="Digite o e-mail da diretoria responsável " formControlName="descricao" required email
+        [id]="utility.getElementId(0, 'liberacao-valor')" />
+      <mat-error *ngIf="liberacaoAcessoForm.controls['descricao'].hasError('required')">Campo obrigatório</mat-error>
+    </mat-form-field>
+  </div>
+</form>

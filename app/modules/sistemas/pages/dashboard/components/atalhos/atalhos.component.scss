@@ -1,0 +1,24 @@
+@import '$settings';
+@import '$tools';
+
+.btn-atalho-icon {
+  @include border-radius(8px);
+  width: 40px;
+  height: 40px;
+  background-color: rgba(22, 102, 174, .1);
+  margin: 0 auto;
+
+  i {
+    color: $primary;
+    font-size: 20px;
+  }
+}
+
+p {
+  color: $primary;
+  font-size: 14px;
+
+  i {
+    display: none;
+  }
+}

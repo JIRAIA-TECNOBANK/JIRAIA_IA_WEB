@@ -1,0 +1,125 @@
+<mat-tab-group (selectedTabChange)="changeTab($event)" class="tab-100">
+    <mat-tab label="baixar">
+        <ng-template mat-tab-label>
+            <i class="fa-regular fa-download tab-icon"></i>
+            Baixar
+        </ng-template>
+        <div class="content w-100 px-2 mt-2">
+            <form [formGroup]="formBaixar" fxFlex="column">
+                <div fxFlex="row" fxLayoutAlign="space-between" class="w-100">
+                    <mat-radio-group formControlName="tipoCertidao" required aria-label="Escolha uma opção de certidão"
+                        [id]="utility.getElementId(3, 'tipo-certidao')" fxFlex="row" fxLayoutAlign="space-between">
+                        <mat-radio-button [value]="1"
+                            [id]="utility.getElementId(3, 'tipo-certidao', 'simplificada')">Certidão
+                            simplificada</mat-radio-button>
+                        <mat-radio-button [value]="2" class="mr-0"
+                            [id]="utility.getElementId(3, 'tipo-certidao', 'inteiro-teor')">Certidão de inteiro
+                            teor</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+            </form>
+        </div>
+    </mat-tab>
+    <mat-tab label="email">
+        <ng-template mat-tab-label>
+            <i class="fa-regular fa-paper-plane-top tab-icon"></i>
+            Enviar por e-mail
+        </ng-template>
+        <div class="content w-100 px-2 mt-2">
+            <form [formGroup]="formEmail" fxFlex="column">
+                <div fxLayout="row" fxLayoutAlign="space-between" class="w-100">
+                    <mat-radio-group formControlName="tipoCertidao" required label="Escolha uma opção de certidão"
+                        [id]="utility.getElementId(3, 'tipo-certidao')" fxFlex="row" fxLayoutAlign="space-between">
+                        <mat-radio-button value="1"
+                            [id]="utility.getElementId(3, 'tipo-certidao', 'simplificada')">Certidão
+                            simplificada</mat-radio-button>
+                        <mat-radio-button value="2" class="mr-0"
+                            [id]="utility.getElementId(3, 'tipo-certidao', 'inteiro-teor')">Certidão
+                            de inteiro
+                            teor</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+
+                <div fxLayout="row" fxLayoutGap="10px" class="mt-1">
+                    <mat-form-field appearance="outline" fxFlex="100">
+                        <mat-label>Escolha uma empresa </mat-label>
+                        <input type="text" matInput [id]="utility.getElementId(5, 'empresa')" name="empresaNome"
+                            formControlName="empresaNome" placeholder="Digite a empresa" (blur)="selecionaEmpresaId()"
+                            (input)="filtrarEmpresas($event.target.value)" [matAutocomplete]="empresasselect">
+                        <mat-autocomplete #empresasselect="matAutocomplete">
+                            <mat-option *ngFor="let empresa of empresasFiltradas"
+                                [value]="empresa.nomeFantasia + ' - ' + empresa.cnpj" class="usuario-email"
+                                [matTooltip]="empresa.nomeFantasia + ' - ' + empresa.cnpj">{{
+                                empresa.nomeFantasia }} - {{ empresa.cnpj }}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-hint>Obrigatório</mat-hint>
+                        <mat-error *ngIf="formEmail.controls['empresaId'].hasError('required')">Campo obrigatório
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div fxLayout="row" fxLayoutGap="10px">
+                    <mat-form-field class="default-chip-list py-0" appearance="outline">
+                        <mat-label>E-mails que receberão o relatório</mat-label>
+                        <mat-chip-list #chipList aria-label="Seleção de usuários" required
+                            [disabled]="!formEmail.get('empresaId').value">
+                            <mat-chip *ngFor="let usuario of usuarios" (removed)="remove(usuario)">
+                                {{usuario.nome}}
+                                <button matChipRemove>
+                                    <i class="fa-solid fa-xmark text-primary"></i>
+                                </button>
+                            </mat-chip>
+                            <input [id]="utility.getElementId(0, 'empresa-usuarios')" #usuarioInput
+                                [formControl]="usuariosControl" [matAutocomplete]="auto" [matChipInputFor]="chipList"
+                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                (matChipInputTokenEnd)="add($event)">
+                        </mat-chip-list>
+                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                            <mat-option *ngFor="let usuario of filteredUsuarios | async" [value]="usuario.nome"
+                                class="email-chip">
+                                {{usuario.nome}}
+                                <span class="usuario-adicionado"
+                                    *ngIf="verifyUsuarioAdicionado(usuario)">Adicionado</span>
+                                <span>{{ usuario.email }}</span>
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </div>
+                <mat-hint class="mat-hint-custom">Obrigatório</mat-hint>
+                <mat-error class="mat-hint-custom" *ngIf="usuariosControl.hasError('required')">Campo obrigatório
+                </mat-error>
+
+                <!-- <div fxLayout="row">
+                    <mat-form-field class="mt-1" appearance="outline" fxFlex="100">
+                        <mat-label>Solicitação </mat-label>
+                        <mat-select disableOptionCentering formControlName="solicitacao" required
+                            [id]="utility.getElementId(5, 'certidao-solicitacao')">
+                            <mat-option> Solicitação </mat-option>
+                            <mat-option value="0"> Cliente </mat-option>
+                            <mat-option value="1"> Área gestora </mat-option>
+                            <mat-option value="2"> Detran</mat-option>
+                        </mat-select>
+                        <mat-hint>Obrigatório</mat-hint>
+                    </mat-form-field>
+                </div>
+
+                <div fxLayout="row">
+                    <mat-form-field panelClass="custom-fields" appearance="outline" fxFlex="100"
+                        [id]="utility.getElementId(0, 'email-certidao')">
+                        <mat-label>E-mail que receberá a certidão</mat-label>
+                        <input matInput placeholder="Digite os e-mails" formControlName="emailDestinatario" required
+                            type="email" name="email" />
+                        <mat-error *ngIf="
+                      formEmail.controls['emailDestinatario'].hasError('required')
+                    ">Este campo é obrigatório</mat-error>
+                        <mat-error *ngIf="
+                      formEmail.controls['emailDestinatario'].hasError('email')
+                    ">E-mail inválido</mat-error>
+                        <mat-hint>Obrigatório</mat-hint>
+                    </mat-form-field>
+                </div> -->
+            </form>
+        </div>
+    </mat-tab>
+</mat-tab-group>

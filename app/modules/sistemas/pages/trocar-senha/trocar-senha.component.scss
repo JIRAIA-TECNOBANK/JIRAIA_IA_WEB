@@ -1,0 +1,40 @@
+@import '$settings';
+@import '$tools';
+
+mat-card {
+  padding-bottom: 10px !important; 
+}
+
+p {
+  font-size: 16px;
+}
+
+.info {
+  @include border-radius(10px);
+  background-color: rgb(7 105 175 / 5%);
+  padding: 1.5rem;
+
+  i {
+    color: $primary;
+    font-size: 20px;
+
+    &.text-success {
+      color: $success-900;
+      margin-right: 0.3rem;
+      font-size: 14px;
+    }
+
+    &.text-secondary {
+      color: $gray-700;
+      font-size: 4px;
+      vertical-align: middle;
+      margin-right: 0.3rem;
+      margin-left: 0.3rem;
+    }
+  }
+
+  p {
+    font-size: 14px;
+    color: $gray-700;
+  }
+}

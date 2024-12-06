@@ -1,0 +1,63 @@
+<section *ngIf="!layoutAlternativo" fxLayout="row">
+    <button 
+        (click)="onOptionChangeNacional(0)" 
+        mat-flat-button 
+        type="button" 
+        class="bold periodo"
+        [ngClass]="{ 'selected': opcaoSelecionada == 0 }"
+    >
+        Registro de contrato
+    </button>
+
+    <button 
+        (click)="onOptionChangeNacional(1)" 
+        mat-flat-button 
+        type="button" 
+        class="bold periodo"
+        [ngClass]="{ 'selected': opcaoSelecionada == 1 }"
+    >
+        Registro de garantia
+    </button>
+
+    <button 
+        (click)="onOptionChangeNacional(2)" 
+        mat-flat-button 
+        type="button" 
+        class="bold periodo"
+        [ngClass]="{ 'selected': opcaoSelecionada == 2 }"
+    >
+        Instituição financeira
+    </button>
+</section>
+
+<section *ngIf="layoutAlternativo" fxLayout="row">
+    <button 
+        (click)="onOptionChangeEstadual(0)" 
+        mat-flat-button 
+        type="button" 
+        class="bold periodo"
+        [ngClass]="{ 'selected': opcaoSelecionada == 0 }"
+    >
+        Registro de contrato
+    </button>
+
+    <button 
+        (click)="onOptionChangeEstadual(1)" 
+        mat-flat-button 
+        type="button" 
+        class="bold periodo"
+        [ngClass]="{ 'selected': opcaoSelecionada == 1 }"
+    >
+        Registro de garantia
+    </button>
+
+    <button 
+        (click)="onOptionChangeEstadual(2)" 
+        mat-flat-button 
+        type="button" 
+        class="bold periodo"
+        [ngClass]="{ 'selected': opcaoSelecionada == 2 }"
+    >
+        Instituição financeira
+    </button>
+</section>

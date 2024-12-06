@@ -1,0 +1,391 @@
+<div [hidden]="childstate">
+
+  <div class="d-flex justify-content-end mb-2 top-options" style="gap: 10px"
+    [id]="utility.getElementId(2, 'enviar-lote')">
+    <app-atualizar-pagina (atualizar)="atualizarPagina()"></app-atualizar-pagina>
+
+    <button mat-flat-button color="secondary" (click)="onClickEnviarLote()"
+      [id]="utility.getElementId(2, 'enviar-lote')"
+      [disabled]="!utility.getPermission([Permissoes.GESTAO_OPERACOES_LOTE_REGISTRAR])" *ngIf="tabNumber == 1">
+      Enviar contratos
+    </button>
+  </div>
+
+  <mat-tab-group (selectedTabChange)="changeTab($event)" [selectedIndex]="tabNumber">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <div class="tab-label">
+          <i class="fa-regular fa-memo"></i>
+          <span>Operações</span>
+        </div>
+      </ng-template>
+
+      <div class="default-tab px-2 pb-3">
+        <form [formGroup]="formularioConsulta">
+          <app-grid-filter [filter]="filter" (pesquisar)="search($event)" (customControls)="setCustomControls($event)"
+            (redefinir)="redefinirConsultaOperacoes()" [triggerShowMore]="requiredFieldsError" [radiusTop]="false"
+            [showRedefinir]="showRedefinirButton">
+            <section class="first-row d-flex" fxLayout.sm="column" fxLayout="row wrap">
+              <!--Por chassi-->
+              <app-filter-field [field]="fieldChassi" [control]="chassiControl">
+              </app-filter-field>
+
+              <!--Por empresa-->
+              <app-filter-field [field]="fieldEmpresa" [control]="empresaControl" (selectAll)="selectAll($event)"
+                [searchControl]="empresaSearchControl" (searchInput)="searchFilter($event)"
+                [redefinirField]="redefinirField">
+              </app-filter-field>
+
+              <!--Por operacao-->
+              <app-filter-field [field]="fieldOperacao" [control]="operacaoControl" (selectAll)="selectAll($event)">
+              </app-filter-field>
+
+              <!--Por código de retorno-->
+              <app-filter-field [field]="fieldCodigoRetorno" [control]="codigoRetornoControl"
+                (selectAll)="selectAll($event)" [searchControl]="codigoRetornoSearchControl"
+                (searchInput)="searchFilter($event)" [redefinirField]="redefinirField">
+              </app-filter-field>
+            </section>
+
+            <section class="second-row d-flex" fxLayout="column">
+              <div fxLayout.sm="column" fxLayout="row wrap">
+
+                <!--Por status-->
+                <app-filter-field [field]="fieldStatus" [control]="statusControl" (selectAll)="selectAll($event)">
+                </app-filter-field>
+
+                <!--Por imagem-->
+                <app-filter-field [field]="fieldImagem" [control]="imagemControl" (selectAll)="selectAll($event)">
+                </app-filter-field>
+
+                <!--Por periodo-->
+                <button mat-stroked-button fxFlex [matMenuTriggerFor]="menuRadio" class="filter-button mt-2"
+                  [id]="utility.getElementId(2, 'filter', fieldPeriodo.id)" type="button" [ngClass]="{
+                  'filter-active':
+                    (periodoControl.value ||
+                      dataInicialControl.value ||
+                      dataFinalControl.value) &&
+                    !dataInicialControl.invalid &&
+                    !dataFinalControl.invalid,
+                  'filter-error':
+                    requiredFieldsError ||
+                    dataInicialControl.invalid ||
+                    dataFinalControl.invalid
+                }" fxFlex>
+                  <span class="filter-title">{{ fieldPeriodo.titulo }}</span>
+                  <i class="fal fa-chevron-down mr-1"></i>
+                </button>
+                <mat-menu #menuRadio="matMenu" class="mat-elevation-z8 filter">
+                  <div class="filter-search" (click)="stopPropagation($event)">
+                    <div class="filter-header d-flex justify-content-between pl-2 b-divider">
+                      <span> Por período</span>
+                      <button [id]="utility.getElementId(2, 'filter-clean', fieldPeriodo.id)" mat-button color="primary"
+                        class="btn-redefinir" (click)="redefinir(periodoControl, fieldPeriodo)">
+                        Limpar
+                      </button>
+                    </div>
+
+                    <section class="filter-options py-1 px-2">
+                      <mat-radio-group [formControl]="periodoControl"
+                        [id]="utility.getElementId(3, 'filter', fieldPeriodo.id)">
+                        <mat-radio-button *ngFor="let option of fieldPeriodo.options" [value]="option.value"
+                          class="mb-1" (change)="cleanDates()">
+                          {{ option.label }}</mat-radio-button>
+                      </mat-radio-group>
+
+                      <div class="row" fxLayoutAlign="end">
+                        <i class="fa-regular fa-circle-info text-primary info pr-0"
+                          [id]="utility.getElementId(14, 'periodo')"
+                          matTooltip="Na pesquisa, informe intervalo de data limitado a 90 dias."></i>
+                      </div>
+
+                      <div class="row pt-1" fxLayoutGap="10">
+                        <mat-form-field appearance="outline" fxFlex="50" class="mat-field-small mr-1">
+                          <mat-label>DE</mat-label>
+                          <input [id]="utility.getElementId(6, 'filter-de', fieldPeriodo.id)"
+                            [formControl]="dataInicialControl" matInput placeholder="dd/mm/aaaa"
+                            [min]="addDays(dataFinalControl.value, -90)" [max]="addDays(dataFinalControl.value, 0)"
+                            [matDatepicker]="de" [required]="
+                            dataFinalControl.value != null &&
+                            dataFinalControl.value != ''
+                          " (click)="de.open()" (keydown.tab)="de.close()" />
+                          <mat-datepicker-toggle matSuffix [for]="de" hidden>
+                          </mat-datepicker-toggle>
+                          <mat-datepicker #de></mat-datepicker>
+                          <mat-hint class="text-danger bold" *ngIf="dataInicialControl.hasError('required')">
+                            Campo obrigatório
+                          </mat-hint>
+                          <mat-hint class="text-danger bold" *ngIf="
+                            dataInicialControl.hasError('matDatepickerMax')
+                          ">
+                            Data inicial não pode ser maior que hoje
+                          </mat-hint>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" fxFlex="50" class="mat-field-small">
+                          <mat-label>ATÉ</mat-label>
+                          <input [id]="utility.getElementId(6, 'filter-ate', fieldPeriodo.id)"
+                            [formControl]="dataFinalControl" matInput placeholder="dd/mm/aaaa"
+                            [min]="addDays(dataInicialControl.value, 0)" [max]="addDays(dataInicialControl.value, 90)"
+                            [matDatepicker]="ate" (click)="ate.open()" [required]="
+                            dataInicialControl.value != null &&
+                            dataInicialControl.value != ''
+                          " (keydown.tab)="ate.close()" />
+                          <mat-datepicker-toggle matSuffix [for]="ate" hidden>
+                          </mat-datepicker-toggle>
+                          <mat-datepicker #ate></mat-datepicker>
+                          <mat-error class="text-danger bold" *ngIf="
+                            erroDataFinal ||
+                            dataFinalControl.hasError('matDatepickerMin')
+                          ">
+                            Data final deve ser maior que a data inicial
+                          </mat-error>
+                          <mat-hint class="text-danger bold" *ngIf="dataFinalControl.hasError('required')">
+                            Campo obrigatório
+                          </mat-hint>
+                          <mat-hint class="text-danger bold" *ngIf="dataFinalControl.hasError('matDatepickerMax')">
+                            Data final não pode ser maior que hoje
+                          </mat-hint>
+                        </mat-form-field>
+                      </div>
+                    </section>
+                  </div>
+                </mat-menu>
+
+                <!--Por canal-->
+                <app-filter-field [field]="fieldCanal" [control]="canalControl" (selectAll)="selectAll($event)">
+                </app-filter-field>
+
+                <!--Por UF-->
+                <app-filter-field [field]="fieldUf" [control]="ufControl" (selectAll)="selectAll($event)">
+                </app-filter-field>
+
+                <!--Outras opcoes-->
+                <section>
+                  <button mat-stroked-button [matMenuTriggerFor]="menuOpcoes" class="filter-button mt-2"
+                    [id]="utility.getElementId(2, 'filter', fieldOpcoes.id)" type="button" [ngClass]="{
+                    'filter-active': opcoesControl.value,
+                    'filter-error':
+                      requiredFieldsError ||
+                      opcoesControl.invalid ||
+                      formularioConsulta.get('inputChave').invalid
+                  }" fxFlex>
+                    <span class="filter-title">{{ fieldOpcoes.titulo }}</span>
+                    <i class="fal fa-chevron-down mr-1"></i>
+                  </button>
+                  <mat-menu #menuOpcoes="matMenu" class="mat-elevation-z8 filter">
+                    <div class="filter-search" (click)="stopPropagation($event)">
+                      <div class="filter-header d-flex justify-content-between pl-2 b-divider">
+                        <span> {{ fieldOpcoes.titulo }}</span>
+                        <button [id]="utility.getElementId(2, 'filter-clean', fieldOpcoes.id)" mat-button
+                          color="primary" class="btn-redefinir" (click)="redefinir(opcoesControl, fieldOpcoes)">
+                          Limpar
+                        </button>
+                      </div>
+
+                      <section class="filter-options py-1 px-2">
+                        <div class="row" fxLayoutGap="10">
+                          <mat-form-field appearance="outline" fxFlex="auto">
+                            <mat-label>Escolha uma chave</mat-label>
+                            <mat-select [id]="utility.getElementId(5, 'filter', 'chave')" [formControl]="opcoesControl"
+                              (selectionChange)="selecionarChave($event)">
+                              <mat-option>Selecione</mat-option>
+                              <mat-option *ngFor="let chave of chavesPesquisa" [value]="chave?.id">
+                                {{ chave?.valor }}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+
+                        <div class="row" fxLayoutGap="10">
+                          <mat-form-field appearance="outline" fxFlex="auto">
+                            <mat-label>Chave</mat-label>
+                            <input [id]="utility.getElementId(0, 'filter', 'chave')" formControlName="inputChave"
+                              matInput placeholder="Digite a chave" [mask]="masks" [attributes]="attributes"
+                              [required]="opcoesControl.value != null" />
+                            <mat-hint class="text-danger bold" *ngIf="
+                              formularioConsulta
+                                .get('inputChave')
+                                .hasError('required')
+                            ">
+                              Campo obrigatório
+                            </mat-hint>
+                            <mat-hint class="text-danger bold" *ngIf="
+                              formularioConsulta
+                                .get('inputChave')
+                                .hasError('maxlength')
+                            ">
+                              Digite no máximo
+                              {{ attributes.maxlength }} caracteres
+                            </mat-hint>
+                          </mat-form-field>
+                        </div>
+                      </section>
+                    </div>
+                  </mat-menu>
+                </section>
+              </div>
+
+              <div fxLayout.sm="column" fxLayout="row wrap">
+                <!--Por status Portal-->
+                <app-filter-field [field]="fieldStatusPortal" [control]="statusPortalControl">
+                </app-filter-field>
+
+                <!--Por contratos ativos-->
+                <app-filter-field [field]="fieldAtivo" [control]="ativoControl" (selectAll)="selectAll($event)">
+                </app-filter-field>
+              </div>
+
+            </section>
+          </app-grid-filter>
+        </form>
+
+        <mat-card class="consulta__card mt-2 px-0 pt-0">
+          <ng-container>
+            <app-resultado-consulta [consulta]="consultaOperacoes" [chaves]="chavesPesquisa"
+              (espelhoProtocolo)="openEspelho($event)" (inconsistencias)="visualizarInconsistencias($event)"
+              (closePreloader)="onClosePreloader(true)" [refresh]="refreshConsulta">
+            </app-resultado-consulta>
+          </ng-container>
+        </mat-card>
+      </div>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <div class="tab-label">
+          <i class="fa-regular fa-box"></i>
+          <span>Lotes</span>
+        </div>
+      </ng-template>
+
+      <div class="default-tab px-2 pb-3">
+        <app-grid-filter [filter]="filterLote" [radiusTop]="false" (pesquisar)="searchLotes($event)"
+          (redefinir)="redefinirMonitorLotesGrid()" (customControls)="setLoteCustomControls($event)"
+          [showRedefinir]="showRedefinirLoteButton">
+          <section class="first-row d-flex" fxLayout.sm="column" fxLayout="row wrap">
+            <!--Por empresa-->
+            <app-filter-field [field]="fieldLoteEmpresa" [control]="loteEmpresaControl" (selectAll)="selectAll($event)"
+              [searchControl]="loteEmpresaSearchControl" (searchInput)="searchFilter($event)"
+              [redefinirField]="redefinirLoteField">
+            </app-filter-field>
+
+            <!--Por versao-->
+            <app-filter-field [field]="fieldLoteVersao" [control]="loteVersaoControl" (selectAll)="selectAll($event)">
+            </app-filter-field>
+
+            <!--Por status-->
+            <app-filter-field [field]="fieldLoteStatus" [control]="loteStatusControl" (selectAll)="selectAll($event)">
+            </app-filter-field>
+
+            <!--Por protocolo-->
+            <app-filter-field [field]="fieldLoteProtocolo" [control]="loteProtocoloControl">
+            </app-filter-field>
+          </section>
+
+          <section class="second-row d-flex" fxLayout.sm="column" fxLayout="row wrap">
+            <!--Por periodo-->
+            <button mat-stroked-button [matMenuTriggerFor]="menuRadioLote" class="filter-button mt-2"
+              [id]="utility.getElementId(2, 'filter', fieldLotePeriodo.id)" type="button" [ngClass]="{
+                'filter-active':
+                  (lotePeriodoControl.value ||
+                    loteDataInicioControl.value ||
+                    loteDataFimControl.value) &&
+                  !loteDataInicioControl.invalid &&
+                  !loteDataFimControl.invalid,
+                'filter-error':
+                  requiredFieldsError ||
+                  loteDataInicioControl.invalid ||
+                  loteDataFimControl.invalid
+              }" fxFlex>
+              <span class="filter-title">{{ fieldLotePeriodo.titulo }}</span>
+              <i class="fal fa-chevron-down mr-1"></i>
+            </button>
+            <mat-menu #menuRadioLote="matMenu" class="mat-elevation-z8 filter">
+              <div class="filter-search" (click)="stopPropagation($event)">
+                <div class="filter-header d-flex justify-content-between pl-2 b-divider">
+                  <span> Por período</span>
+                  <button [id]="utility.getElementId(2, 'filter-clean', fieldLotePeriodo.id)" mat-button color="primary"
+                    class="btn-redefinir" (click)="redefinir(lotePeriodoControl, fieldLotePeriodo)">
+                    Limpar
+                  </button>
+                </div>
+
+                <section class="filter-options py-1 px-2">
+                  <mat-radio-group [formControl]="lotePeriodoControl"
+                    [id]="utility.getElementId(3, 'filter', fieldLotePeriodo.id)">
+                    <mat-radio-button *ngFor="let option of fieldLotePeriodo.options" [value]="option.value"
+                      class="mb-1" (change)="cleanDatesLote()">
+                      {{ option.label }}</mat-radio-button>
+                  </mat-radio-group>
+
+                  <div class="row pt-1" fxLayoutGap="10">
+                    <mat-form-field appearance="outline" fxFlex="50" class="mat-field-small mr-1">
+                      <mat-label>DE</mat-label>
+                      <input [id]="utility.getElementId(6, 'filter-de', fieldLotePeriodo.id)"
+                        [formControl]="loteDataInicioControl" matInput placeholder="dd/mm/aaaa" (dateChange)="
+                          onChangePeriodoLote($event.target.value, true)
+                        " [min]="minInitialLoteDate" [max]="maxDateLote" [matDatepicker]="lotede" [required]="
+                          loteDataFimControl.value != null &&
+                          loteDataFimControl.value != ''
+                        " (click)="lotede.open()" />
+                      <mat-datepicker-toggle matSuffix [for]="lotede" hidden>
+                      </mat-datepicker-toggle>
+                      <mat-datepicker #lotede></mat-datepicker>
+                      <mat-hint class="text-danger bold" *ngIf="loteDataInicioControl.hasError('required')">
+                        Campo obrigatório
+                      </mat-hint>
+                      <mat-hint class="text-danger bold" *ngIf="
+                          loteDataInicioControl.hasError('matDatepickerMax')
+                        ">
+                        Data inicial não pode ser maior que hoje
+                      </mat-hint>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" fxFlex="50" class="mat-field-small">
+                      <mat-label>ATÉ</mat-label>
+                      <input [id]="
+                          utility.getElementId(6, 'filter-ate', fieldLotePeriodo.id)
+                        " [formControl]="loteDataFimControl" matInput placeholder="dd/mm/aaaa" (dateChange)="
+                          onChangePeriodoLote($event.target.value, false)
+                        " [min]="minDateLote" [matDatepicker]="loteate" (click)="loteate.open()" [required]="
+                          loteDataInicioControl.value != null &&
+                          loteDataInicioControl.value != ''
+                        " />
+                      <mat-datepicker-toggle matSuffix [for]="loteate" hidden>
+                      </mat-datepicker-toggle>
+                      <mat-datepicker #loteate></mat-datepicker>
+                      <mat-error class="text-danger bold" *ngIf="
+                          loteDataFimControl.hasError('matDatepickerMin')
+                        ">
+                        Data final deve ser maior que a data inicial
+                      </mat-error>
+                      <mat-hint class="text-danger bold" *ngIf="loteDataFimControl.hasError('required')">
+                        Campo obrigatório
+                      </mat-hint>
+                      <mat-hint class="text-danger bold" *ngIf="loteDataFimControl.hasError('matDatepickerMax')">
+                        Data final não pode ser maior que hoje
+                      </mat-hint>
+                    </mat-form-field>
+                  </div>
+                </section>
+              </div>
+            </mat-menu>
+          </section>
+        </app-grid-filter>
+
+        <mat-card class="p-0 mt-2">
+          <ng-container>
+            <app-table-lotes [refresh]="refreshLote" [filtro]="monitorLotes" (closePreloader)="onClosePreloader(false)"
+              [refreshGrid]="refreshGrid">
+            </app-table-lotes>
+          </ng-container>
+        </mat-card>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+
+<div class="px-2">
+  <router-outlet></router-outlet>
+</div>

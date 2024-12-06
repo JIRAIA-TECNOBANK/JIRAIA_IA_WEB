@@ -1,0 +1,89 @@
+<div class="filtros-dashboard" fxLayout="row" fxLayoutAlign="space-between">
+    <section fxLayout="row">
+        <div class="icone">
+            <i class="fa-regular fa-chart-simple"></i>
+        </div>
+        <section fxLayout="column" fxLayoutAlign="start" class="pl-1">
+            <p class="bold mb-0">Complemente sua consulta com a visualização dos gráficos abaixo.</p>
+            <p class="mt-0">Se precisar, personalize os resultados utilizando os filtros ao lado.</p>
+        </section>
+    </section>
+
+    <section>
+        <button mat-flat-button type="button" class="bold periodo" [id]="utility.getElementId(2, 'grafico-filtro-7d')"
+            [ngClass]="{ 'selected': periodoPadrao && periodoSelecionado === 7 }" (click)="selecionarPeriodo(7)">
+            7D
+        </button>
+        <button mat-flat-button type="button" class="bold periodo" [id]="utility.getElementId(2, 'grafico-filtro-30d')"
+            [ngClass]="{ 'selected': periodoPadrao && periodoSelecionado === 30 }" (click)="selecionarPeriodo(30)">
+            30D
+        </button>
+        <button mat-flat-button type="button" class="bold periodo" [id]="utility.getElementId(2, 'grafico-filtro-90d')"
+            [ngClass]="{ 'selected': periodoPadrao && periodoSelecionado === 90 }" (click)="selecionarPeriodo(90)">
+            90D
+        </button>
+
+        <button mat-flat-button type="button" class="bold periodo" [id]="utility.getElementId(2, 'grafico-filtrar')"
+            [matMenuTriggerFor]="filtrar" [class.selected]="verificarFiltrosPersonalizados()">
+            <i class="fa-solid fa-sliders"></i> Filtrar
+        </button>
+
+        <mat-menu #filtrar="matMenu" class="mat-elevation-z8 filtro-resumo pt-0" xPosition="before">
+            <div class="filter-search" (click)="stopPropagation($event)">
+                <div class="filter-header d-flex justify-content-between align-items-center pl-2">
+                    <span> Filtrar</span>
+                    <button [id]="utility.getElementId(2, 'limpar-filtro', 'grafico-linha')" mat-button color="primary"
+                        class="btn-redefinir filter-header" (click)="limparFiltros()">
+                        Redefinir
+                    </button>
+                </div>
+
+                <form [formGroup]="filtroForm" fxLayout="column">
+                    <div class="row">
+                        <i class="fa-regular fa-circle-info text-primary info pr-0"
+                            [id]="utility.getElementId(14, 'info-data')"
+                            matTooltip="Na pesquisa, informe intervalo de data limitado a 90 dias."></i>
+                    </div>
+
+                    <div fxLayout="row" class="filtro-datas">
+                        <mat-form-field appearance="outline" fxFlex="50" class="mr-1">
+                            <mat-label>Data inicial</mat-label>
+                            <input [id]="utility.getElementId(6, 'grafico-filtro-data-inicial')"
+                                formControlName="dataInicial" matInput placeholder="dd/mm/aaaa"
+                                [min]="addDays(filtroForm.get('dataFinal').value, -90)"
+                                [max]="addDays(filtroForm.get('dataFinal').value, 0)" [matDatepicker]="deComplementar"
+                                (click)="deComplementar.open()" (keydown.tab)="deComplementar.close()" />
+                            <mat-datepicker-toggle matSuffix [for]="deComplementar"
+                                [id]="utility.getElementId(6, 'data-inicial', 'picker')"></mat-datepicker-toggle>
+                            <mat-datepicker #deComplementar></mat-datepicker>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" fxFlex="50">
+                            <mat-label>Data final</mat-label>
+                            <input [id]="utility.getElementId(6, 'grafico-filtro-data-final')"
+                                formControlName="dataFinal" matInput placeholder="dd/mm/aaaa"
+                                [min]="addDays(filtroForm.get('dataInicial').value, 0)"
+                                [max]="addDays(filtroForm.get('dataInicial').value, 90)"
+                                [matDatepicker]="ateComplementar" (click)="ateComplementar.open()"
+                                (keydown.tab)="ateComplementar.close()" />
+                            <mat-datepicker-toggle matSuffix [for]="ateComplementar"
+                                [id]="utility.getElementId(6, 'data-final', 'picker')"></mat-datepicker-toggle>
+                            <mat-datepicker #ateComplementar></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+
+                    <div fxLayout="row">
+                        <button mat-flat-button type="button" class="bold confirmar w-100"
+                            [id]="utility.getElementId(2, 'grafico-filtro-confirmar')"
+                            (click)="confirmarFiltros(); trigger.closeMenu()">
+                            Pesquisar
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </mat-menu>
+    </section>
+
+    <div class="circle"> </div>
+</div>

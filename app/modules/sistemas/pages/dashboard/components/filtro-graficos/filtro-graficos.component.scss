@@ -1,0 +1,91 @@
+@import '$settings';
+@import '$tools';
+
+.filtros-dashboard {
+    section {
+        display: flex;
+        align-items: center;
+
+        .icone {
+            background: -webkit-linear-gradient(0deg, #E32B51 0%, #056AB0 100%);
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            margin-left: 1rem;
+            margin-right: 1rem;
+
+            i {
+                font-size: 25px;
+            }
+        }
+
+        p {
+            font-size: 14px;
+
+            &.bold {
+                color: $blue-900;
+            }
+        }
+
+        .periodo {
+            background-color: #DFEEFC;
+            color: $blue-700;
+            font-size: 12px;
+            margin-left: 1rem;
+
+            &:hover {
+                color: $white;
+                background-color: $blue-600;
+            }
+        
+            &.selected {
+                color: $white;
+                background-color: $primary;
+            }
+        }
+    }
+
+    .circle {
+        @include border-radius(100%);
+        width: 290px;
+        height: 290px;
+        transform: rotate(175deg);
+        opacity: 0.05;
+        background: linear-gradient(90deg, #E32B51 0%, #056AB0 100%);
+        background-blend-mode: darken;
+        position: absolute;
+        right: 75rem;
+        top: 2rem;
+    }
+}
+
+.filter-search {
+    font-size: 12px !important;
+
+    .filter-header {
+        border-bottom: 1px solid $gray-400;
+
+        span {
+            @include fontMontserratBold;
+            color: $gray-800;
+        }
+
+        button {
+            font-size: 12px !important;
+            border-bottom: none;
+        }
+    }
+
+    form {
+        padding: 1rem;
+
+        .filtro-datas {
+            padding-right: .65rem;
+        }
+
+        .confirmar {
+            color: $white;
+            background-color: $primary;
+            font-size: 12px;
+        }
+    }
+}

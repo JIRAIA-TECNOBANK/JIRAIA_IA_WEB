@@ -1,0 +1,32 @@
+<app-grid-filter 
+  [filter]="filter" 
+  (pesquisar)="search($event)" 
+  (customControls)="setCustomControls($event)"
+  (redefinir)="redefinirFiltros()" 
+  [radiusTop]="false" 
+  [showRedefinir]="showRedefinirBtn" 
+  [triggerShowMore]="false"
+>
+  <section class="first-row d-flex" fxLayout.sm="column" fxLayout="row wrap">
+    <app-filter-field 
+      [field]="fieldUf" 
+      [control]="ufControl" 
+      (selectAll)="selectAll($event, 'uf')"
+    ></app-filter-field>
+
+    <app-filter-field 
+      [field]="fieldNome" 
+      [control]="nomeControl" 
+    ></app-filter-field>
+
+    <app-filter-field 
+      [field]="fieldOrgao" 
+      [control]="orgaoControl" 
+    ></app-filter-field>
+
+    <app-filter-field 
+      [field]="fieldCargo" 
+      [control]="cargoControl"
+    ></app-filter-field>
+  </section>
+</app-grid-filter>

@@ -1,0 +1,56 @@
+<section (click)="formularioAberto = true" fxLayout="row" [ngClass]="{ 'cursor-pointer': !formularioAberto }">
+    <h6 class="mb-1">Gerenciar informações financeiras e contábeis
+        <i *ngIf="!formularioAberto" class="fas fa-check text-success"></i>
+    </h6>
+</section>
+
+<form [formGroup]="formulario" (ngSubmit)="confirmar()" fxLayout="column" [ngClass]="{ 'd-none': !formularioAberto }">
+    <div fxLayout="row wrap" fxLayoutGap="10px grid">
+        <mat-form-field appearance="outline" fxFlex="33">
+            <mat-label>Conta contábil</mat-label>
+            <input matInput placeholder="Conta contábil" formControlName="contaContabil" type="text" required
+                [id]="utility.getElementId(1, 'conta-contabil')" numbers-only maxlength="15" />
+            <mat-hint>Obrigatório</mat-hint>
+            <mat-error *ngIf="formulario.get('contaContabil').hasError('required')">Obrigatório</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="33">
+            <mat-label>Código Bacen</mat-label>
+            <input matInput placeholder="Código Bacen" formControlName="codigoBacen" type="text" required
+                [id]="utility.getElementId(1, 'codigo-bacen')" numbers-only maxlength="15" />
+            <mat-hint>Obrigatório</mat-hint>
+            <mat-error *ngIf="formulario.get('codigoBacen').hasError('required')">Obrigatório</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="33">
+            <mat-label>Condição de pagamento</mat-label>
+            <input matInput placeholder="Condição de pagamento" formControlName="condicaoPagamento" type="text" required
+                [id]="utility.getElementId(1, 'condicao-pagamento')" numbers-only maxlength="15" />
+            <mat-hint>Obrigatório</mat-hint>
+            <mat-error *ngIf="formulario.get('condicaoPagamento').hasError('required')">Obrigatório</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="33">
+            <mat-label>Natureza financeira</mat-label>
+            <input matInput placeholder="Natureza financeira" formControlName="naturezaFinanceira" type="text" required
+                [id]="utility.getElementId(1, 'natureza-financeira')" numbers-only maxlength="15" />
+            <mat-hint>Obrigatório</mat-hint>
+            <mat-error *ngIf="formulario.get('naturezaFinanceira').hasError('required')">Obrigatório</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="33">
+            <mat-label>Código país</mat-label>
+            <input matInput placeholder="Código país" formControlName="codigoPais" type="text" required
+                [id]="utility.getElementId(1, 'codigo-pais')" numbers-only maxlength="15" />
+            <mat-hint>Obrigatório</mat-hint>
+            <mat-error *ngIf="formulario.get('codigoPais').hasError('required')">Obrigatório</mat-error>
+        </mat-form-field>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="end">
+        <button mat-flat-button color="primary" [id]="utility.getElementId(2, 'salvar-info-contabeis')" type="submit"
+            [disabled]="!formulario.valid" class="bold">
+            Salvar
+        </button>
+    </div>
+</form>

@@ -1,0 +1,21 @@
+@import '$settings';
+@import '$tools';
+
+h6 {
+    @include fontMontserratBold;
+    font-size: 16px;
+    color: $gray-800;
+    margin: 8px 0 8px 0;
+}
+
+.label {
+    font-size: 12px;
+}
+
+.w-35 {
+    width: 35%;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}

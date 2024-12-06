@@ -1,0 +1,195 @@
+<div>
+	<section class="text-paginator">
+		<div class="row d-flex">
+			<section class="select-options mr-4 d-flex" *ngIf="selection.selected.length > 0">
+				{{ selection.selected.length }} operaç{{ selection.selected.length > 1 ? 'ões' : 'ão' }}
+				selecionada{{
+				selection.selected.length > 1 ? 's' : '' }}
+
+				<div class="btn-wrapper" matTooltip="Aprovar" (click)="onAprovar()"
+					[id]="utility.getElementId(2, 'aprovar-conciliacao')" *ngIf="habilitarAprovar()">
+					<i class="fa-regular fa-clipboard-check"></i>
+				</div>
+
+				<div class="btn-wrapper" (click)="exportarTodos(selection.selected)" matTooltip="Exportar"
+					[id]="utility.getElementId(2, 'exportar-arquivos-conciliacao')">
+					<i class="fa-regular fa-file-export"></i>
+				</div>
+
+				<div class="btn-wrapper" (click)="regerarConciliacao()" matTooltip="Gerar novamente a conciliação"
+					[id]="utility.getElementId(2, 'regerar-conciliacao')">
+					<i class="fa-regular fa-rotate-right"></i>
+				</div>
+
+				<div class="btn-wrapper" matTooltip="Exportar relatório de pré-fechamento"
+					(click)="onExportarRelatorioFechamento(selection.selected)"
+					[id]="utility.getElementId(2, 'exportar-relatorio-pre-fechamento-conciliacao')">
+					<i class="fa-regular fa-file-invoice-dollar"></i>
+				</div>
+			</section>
+
+			<section class="default-text" *ngIf="paginator">
+				Mostrando
+				{{
+				paginator?.pageSize > totalItens
+				? totalItens
+				: paginator?.pageSize
+				}}
+				de {{ totalItens }} resultados
+			</section>
+		</div>
+	</section>
+	<mat-paginator [pageSizeOptions]="[25, 50, 75, 100, 1000]" [length]="totalItens" #paginator></mat-paginator>
+
+	<div>
+		<table mat-table [dataSource]="items$ | async" (matSortChange)="sortData($event)" #table="matSort"
+			aria-describedby="Conciliação" matSort>
+			<ng-container matColumnDef="selecionar">
+				<th mat-header-cell *matHeaderCellDef class="pr-1">
+					<mat-checkbox [id]="utility.getElementId(4, 'select-all-op-concilioacao')"
+						(change)="$event ? utility.toggleAllRows(selection, dataSource, 'id') : null"
+						[checked]="utility.verifyPageSelection(selection, dataSource, 'id') == 1"
+						[indeterminate]="utility.verifyPageSelection(selection, dataSource, 'id') == 2">
+					</mat-checkbox>
+				</th>
+				<td mat-cell *matCellDef="let element">
+					<mat-checkbox [id]="utility.getElementId(4, element.id)" (click)="$event.stopPropagation()"
+						(change)="$event ? utility.check(selection, element, 'id') : null"
+						[checked]="utility.isSelected(selection, element, 'id')" [disabled]="desabilitarCheckbox()">
+					</mat-checkbox>
+				</td>
+			</ng-container>
+
+			<ng-container matColumnDef="empresa">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Empresa</th>
+				<td mat-cell *matCellDef="let element" [matTooltip]="element.empresa" class="column-max-width">{{
+					element.empresa }}</td>
+			</ng-container>
+
+			<ng-container matColumnDef="clienteId">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Código do cliente</th>
+				<td mat-cell *matCellDef="let element" class="column-max-width">{{
+					element.clienteId }}</td>
+			</ng-container>
+
+			<ng-container matColumnDef="uf">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>UF</th>
+				<td mat-cell *matCellDef="let element" class="column-max-width">{{
+					element.uf }}</td>
+			</ng-container>
+
+			<ng-container matColumnDef="mesCompetencia">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Mês de
+					competência</th>
+				<td mat-cell *matCellDef="let element" class="column-max-width">{{
+					element.mesCompetencia | date: "MM/yyyy" }}</td>
+			</ng-container>
+
+			<ng-container matColumnDef="quantidadeOperacoes">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Quant.
+					de operações</th>
+				<td mat-cell *matCellDef="let element" class="column-max-width">{{
+					element.quantidadeOperacoes }}</td>
+			</ng-container>
+
+			<ng-container matColumnDef="quantidadeReembolsar">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Operações
+					a reembolsar</th>
+				<td mat-cell *matCellDef="let element" class="column-max-width">{{
+					element.quantidadeReembolsar }}</td>
+			</ng-container>
+
+			<ng-container matColumnDef="valorNotaFiscal">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Valor da
+					Nota Fiscal</th>
+				<td mat-cell *matCellDef="let element" class="column-max-width">{{
+					element.valorNotaFiscal | currency : 'BRL' }}</td>
+			</ng-container>
+
+			<ng-container matColumnDef="valorNotaDebito">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Valor da
+					Nota de Débito</th>
+				<td mat-cell *matCellDef="let element" class="column-max-width">{{
+					element.valorNotaDebito | currency : 'BRL' }}</td>
+			</ng-container>
+
+			<ng-container matColumnDef="status">
+				<th mat-header-cell *matHeaderCellDef>
+					Status <i id="icon-tooltip-status" class="fa-regular fa-circle-info text-primary info"
+						matTooltipClass="tooltip-grid-header" #tooltip="matTooltip"
+						[id]="utility.getElementId(14, 'status', 'conciliacao')"
+						matTooltip="Conciliado: Os contratos registrados e elegíveis para faturamento foram validados com sucesso através da conciliação entre Detran e Tecnobank.
+                    
+                    Não Conciliado: Até o momento o DETRAN não disponibilizou seu relatório de fechamento para validação, portanto para cobrança consideramos as operações apuradas internamente pela Tecnobank e que são elegíveis para faturamento.
+                    
+                    Aguardando revisão: Para que essa conciliação possa ser concluída, favor analisar e aplicar as tratativas manuais."></i>
+				</th>
+				<td mat-cell *matCellDef="let element" class="column-max-width">
+					<span *ngIf="element.isConciliadoForaPrazo" class="icone-informacao-grid"
+						matTooltipClass="tooltip-grid-header"
+						matTooltip="Arquivo conciliado fora do prazo esperado, posterior ao 3º dia do mês.">i</span> {{
+					element.statusFaturamentoConciliado.descricao }}
+				</td>
+			</ng-container>
+
+			<ng-container matColumnDef="acoes">
+				<th mat-header-cell *matHeaderCellDef></th>
+				<td mat-cell *matCellDef="let element" class="min-width">
+					<div>
+						<button mat-button [matMenuTriggerFor]="menu">
+							<mat-icon>more_vert</mat-icon>
+						</button>
+						<mat-menu #menu="matMenu">
+							<button mat-menu-item [id]="utility.getElementId(2, 'baixar-conciliacao', element.id)"
+								(click)="baixarArquivoConciliacao(element.id, element.mesCompetencia, element.cnpj)">
+								Baixar
+							</button>
+							<button mat-menu-item (click)="openDialogEnviarEmail(element)"
+								[id]="utility.getElementId(2, 'enviar-email-conciliacao', element.id)">
+								Enviar por e-mail
+							</button>
+							<button mat-menu-item (click)="onExcluirCobranca(element)"
+								[id]="utility.getElementId(2, 'excluir-cobranca-conciliacao', element.id)">
+								Excluir cobrança
+							</button>
+							<button mat-menu-item (click)="onExcluirArquivo(element)"
+								[id]="utility.getElementId(2, 'excluir-arquivo-conciliacao', element.id)">
+								Excluir arquivo
+							</button>
+						</mat-menu>
+					</div>
+				</td>
+			</ng-container>
+
+			<ng-container matColumnDef="semRegistro">
+				<th class="text-center feedBack pt-1" mat-cell *matFooterCellDef colspan="11">
+					<img src="./../../../../../../../../../../assets/img/custom-icons/icon-vazio-artigos.svg"
+						alt="Não há registros." />
+					<p class="desk bold text-gray-700"> Não há registros. </p>
+				</th>
+			</ng-container>
+
+			<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+			<tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+			<tr mat-row *matFooterRowDef="['semRegistro']" [ngClass]="{'d-none': totalItens > 0 }"></tr>
+		</table>
+
+		<section class="text-paginator">
+			<div class="row d-flex">
+				<section class="default-text">
+					Mostrando
+					{{
+					paginator?.pageSize > totalItens
+					? totalItens
+					: paginator?.pageSize
+					}}
+					de {{ totalItens }} resultados
+				</section>
+			</div>
+		</section>
+		<mat-paginator (page)="syncPrimaryPaginator($event)" [pageSize]="paginator.pageSize"
+			[pageIndex]="paginator.pageIndex" [length]="paginator.length"
+			[pageSizeOptions]="paginator?.pageSizeOptions">
+		</mat-paginator>
+	</div>
+</div>

@@ -1,0 +1,104 @@
+<mat-card class="espelho-contrato">
+  <div class="panel-title">
+    Dados complementares do contrato
+  </div>
+
+  <div fxLayout="row" fxLayoutGap="10px" class="mt-2">
+    <div fxFlex="20" class="item">
+      <div class="item-title">Taxa de mora</div>
+      <div class="item-description">{{ contrato?.complementar.indicadorTaxaMora ? 'Sim' : 'Não' }}</div>
+    </div>
+    <div fxFlex="20" class="item">
+      <div class="item-title">Valor taxa de mora</div>
+      <div class="item-description">{{ contrato?.complementar.indicadorTaxaMora ? (contrato?.complementar.valorTaxaMora
+        === null ? '-' : contrato?.complementar.valorTaxaMora + '%') : '-' }}</div>
+    </div>
+    <div fxFlex="auto" class="item">
+      <div class="item-title">Índices</div>
+      <div class="item-description">{{ contrato?.complementar.indice ?? '-' }}</div>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayoutGap="10px" class="mt-2">
+    <div fxFlex="20" class="item">
+      <div class="item-title">Taxa de multa</div>
+      <div class="item-description">{{ contrato?.complementar?.indicadorTaxaMulta ? 'SIM' : 'NÃO' }}</div>
+    </div>
+    <div fxFlex="20" class="item">
+      <div class="item-title">Valor taxa de multa</div>
+      <div class="item-description">{{ contrato?.complementar.indicadorTaxaMulta ?
+        (contrato?.complementar.valorTaxaMulta === null ? '-' : contrato?.complementar.valorTaxaMulta + '%') : '-' }}
+      </div>
+    </div>
+    <div fxFlex="30" class="item">
+      <div class="item-title">Indicador de comissão</div>
+      <div class="item-description">{{ contrato?.complementar.indicadorComissao ? 'SIM' : 'NÃO' }}</div>
+    </div>
+    <div fxFlex="30" class="item">
+      <div class="item-title">Comissão</div>
+      <div class="item-description">{{ contrato?.complementar.comissao === null ? '-' : contrato?.complementar.comissao
+        + '%' }}</div>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayoutGap="10px" class="mt-2">
+    <div fxFlex="20" class="item" *ngIf="contrato?.contrato.ufLicenciamento == 'PR'">
+      <div class="item-title">Valor taxa de contrato</div>
+      <div class="item-description">{{ getValorTaxaContrato(contrato?.complementar.taxaContrato) }}</div>
+    </div>
+    <div fxFlex="20" class="item">
+      <div class="item-title">Valor taxa de juros ao mês</div>
+      <div class="item-description">{{ contrato?.complementar.taxaJurosMes === null ? '-' :
+        contrato?.complementar.taxaJurosMes + '%' }}</div>
+    </div>
+    <div [fxFlex]="contrato?.contrato.ufLicenciamento == 'PR' ? '30' : '20'" class="item">
+      <div class="item-title">Indicador de penalidade</div>
+      <div class="item-description">{{ contrato?.complementar.indicadorPenalidade ? 'SIM' : 'NÃO' }}</div>
+    </div>
+    <div fxFlex="30" class="item">
+      <div class="item-title">Penalidade</div>
+      <div class="item-description">{{ contrato?.complementar.indicadorPenalidade ? (contrato?.complementar.penalidade
+        == '' || contrato?.complementar.penalidade == null ? '-' : contrato?.complementar.penalidade) : '-' }}</div>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayoutGap="10px">
+    <div fxFlex="20" class="item">
+      <div class="item-title mt-2">Valor do IoF</div>
+      <div class="item-description">{{ valorTaxaIof }}</div>
+
+      <div class="item-title mt-2">Principal recebedor do pagamento</div>
+      <div class="item-description">{{ contrato?.complementar.nomeRecebedorPagamento == '' ||
+        contrato?.complementar.nomeRecebedorPagamento == null ? '-' :
+        contrato?.complementar.nomeRecebedorPagamento }}</div>
+
+      <div class="item-title mt-2">Tipo doc. recebedor</div>
+      <div class="item-description">{{ contrato?.complementar.documentoRecebedor?.tipoDocumento == 1 ? 'CPF' : 'CNPJ' }}
+      </div>
+
+      <div class="item-title mt-2">Tipo doc. vendedor</div>
+      <div class="item-description">{{ contrato?.complementar.documentoVendedor?.tipoDocumento == 1 ? 'CPF' : 'CNPJ' }}
+      </div>
+    </div>
+
+    <div fxFlex="20" class="item">
+      <div class="item-title mt-2">Valor taxa de juros ao ano</div>
+      <div class="item-description">{{ contrato?.complementar.taxaJurosAno === null ? '-' :
+        contrato?.complementar.taxaJurosAno + '%' }}</div>
+
+      <div class="item-title mt-2">&nbsp;</div>
+      <div class="item-description">&nbsp;</div>
+
+      <div class="item-title mt-2">CPF/CNPJ do recebedor do pgto</div>
+      <div class="item-description">{{ documentoRecebedor }}</div>
+
+      <div class="item-title mt-2">CPF/CNPJ do vendedor do bem</div>
+      <div class="item-description">{{ documentoVendedor }}</div>
+    </div>
+
+    <div fxFlex="60" class="item mt-2">
+      <div class="item-title">Comentários</div>
+      <div class="item-description">{{ contrato?.complementar.comentario?? '-' }}</div>
+    </div>
+  </div>
+</mat-card>

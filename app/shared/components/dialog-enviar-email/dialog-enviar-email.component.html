@@ -1,0 +1,51 @@
+<div class="content px-2">
+  <p>Adicione ao menos um e-mail para receber {{ texto }}:</p>
+
+  <form [formGroup]="formulario">
+    <div fxLayout="row" fxLayoutGap="10px">
+      <mat-form-field appearance="outline" fxFlex="100">
+        <mat-label>Escolha uma empresa </mat-label>
+        <input type="text" matInput [id]="utility.getElementId(5, 'empresa')" name="empresaNome"
+          formControlName="empresaNome" placeholder="Digite a empresa" (blur)="selecionaEmpresaId()"
+          (input)="filtrarEmpresas($event.target.value)" [matAutocomplete]="empresasselect">
+        <mat-autocomplete #empresasselect="matAutocomplete">
+          <mat-option *ngFor="let empresa of empresasFiltradas" [value]="empresa.nomeFantasia + ' - ' + empresa.cnpj"
+            class="usuario-email" [matTooltip]="empresa.nomeFantasia + ' - ' + empresa.cnpj">{{
+            empresa.nomeFantasia }} - {{ empresa.cnpj }}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-hint>Obrigatório</mat-hint>
+        <mat-error *ngIf="formulario.controls['empresaId'].hasError('required')">Campo obrigatório
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div fxLayout="row" fxLayoutGap="10px">
+      <mat-form-field class="default-chip-list py-0" appearance="outline">
+        <mat-label>E-mails que receberão {{ texto }}</mat-label>
+        <mat-chip-list #chipList aria-label="Seleção de usuários" required
+          [disabled]="!formulario.get('empresaId').value">
+          <mat-chip *ngFor="let usuario of usuarios" (removed)="remove(usuario)">
+            {{usuario.nome}}
+            <button matChipRemove>
+              <i class="fa-solid fa-xmark text-primary"></i>
+            </button>
+          </mat-chip>
+          <input [id]="utility.getElementId(0, 'empresa-usuarios')" #usuarioInput [formControl]="usuariosControl"
+            [matAutocomplete]="auto" [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            (matChipInputTokenEnd)="add($event)">
+        </mat-chip-list>
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+          <mat-option *ngFor="let usuario of filteredUsuarios | async" [value]="usuario.nome" class="email-chip">
+            {{usuario.nome}}
+            <span class="usuario-adicionado" *ngIf="verifyUsuarioAdicionado(usuario)">Adicionado</span>
+            <span>{{ usuario.email }}</span>
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+    <mat-hint class="mat-hint-custom">Obrigatório</mat-hint>
+    <mat-error class="mat-hint-custom" *ngIf="usuariosControl.hasError('required')">Campo obrigatório
+    </mat-error>
+  </form>
+</div>

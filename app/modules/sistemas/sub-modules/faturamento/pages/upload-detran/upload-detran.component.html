@@ -1,0 +1,84 @@
+<section class="mx-2">
+  <mat-card class="mat-elevation-z8">
+    <form [formGroup]="formulario" #form="ngForm" fxLayout="row " fxLayoutAlign="space-between center">
+      <section
+        fxFlex="90"
+        fxLayout="row wrap"
+        fxLayoutGap="10px"
+        fxLayoutAlign="start grid"
+      >
+        <mat-form-field
+          appearance="outline"
+          fxFlex="10"
+          [id]="utility.getElementId(5, 'consultar-detran-uf')"
+        >
+          <mat-label>UF </mat-label>
+          <mat-select formControlName="uf" required>
+            <mat-option *ngFor="let uf of ufs" [value]="uf.valor">
+              {{ uf.valor }}
+            </mat-option>
+          </mat-select>
+          <mat-hint>Obrigatório</mat-hint>
+          <mat-error *ngIf="formulario.controls['uf'].hasError('required')"
+            >Obrigatório
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field
+          appearance="outline"
+          fxFlex="20"
+          [id]="utility.getElementId(5, 'consultar-detran-mes-competencia')"
+        >
+          <mat-label>Mês competência </mat-label>
+          <mat-select formControlName="mes" required>
+            <mat-option
+              *ngFor="let mes of utility.listaNomesMesas(); let i = index"
+              [value]="i + 1"
+            >
+              {{ mes }}
+            </mat-option>
+          </mat-select>
+          <mat-hint>Obrigatório</mat-hint>
+          <mat-error *ngIf="formulario.controls['mes'].hasError('required')"
+            >Obrigatório
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field
+        appearance="outline"
+        fxFlex="20"
+        [id]="utility.getElementId(5, 'consultar-detran-ano-competencia')"
+      >
+        <mat-label>Ano competência </mat-label>
+        <input
+            type="text"
+            matInput
+            [id]="utility.getElementId(0, 'consultar-detran-ano-competencia')"
+            name="ano"
+            formControlName="ano"
+            placeholder="ano"
+            numbers-only
+            maxlength="4"
+            required
+          />
+        <mat-hint>Obrigatório</mat-hint>
+        <mat-error *ngIf="formulario.controls['ano'].hasError('required')"
+          >Obrigatório
+        </mat-error>
+      </mat-form-field>
+      </section>
+
+      <button
+        mat-flat-button
+        color="secondary"
+        class="submit"
+        type="submit"
+        [disabled]="!formulario.valid"
+        [id]="utility.getElementId(2, 'enviar-arquivo')"
+        (click)="abrirDialogEnviarArquivos()"
+      >
+			<i class="fa-solid fa-upload"></i><span>&nbsp;&nbsp;Enviar arquivo</span>
+      </button>
+    </form>
+  </mat-card>
+</section>

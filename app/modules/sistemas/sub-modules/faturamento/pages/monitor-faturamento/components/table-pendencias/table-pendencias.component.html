@@ -1,0 +1,136 @@
+<div>
+	<section class="text-paginator">
+		<div class="row d-flex">
+			<section class="default-text" *ngIf="paginator">
+				Mostrando
+				{{
+				paginator?.pageSize > totalItens
+				? totalItens
+				: paginator?.pageSize
+				}}
+				de {{ totalItens }} resultados
+			</section>
+		</div>
+	</section>
+	<mat-paginator [pageSizeOptions]="[25, 50, 75, 100, 1000]" [length]="totalItens" #paginator></mat-paginator>
+
+	<div>
+		<table mat-table [dataSource]="items$ | async" (matSortChange)="sortData($event)" #table="matSort"
+			aria-describedby="Pendências" matSort>
+			<ng-container matColumnDef="empresa">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Empresa</th>
+				<td mat-cell *matCellDef="let element" [matTooltip]="element.empresa" class="column-max-width">{{
+					element.empresa }}</td>
+			</ng-container>
+
+			<ng-container matColumnDef="clienteId">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Código do cliente</th>
+				<td mat-cell *matCellDef="let element" class="column-max-width">{{
+					element.clienteId }}</td>
+			</ng-container>
+
+			<ng-container matColumnDef="uf">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>UF</th>
+				<td mat-cell *matCellDef="let element" class="column-max-width">{{
+					element.uf }}</td>
+			</ng-container>
+
+			<ng-container matColumnDef="mesCompetencia">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Mês de
+					competência</th>
+				<td mat-cell *matCellDef="let element" class="column-max-width">{{
+					element.mesCompetencia | date: "MM/yyyy" }}</td>
+			</ng-container>
+
+			<ng-container matColumnDef="quantidadeOperacoes">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Quant.
+					de operações</th>
+				<td mat-cell *matCellDef="let element" class="column-max-width">{{
+					element.quantidadeOperacoes }}</td>
+			</ng-container>
+
+			<ng-container matColumnDef="quantidadeReembolsar">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Operações
+					a reembolsar</th>
+				<td mat-cell *matCellDef="let element" class="column-max-width">{{
+					element.quantidadeReembolsar }}</td>
+			</ng-container>
+
+			<ng-container matColumnDef="valorNotaFiscal">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Valor da
+					Nota Fiscal</th>
+				<td mat-cell *matCellDef="let element" class="column-max-width">{{
+					element.valorNotaFiscal | currency : 'BRL' }}</td>
+			</ng-container>
+
+			<ng-container matColumnDef="valorNotaDebito">
+				<th mat-header-cell *matHeaderCellDef mat-sort-header>Valor da
+					Nota de Débito</th>
+				<td mat-cell *matCellDef="let element" class="column-max-width">{{
+					element.valorNotaDebito | currency : 'BRL' }}</td>
+			</ng-container>
+
+			<ng-container matColumnDef="status">
+				<th mat-header-cell *matHeaderCellDef>
+					Status <i id="icon-tooltip-status" class="fa-regular fa-circle-info text-primary info"
+						matTooltipClass="tooltip-grid-header" #tooltip="matTooltip"
+						[id]="utility.getElementId(14, 'status', 'pendencias')"
+						matTooltip="Aguardando revisão: Para que essa conciliação possa ser concluída, favor analisar e aplicar as tratativas manuais."></i>
+				</th>
+				<td mat-cell *matCellDef="let element" [matTooltip]="element.statusFaturamentoConciliado.descricao"
+					class="column-max-width">
+					<span *ngIf="element.isConciliadoForaPrazo" class="icone-informacao-grid" matTooltipClass="tooltip-grid-header"
+						matTooltip="Arquivo conciliado fora do prazo esperado, posterior ao 3º dia do mês.">i</span>
+					{{ element.statusFaturamentoConciliado.descricao }}
+				</td>
+			</ng-container>
+
+			<ng-container matColumnDef="acoes">
+				<th mat-header-cell *matHeaderCellDef></th>
+				<td mat-cell *matCellDef="let element" class="min-width">
+					<div>
+						<button mat-button [matMenuTriggerFor]="menu">
+							<mat-icon>more_vert</mat-icon>
+						</button>
+						<mat-menu #menu="matMenu">
+							<button mat-menu-item [id]="utility.getElementId(2, 'detalhar-pendencia', element.id)"
+								(click)="detalhar(element.id, element.empresa, element.uf)">
+								Detalhar
+							</button>
+						</mat-menu>
+					</div>
+				</td>
+			</ng-container>
+
+			<ng-container matColumnDef="semRegistro">
+				<th class="text-center feedBack pt-1" mat-cell *matFooterCellDef colspan="11">
+					<img src="./../../../../../../../../../../assets/img/custom-icons/icon-vazio-artigos.svg"
+						alt="Não há registros" />
+					<p class="desk bold text-gray-700"> Não há registros. </p>
+				</th>
+			</ng-container>
+
+			<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+			<tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+			<tr mat-row *matFooterRowDef="['semRegistro']" [ngClass]="{'d-none': totalItens > 0 }"></tr>
+		</table>
+
+		<section class="text-paginator">
+			<div class="row d-flex">
+				<section class="default-text">
+					Mostrando
+					{{
+					paginator?.pageSize > totalItens
+					? totalItens
+					: paginator?.pageSize
+					}}
+					de {{ totalItens }} resultados
+				</section>
+			</div>
+		</section>
+		<mat-paginator (page)="syncPrimaryPaginator($event)" [pageSize]="paginator.pageSize"
+			[pageIndex]="paginator.pageIndex" [length]="paginator.length"
+			[pageSizeOptions]="paginator?.pageSizeOptions">
+		</mat-paginator>
+	</div>
+</div>

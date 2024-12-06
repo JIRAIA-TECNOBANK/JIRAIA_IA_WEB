@@ -1,0 +1,93 @@
+<div class="d-flex justify-content-end top-options tab-grupo-child" style="gap: 10px">
+  <button mat-flat-button [id]="utility.getElementId(2, 'convidar-usuario')" color="secondary"
+    (click)="convidarUsuario()" *ngIf="tabNumber == 2"
+    [disabled]="!utility.getPermission([Permissoes.GESTAO_EMPRESA_USUARIO_CONVIDADO_CADASTRAR])">Convidar
+    usuário</button>
+</div>
+
+<mat-tab-group (selectedTabChange)="changeTab($event)" [selectedIndex]="tabNumber">
+  <mat-tab label="Empresas disponíveis"
+    [disabled]="!utility.getPermission([Permissoes.GESTAO_EMPRESA_GRUPO_ECONOMICO_CADASTRAR])">
+    <ng-template mat-tab-label>
+      <div class="empresas-tab-label" id="label-empresas-disponiveis">
+        <i class="fa-regular fa-building"></i>
+        <span>Empresas disponíveis</span>
+      </div>
+    </ng-template>
+    <div class="px-2">
+      <app-grid-filter [filter]="filterDisponiveis" (pesquisar)="searchDisponiveis($event)"
+        (redefinir)="redefinirDisponiveis()" [radiusTop]="false"
+        [showRedefinir]="showRedefinirDisponiveisBtn"></app-grid-filter>
+    </div>
+
+    <div class="default-tab px-2 pb-3">
+      <mat-card class="mat-elevation-z8 mt-2 p-0">
+        <app-empresas-disponiveis [grupoEconomicoId]="grupoEconomicoId" [filtro]="filtroDisponiveis"
+          (atualizarGrid)="atualizarGrid(false)" [atualizar]="atualizarDisponiveis">
+        </app-empresas-disponiveis>
+      </mat-card>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="Empresas incluídas">
+    <ng-template mat-tab-label>
+      <div class="empresas-tab-label" id="label-empresas-incluidas">
+        <i class="fa-regular fa-building-circle-check"></i>
+        <span>Empresas incluídas</span>
+      </div>
+    </ng-template>
+    <div class="px-2">
+      <app-grid-filter [filter]="filterIncluidas" (pesquisar)="searchIncluidas($event)"
+        (redefinir)="redefinirIncluidas()" [radiusTop]="false"
+        [showRedefinir]="showRedefinirIncluidasBtn"></app-grid-filter>
+    </div>
+
+    <div class="default-tab px-2 pb-3">
+      <mat-card class="mat-elevation-z8 mt-2 p-0">
+        <app-empresas-incluidas [grupoEconomicoId]="grupoEconomicoId" [filtro]="filtroIncluidas"
+          (atualizarGrid)="atualizarGrid(true)" [atualizar]="atualizarIncluidas"></app-empresas-incluidas>
+      </mat-card>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="convidados">
+    <ng-template mat-tab-label>
+      <div class="empresas-tab-label" id="label-usuarios-convidados">
+        <i class="fa-regular fa-users-medical text-default"></i>&nbsp;
+        <span>Usuários convidados</span>
+      </div>
+    </ng-template>
+    <div class="px-2">
+      <app-grid-filter [filter]="filterConvidado" (pesquisar)="searchConvidados($event)"
+        (customControls)="setCustomControls($event)" (redefinir)="redefinirFiltroConvidado()"
+        [showRedefinir]="refreshUsuarioConvidadoGrid" [radiusTop]="false"
+        [id]="getElementId(2, 'grupo-economico-convidar-usuarios')">
+        <!--Por nome-->
+        <app-filter-field [field]="fieldNomeConvidado" [control]="nomeUsuarioControl">
+        </app-filter-field>
+
+        <!--Por email-->
+        <app-filter-field [field]="fieldEmailConvidado" [control]="emailConvidadoControl" [searchControl]="emailConvidadoSearchControl"
+          (searchInput)="searchFilter($event)" [redefinirField]="redefinirField">
+        </app-filter-field>
+
+        <!--Por empresa-->
+        <app-filter-field [field]="fieldEmpresaConvidado" [control]="empresaControl" (selectAll)="selectAll($event)"
+          [searchControl]="empresaSearchControl" (searchInput)="searchFilter($event)" [redefinirField]="redefinirField">
+        </app-filter-field>
+
+        <!--Por tipo usuario-->
+        <app-filter-field [field]="fieldTipoConvidado" [control]="tipoUsuarioControl" (selectAll)="selectAll($event)">
+        </app-filter-field>
+      </app-grid-filter>
+    </div>
+
+    <div class="default-tab px-2 pb-3">
+      <mat-card class="mat-elevation-z8 mt-2 p-0">
+        <app-table-usuarios-convidados [filtro]="filtroUsuarioConvidado" [refreshGrid]="refreshUsuarioConvidadoGrid"
+          [grupoEconomicoId]="grupoEconomicoId">
+        </app-table-usuarios-convidados>
+      </mat-card>
+    </div>
+  </mat-tab>
+</mat-tab-group>

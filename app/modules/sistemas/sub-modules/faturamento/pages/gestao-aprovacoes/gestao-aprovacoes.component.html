@@ -1,0 +1,40 @@
+<mat-tab-group (selectedTabChange)="onTabChange($event)" [selectedIndex]="activeIndex">
+    <mat-tab [disabled]="!utility.getPermission([Permissoes.GESTAO_FINANCEIRO_APROVAR_CANCELAMENTO_NF_ND])">
+        <ng-template mat-tab-label>
+            <div class="tab-label">
+                <i class="fa-regular fa-note-sticky"></i>
+                <span>Cancelamento de NF/ND</span>
+            </div>
+        </ng-template>
+        <div class="px-2">
+            <app-filtro-cancelamento-nf-nd [ufOptions]="filterOptionUf" (filtro)="filtroCancelamentoNotas = $event"
+                [empresaOptions]="filterOptionEmpresa"></app-filtro-cancelamento-nf-nd>
+        </div>
+
+        <div class="default-tab px-2 pb-3">
+            <mat-card class="mat-elevation-z8 mt-2 p-0">
+                <app-table-cancelamento-nf-nd [aba]="activeIndex === 0"
+                    [filtro]="filtroCancelamentoNotas"></app-table-cancelamento-nf-nd>
+            </mat-card>
+        </div>
+    </mat-tab>
+    <mat-tab [disabled]="!utility.getPermission([Permissoes.GESTAO_FINANCEIRO_APROVACAO_PRECO_TECNOBANK])">
+        <ng-template mat-tab-label>
+            <div class="tab-label">
+                <i class="fa-regular fa-basket-shopping"></i>
+                <span>Cesta de serviços</span>
+            </div>
+        </ng-template>
+        <div class="px-2">
+            <app-filtro-cesta-servico [ufOptions]="filterOptionUf" (filtro)="filtroAprovacaoCesta = $event"
+                [empresaOptions]="filterOptionEmpresa"></app-filtro-cesta-servico>
+        </div>
+
+        <div class="default-tab px-2 pb-3">
+            <mat-card class="mat-elevation-z8 mt-2 p-0">
+                <app-table-cesta-servico [aba]="activeIndex === 1"
+                    [filtro]="filtroAprovacaoCesta"></app-table-cesta-servico>
+            </mat-card>
+        </div>
+    </mat-tab>
+</mat-tab-group>

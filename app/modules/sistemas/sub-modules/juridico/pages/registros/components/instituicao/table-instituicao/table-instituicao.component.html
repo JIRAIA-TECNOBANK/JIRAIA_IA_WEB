@@ -1,0 +1,117 @@
+<div>
+  <section class="text-paginator">
+    <div class="row d-flex">
+      <section class="default-text" *ngIf="paginator">
+        Mostrando {{ paginator?.pageSize > totalItems ? totalItems : paginator?.pageSize }}
+        de {{ totalItems }} resultados
+      </section>
+    </div>
+  </section>
+
+  <mat-paginator
+    [pageSizeOptions]="[25, 50, 75, 100]"
+    [length]="totalItems"
+    #paginator
+  ></mat-paginator>
+
+  <table mat-table [dataSource]="items$ | async">
+    <!-- UF Column -->
+    <ng-container matColumnDef="uf">
+      <th mat-header-cell *matHeaderCellDef>UF</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.uf }}
+      </td>
+    </ng-container>
+
+    <!-- Preço cadastrado Column -->
+    <ng-container matColumnDef="precoCadastro">
+      <th mat-header-cell *matHeaderCellDef>Preço de cadastro</th>
+      <td mat-cell *matCellDef="let element" class="column-max-width">
+        {{ element.precoCadastro }}
+      </td>
+    </ng-container>
+
+    <!-- Preço de renovação de cadastro Column -->
+    <ng-container matColumnDef="precoRenovacao">
+      <th mat-header-cell *matHeaderCellDef>Preço de renovação de cadastro</th>
+      <td mat-cell *matCellDef="let element" class="column-max-width">
+        {{ element.precoRenovacaoCadastro }}
+      </td>
+    </ng-container>
+
+    <!-- Periodicidade Column -->
+    <ng-container matColumnDef="periodicidade">
+      <th mat-header-cell *matHeaderCellDef>Periodicidade</th>
+      <td mat-cell *matCellDef="let element" class="column-max-width">
+        {{ element.periodicidade }}
+      </td>
+    </ng-container>
+
+    <!-- Options Column-->
+    <ng-container matColumnDef="opcoes">
+      <th mat-header-cell *matHeaderCellDef>{{ grupoEconomicoId != null ? "Ação" : "" }}</th>
+      <td mat-cell *matCellDef="let element">
+        <div *ngIf="grupoEconomicoId == null">
+          <button
+            mat-button
+            [matMenuTriggerFor]="menu"
+            [id]="utility.getElementId(2, 'instituicao-acoes', element.id)"
+          >
+            <mat-icon>more_vert</mat-icon>
+          </button>
+
+          <mat-menu #menu="matMenu">
+            <button
+              mat-menu-item
+              [routerLink]="['/registros/editar-instituicao/', element.id]"
+              [id]="utility.getElementId(2, 'instituicao-editar')"
+            >
+              Editar/consultar
+            </button>
+
+            <button
+              mat-menu-item
+              (click)="deletarInstituicao(element)"
+              [id]="utility.getElementId(2, 'instituicao-deletar')"
+            >
+              Deletar
+            </button>
+          </mat-menu>
+        </div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="semRegistro">
+      <th
+        class="text-center feedBack pt-1"
+        mat-cell
+        *matFooterCellDef
+        colspan="11"
+      >
+        <img src="./../../../../../../../../../assets/img/custom-icons/icon-vazio-artigos.svg"/>
+        <p class="desk bold text-gray-700">Não há registros.</p>
+      </th>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    <tr mat-row *matFooterRowDef="['semRegistro']" [ngClass]="{ 'd-none': totalItems > 0 }"></tr>
+  </table>
+
+  <section class="text-paginator">
+    <div class="row d-flex">
+      <section class="default-text">
+        Mostrando {{ paginator?.pageSize > totalItems ? totalItems : paginator?.pageSize }}
+        de {{ totalItems }} resultados
+      </section>
+    </div>
+  </section>
+
+  <mat-paginator
+    (page)="syncPrimaryPaginator($event)"
+    [pageSize]="paginator?.pageSize"
+    [pageIndex]="paginator?.pageIndex"
+    [length]="paginator?.length"
+    [pageSizeOptions]="paginator?.pageSizeOptions"
+  ></mat-paginator>
+</div>

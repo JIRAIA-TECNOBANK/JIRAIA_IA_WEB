@@ -1,0 +1,238 @@
+<div fxLayout="column">
+  <form [formGroup]="filesForm" novalidate>
+    <div *ngIf="!isEdition; else editionBlock">
+      <!-- Head Title - Adicionar documentos -->
+      <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="space-between">
+        <h6>Documentos</h6>
+        <button
+          mat-flat-button
+          (click)="addFile()"
+          *ngIf="utility.getPermission([Permissoes.GESTAO_EMPRESA_CADASTRAR])"
+          id="abrir_formulario_documento"
+        >
+          <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Add novo documento
+        </button>
+      </div>
+      <div
+        class="edition-block"
+        fxLayout="column"
+        fxLayoutAlign="space-between"
+      >
+        <!-- Body - Adicionar documentos VAZIO -->
+        <div
+          *ngIf="!hasFiles(); else fileListBlock"
+          fxLayout="column wrap"
+          fxLayoutGap="20px"
+          fxLayoutAlign="space-around center"
+          class="mt-3"
+        >
+          <img
+            src="./../../../../../../../../../assets/img/e-contrato/no-contact.svg"
+            alt=""
+            class="mt-3"
+          />
+          <h6>Nenhum documento foi adicionado ainda.</h6>
+        </div>
+        <!-- End Body - Adicionar documentos VAZIO -->
+        <!-- Body - Lista de documentos -->
+        <ng-template #fileListBlock>
+          <div class="fileList">
+            <div fxLayout="column" *ngFor="let file of files; let i = index">
+              <div
+                fxLayout="row"
+                fxLayoutAlign="space-between center"
+                class="file"
+              >
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                  <div [ngSwitch]="getExtension(file)">
+                    <div class="icon" *ngSwitchCase="'PDF'">
+                      <img
+                        src="./../../../../assets/img/custom-icons/icon-file-pdf.svg"
+                      />
+                    </div>
+                    <div class="icon" *ngSwitchCase="'DOC'">
+                      <img
+                        src="./../../../../assets/img/custom-icons/icon-file-doc.svg"
+                      />
+                    </div>
+                    <div class="icon" *ngSwitchCase="'DOCX'">
+                      <img
+                        src="./../../../../assets/img/custom-icons/icon-file-docx.svg"
+                      />
+                    </div>
+                    <div class="icon" *ngSwitchDefault>
+                      <img
+                        src="./../../../../assets/img/custom-icons/icon-file-none.svg"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <h4>
+                      {{ file.nome }}
+                    </h4>
+                    <p class="file-size">
+                      tamanho {{ formatBytes(file.tamanhoByte, 2) }}
+                    </p>
+                  </div>
+                </div>
+                <div fxLayout="row">
+                  <button
+                    mat-flat-button
+                    class="editButton"
+                    id="baixar_documento_botao_{{ i }}"
+                    [disabled]="loading"
+                    (click)="onClickDownload(file.documentoGuid, file.nome, i)"
+                  >
+                    <i
+                      *ngIf="loading && downloadingItem === i; else notDownload"
+                      class="fas fa-circle-notch fa-spin"
+                    ></i>
+                    <ng-template #notDownload>
+                      <i class="far fa-arrow-to-bottom" aria-hidden="true"></i>
+                    </ng-template>
+                  </button>
+                  <button
+                    mat-flat-button
+                    class="deleteButton"
+                    id="deletar_documento_botao_{{ i }}"
+                    *ngIf="
+                      utility.getPermission([
+                        Permissoes.GESTAO_EMPRESA_CADASTRAR
+                      ])
+                    "
+                    (click)="onClickDelete(file.documentoGuid)"
+                  >
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+        <!-- End Body - Lista de documentos -->
+        <!-- next step button -->
+        <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="15px" class="mt-3">
+          <button
+            mat-raised-button
+            class="btn btn-primary bold"
+            (click)="onSaveFile()"
+            id="avancar_etapa_documento"
+            *ngIf="utility.getPermission([Permissoes.GESTAO_EMPRESA_CADASTRAR])"
+          >
+            Salvar e continuar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #editionBlock>
+      <!-- Head Title - Cancelar documento -->
+      <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="space-between">
+        <h6 class="headline">Upload de documentos</h6>
+        <button
+          mat-flat-button
+          class="cancel"
+          (click)="cancelFile()"
+          id="cancelar_documento"
+        >
+          Cancelar
+        </button>
+      </div>
+
+      <!-- First row -->
+      <div class="fileForm">
+        <div class="no-flex" fxLayout="row">
+          <input
+            type="file"
+            hidden
+            #fileDropRef
+            id="fileDropRef"
+            (change)="fileBrowseHandler($event.target.files)"
+            [accept]="acceptedTypes"
+            formControlName="arquivo"
+            [disabled]="
+              !utility.getPermission([Permissoes.GESTAO_EMPRESA_CADASTRAR])
+            "
+            [ngClass]="{
+              disabled: utility.getPermission([
+                Permissoes.GESTAO_EMPRESA_CADASTRAR
+              ])
+            }"
+          />
+          <div
+            class="dropzone"
+            appDragAndDrop
+            (fileDropped)="onFileDropped($event)"
+            (click)="onClickFile(fileDropRef)"
+            [ngClass]="{
+              disabled: utility.getPermission([
+                Permissoes.GESTAO_EMPRESA_CADASTRAR
+              ])
+            }"
+          >
+            <div class="dropzone-label" fxLayout="row" fxLayoutAlign="center">
+              <i class="fa-solid fa-folder-open"></i>
+              <p>Arraste o arquivo aqui, ou&nbsp;</p>
+              <p>procure no seu dispositivo</p>
+            </div>
+          </div>
+        </div>
+        <div
+          class="dropzone-hint mb-3"
+          fxLayout="row"
+          fxLayoutAlign="space-between center"
+        >
+          <mat-hint>Formatos PDF, DOC, DOCX. </mat-hint>
+          <mat-hint>Tamanho máximo 10MB</mat-hint>
+        </div>
+
+        <!-- Second row -->
+        <div fxLayout="row" fxLayoutAlign=" center" fxLayoutGap="10px">
+          <mat-form-field appearance="outline" fxFlex="50">
+            <mat-label>Nome do arquivo </mat-label>
+            <input
+              matInput
+              placeholder="Nome do arquivo"
+              formControlName="nome"
+              required
+              id="nome_documento"
+            />
+            <mat-hint>Obrigatório</mat-hint>
+            <mat-error *ngIf="filesForm.controls['nome'].hasError('required')"
+              >Campo obrigatório</mat-error
+            >
+            <mat-error *ngIf="filesForm.controls['nome'].hasError('maxlength')"
+              >O nome deve conter até 20 caracteres.</mat-error
+            >
+          </mat-form-field>
+          <mat-form-field appearance="outline" fxFlex="50">
+            <mat-label>Descrição </mat-label>
+            <input
+              matInput
+              placeholder="Nome do arquivo"
+              formControlName="descricao"
+              id="descricao_documento"
+            />
+            <mat-error
+              *ngIf="filesForm.controls['descricao'].hasError('maxlength')"
+              >A descrição deve conter até 50 caracteres.</mat-error
+            >
+          </mat-form-field>
+        </div>
+
+        <!-- Add file button -->
+        <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="15px" class="mt-3">
+          <button
+            mat-raised-button
+            class="btn btn-primary bold"
+            (click)="prepareFilesList(addedFile)"
+            *ngIf="utility.getPermission([Permissoes.GESTAO_EMPRESA_CADASTRAR])"
+            id="adicionar_documento"
+          >
+            {{ hasFileId() }}
+          </button>
+        </div>
+      </div>
+    </ng-template>
+  </form>
+</div>

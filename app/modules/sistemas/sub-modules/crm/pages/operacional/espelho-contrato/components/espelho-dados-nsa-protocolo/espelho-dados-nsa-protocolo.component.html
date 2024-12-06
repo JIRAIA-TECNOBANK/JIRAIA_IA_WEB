@@ -1,0 +1,14 @@
+<mat-card class="espelho-contrato">
+  <div class="panel-title"> NSA e protocolo </div>
+
+  <div fxLayout="row wrap" fxLayoutGap="10px grid" class="mt-2">
+    <div fxFlex="50" class="item">
+      <div class="item-title">Número Sequencial de Assentamento</div>
+      <div class="item-description">{{ contrato?.contrato.numeroSequencial ?? '-' }}</div>
+    </div>
+    <div fxFlex="50" class="item">
+      <div class="item-title">Número do protocolo</div>
+      <div class="item-description">{{ contrato?.contrato.protocolo ?? '-'}}</div>
+    </div>
+  </div>
+</mat-card>

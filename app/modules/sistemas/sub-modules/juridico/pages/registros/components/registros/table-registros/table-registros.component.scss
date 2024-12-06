@@ -1,0 +1,10 @@
+@import '$settings';
+@import '$tools';
+
+.column-max-width {
+    text-overflow: ellipsis !important;
+    max-width: 175px !important;
+    white-space: nowrap;
+    overflow: hidden;
+    padding-right: 10px !important;
+}

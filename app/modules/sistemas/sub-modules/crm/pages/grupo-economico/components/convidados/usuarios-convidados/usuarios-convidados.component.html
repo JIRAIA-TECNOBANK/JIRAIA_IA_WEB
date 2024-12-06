@@ -1,0 +1,199 @@
+<mat-card class="mb-4 mat-elevation-z8">
+  <div class="d-flex justify-content-between align-items-center">
+    <div class="fw-bold">Dados do usuário</div>
+  </div>
+  <form [formGroup]="createUsuarioConvidadoForm" (ngSubmit)="submitUsuario()" class="mt-2">
+    <div fxLayout="row grid" fxLayoutGap="10px">
+      <mat-form-field appearance="outline" fxFlex="10">
+        <mat-label>Produto </mat-label>
+        <mat-select formControlName="produto" required [id]="utility.getElementId(5, 'convidar-usuarios-produto')">
+          <mat-option>
+            Escolha um produto
+          </mat-option>
+          <mat-option value="0"> e-Contrato </mat-option>
+        </mat-select>
+        <mat-hint>Obrigatório</mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" fxFlex="20">
+        <mat-label>Tipo de usuário </mat-label>
+        <mat-select formControlName="tipoUsuario" required [id]="utility.getElementId(5, 'convidar-usuarios-tipo')">
+          <mat-option>
+            Selecione o tipo de usuário
+          </mat-option>
+          <mat-option value="0"> Usuário interno
+            <i matSuffix class="fa-regular fa-circle-info text-blue-700" [matTooltip]="mensagemUsuarioInterno"
+              matTooltipClass="info-tooltip"></i>
+          </mat-option>
+          <mat-option value="1"> Usuário externo
+            <i matSuffix class="fa-regular fa-circle-info text-blue-700" [matTooltip]="mensagemUsuarioExterno"
+              matTooltipClass="info-tooltip"></i>
+          </mat-option>
+        </mat-select>
+        <i matSuffix *ngIf="createUsuarioConvidadoForm.get('tipoUsuario').value"
+          class="fa-regular fa-circle-info text-blue-700 info-suffix"
+          [matTooltip]="createUsuarioConvidadoForm.get('tipoUsuario').value == 0 ? mensagemUsuarioInterno : mensagemUsuarioExterno"
+          matTooltipClass="info-tooltip"></i>
+        <mat-hint>Obrigatório</mat-hint>
+      </mat-form-field>
+
+      <!--TIPO DE USUARIO AINDA NAO SELECIONADO OU EDICAO DO TIPO USUARIO INTERNO-->
+      <ng-container *ngIf="createUsuarioConvidadoForm.get('tipoUsuario').value == null
+       || createUsuarioConvidadoForm.get('tipoUsuario').value == undefined;
+        then default"> </ng-container>
+
+      <!--NOVO USUARIO INTERNO-->
+      <ng-container *ngIf="createUsuarioConvidadoForm.get('tipoUsuario').value === '0';
+                          then usuarioInterno"></ng-container>
+
+      <!--NOVO USUARIO EXTERNO-->
+      <ng-container *ngIf="createUsuarioConvidadoForm.get('tipoUsuario').value === '1'; 
+                          then usuarioExterno"></ng-container>
+
+      <!--DEFAULT-->
+      <ng-template #default>
+        <mat-form-field appearance="outline" fxFlex="25">
+          <mat-label>Empresa </mat-label>
+          <input matInput placeholder="Nome do usuário" formControlName="nomeEmpresa"
+            [id]="utility.getElementId(0, 'convidar-usuarios-empresa')" />
+          <mat-hint>Obrigatório</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="25">
+          <mat-label>Usuário </mat-label>
+          <input matInput placeholder="Nome do usuário" formControlName="nomeUsuario"
+            [id]="utility.getElementId(0, 'convidar-usuarios-usuario')" />
+          <mat-hint>Obrigatório</mat-hint>
+        </mat-form-field>
+      </ng-template>
+
+      <!--USUARIO INTERNO-->
+      <ng-template #usuarioInterno>
+        <mat-form-field appearance="outline" fxFlex="20">
+          <mat-label>Selecione a empresa</mat-label>
+          <input type="text" matInput [id]="utility.getElementId(5, 'convidar-usuarios-empresa')" name="empresaNomeConvidado"
+            formControlName="empresaNomeConvidado" placeholder="Selecione a empresa" (blur)="selecionarEmpresaId(false, true)"
+            (input)="filterData($event.target.value, true)" [matAutocomplete]="empresasselect">
+          <mat-autocomplete #empresasselect="matAutocomplete">
+            <mat-option *ngFor="let empresa of empresasFiltradas" [value]="empresa.name + ' - ' + empresa.cnpj"
+              class="usuario-email">{{
+              empresa.name }} - {{ empresa.cnpj }}
+            </mat-option>
+          </mat-autocomplete>
+          <i matSuffix *ngIf="createUsuarioConvidadoForm.get('tipoUsuario').value"
+            class="fa-regular fa-circle-info text-blue-700 info-suffix"
+            [matTooltip]="'Selecione uma das empresas pertencentes a esse grupo econômico e para o qual deseja convidar um determinado usuário que não esteja cadastrado nela.'"
+            matTooltipClass="info-tooltip"></i>
+          <mat-hint>Obrigatório</mat-hint>
+          <mat-error *ngIf="createUsuarioConvidadoForm.controls['empresaIdConvidado'].hasError('required')">Campo obrigatório
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="20">
+          <mat-label>Selecione o usuário </mat-label>
+          <input type="text" matInput [id]="utility.getElementId(5, 'convidar-usuarios-usuario')" name="usuarioNome"
+            formControlName="usuarioNome" placeholder="Selecione o usuário" (blur)="selecionaUsuarioId()"
+            (input)="filterData($event.target.value)" [matAutocomplete]="usuariosselect">
+          <mat-autocomplete #usuariosselect="matAutocomplete">
+            <mat-option *ngFor="let usuario of usuariosFiltrados" [value]="usuario.nome + ' (' + usuario.email + ')'"
+              class="usuario-email">{{
+              usuario.nome }}
+              <span>{{ usuario.email }}</span>
+            </mat-option>
+          </mat-autocomplete>
+          <i matSuffix *ngIf="createUsuarioConvidadoForm.get('tipoUsuario').value"
+            class="fa-regular fa-circle-info text-blue-700 info-suffix" [matTooltip]="msgUsrInternoUsuario"
+            matTooltipClass="info-tooltip"></i>
+          <mat-hint>Obrigatório</mat-hint>
+          <mat-error *ngIf="createUsuarioConvidadoForm.controls['usuarioId'].hasError('required')">Campo obrigatório
+          </mat-error>
+        </mat-form-field>
+      </ng-template>
+
+      <!--USUARIO EXTERNO-->
+      <ng-template #usuarioExterno>
+        <mat-form-field appearance="outline" fxFlex="35">
+          <mat-label>Selecione a empresa externa </mat-label>
+          <input type="text" matInput [id]="utility.getElementId(5, 'convidar-usuarios-empresa-externa')" name="empresaNomeOrigem"
+            formControlName="empresaNomeOrigem" placeholder="Selecione a empresa externa" (blur)="selecionarEmpresaId(true)"
+            (input)="carregarEmpresasExternas($event.target.value)" [matAutocomplete]="empresaExternasSelect">
+          <mat-autocomplete #empresaExternasSelect="matAutocomplete">
+            <mat-option *ngFor="let empresa of empresasExternasFiltradas"
+              [value]="empresa.nomeFantasia + ' - ' + empresa.cnpj" class="usuario-email">{{
+              empresa.nomeFantasia }} - {{ empresa.cnpj }}
+            </mat-option>
+          </mat-autocomplete>
+          <i matSuffix *ngIf="createUsuarioConvidadoForm.get('tipoUsuario').value"
+            class="fa-regular fa-circle-info text-blue-700 info-suffix"
+            [matTooltip]="mensagemEmpresaExterna"
+            matTooltipClass="info-tooltip"></i>
+          <mat-hint>Obrigatório</mat-hint>
+          <mat-error *ngIf="createUsuarioConvidadoForm.controls['empresaIdOrigem'].hasError('required')">Campo obrigatório
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="auto">
+          <mat-label>Selecione o usuário externo </mat-label>
+          <input type="text" matInput [id]="utility.getElementId(5, 'convidar-usuarios-usuario')" name="usuarioNome"
+            formControlName="usuarioNome" placeholder="Selecione o usuário" (blur)="selecionaUsuarioId(false)"
+            (input)="filtrarUsuariosExternos($event.target.value)" [matAutocomplete]="usuariosselect">
+          <mat-autocomplete #usuariosselect="matAutocomplete">
+            <mat-option *ngFor="let usuario of usuariosFiltrados" [value]="usuario.nome + ' (' + usuario.email + ')'"
+              class="usuario-email">{{
+              usuario.nome }}
+              <span>{{ usuario.email }}</span>
+            </mat-option>
+          </mat-autocomplete>
+          <i matSuffix *ngIf="createUsuarioConvidadoForm.get('tipoUsuario').value"
+            class="fa-regular fa-circle-info text-blue-700 info-suffix" [matTooltip]="msgUsrExternoUsuario"
+            matTooltipClass="info-tooltip"></i>
+          <mat-hint>Obrigatório</mat-hint>
+          <mat-error *ngIf="createUsuarioConvidadoForm.controls['usuarioId'].hasError('required')">Campo obrigatório
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="30.8">
+          <mat-label>Selecione a empresa</mat-label>
+          <input type="text" matInput [id]="utility.getElementId(5, 'convidar-usuarios-empresa')" name="empresaNomeConvidado"
+            formControlName="empresaNomeConvidado" placeholder="Selecione a empresa" (blur)="selecionarEmpresaId(false, false)"
+            (input)="filterData($event.target.value, true)" [matAutocomplete]="empresasselect">
+          <mat-autocomplete #empresasselect="matAutocomplete">
+            <mat-option *ngFor="let empresa of empresasFiltradas" [value]="empresa.name + ' - ' + empresa.cnpj"
+              class="usuario-email">{{
+              empresa.name }} - {{ empresa.cnpj }}
+            </mat-option>
+          </mat-autocomplete>
+          <i matSuffix *ngIf="createUsuarioConvidadoForm.get('tipoUsuario').value"
+            class="fa-regular fa-circle-info text-blue-700 info-suffix"
+            [matTooltip]="'Selecione uma das empresas pertencentes a esse grupo econômico e para o qual deseja convidar um determinado usuário que não esteja cadastrado nela.'"
+            matTooltipClass="info-tooltip"></i>
+          <mat-hint>Obrigatório</mat-hint>
+          <mat-error *ngIf="createUsuarioConvidadoForm.controls['empresaIdConvidado'].hasError('required')">Campo obrigatório
+          </mat-error>
+        </mat-form-field>
+      </ng-template>
+
+      <!--CAMPO PERFIL SEMPRE ESTARA A MOSTRA NESSA POSICAO-->
+      <mat-form-field appearance="outline" [fxFlex]="createUsuarioConvidadoForm.get('tipoUsuario').value === '1' ? '35' : 'auto'">
+        <mat-label>Selecione o perfil </mat-label>
+        <mat-select formControlName="perfilId" required [id]="utility.getElementId(5, 'convidar-usuarios-perfil')">
+          <mat-option>
+            Selecione o perfil
+          </mat-option>
+          <mat-option *ngFor="let perfil of perfis" [value]="perfil.id">
+            {{ perfil.nome }}</mat-option>
+        </mat-select>
+        <mat-hint>Obrigatório</mat-hint>
+        <mat-error *ngIf="createUsuarioConvidadoForm.controls['perfilId'].hasError('required')">Campo obrigatório
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="d-flex justify-content-end mt-4">
+      <button mat-flat-button color="primary" type="submit" [disabled]="!createUsuarioConvidadoForm.valid"
+        [id]="utility.getElementId(2, 'convidar-usuarios-confirmar')">
+        Confirmar
+      </button>
+    </div>
+  </form>
+</mat-card>

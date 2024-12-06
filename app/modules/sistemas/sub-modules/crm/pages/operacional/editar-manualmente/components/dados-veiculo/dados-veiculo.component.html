@@ -1,0 +1,138 @@
+<div class="d-flex justify-content-between align-items-center">
+  <div class="fw-bold text-gray-800">Dados do veículo</div>
+  <button class="veiculos-adicionados bold" *ngIf="contratoResponse?.veiculo.length > 1" type="button"
+    [matMenuTriggerFor]="menuVeiculosList" [id]="utility.getElementId(2, 'veiculos-adicionados')">
+    {{contratoResponse?.veiculo.length }} veículo{{ contratoResponse?.veiculo.length > 1 ? 's' : '' }} adicionado{{
+    contratoResponse?.veiculo.length > 1
+    ? 's' : '' }}
+  </button>
+  <mat-menu #menuVeiculosList="matMenu">
+    <app-dados-veiculo-list (verVeiculo)="verVeiculo($event)"></app-dados-veiculo-list>
+  </mat-menu>
+</div>
+
+<form [formGroup]="formulario" class="mt-2">
+  <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="10px grid">
+    <mat-form-field fxFlex="40" class="pb-0" appearance="outline">
+      <mat-label>Chassi</mat-label>
+      <input type="text" matInput #chassi [id]="utility.getElementId(0, 'chassi')" maxlength="21" name="chassi"
+        formControlName="chassi" placeholder="Digite o chassi do veículo" alphanumerics-only>
+      <mat-hint>Obrigatório</mat-hint>
+      <mat-error *ngIf="formulario.get('chassi').hasError('required')">Obrigatório</mat-error>
+      <mat-error *ngIf="formulario.get('chassi').hasError('minlength')">Chassi inválido
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field fxFlex="30" class="pb-0" appearance="outline">
+      <mat-label>Ano de fabricação</mat-label>
+      <input type="text" matInput [id]="utility.getElementId(0, 'anoFabricacao')" name="anoFabricacao"
+        formControlName="anoFabricacao" placeholder="Ano de fabricação" numbers-only maxlength="4">
+      <mat-hint>Obrigatório</mat-hint>
+      <mat-error *ngIf="formulario.get('anoFabricacao').hasError('required')">Obrigatório</mat-error>
+      <mat-error *ngIf="formulario.get('anoFabricacao').hasError('range')">
+        Ano de fabricação inválido</mat-error>
+    </mat-form-field>
+
+    <mat-form-field fxFlex="30" class="pb-0" appearance="outline">
+      <mat-label>Ano do modelo</mat-label>
+      <input type="text" matInput [id]="utility.getElementId(0, 'anoModelo')" name="anoModelo"
+        formControlName="anoModelo" placeholder="Ano do modelo" numbers-only maxlength="4">
+    </mat-form-field>
+  </div>
+
+  <div class="pt-2">
+    <div fxLayout="row" fxLayoutGap="10px"> </div>
+
+    <div fxLayout="row" fxLayoutAlign="start" fxLayoutGap="10px">
+      <div class="pt-1 toggle-default" fxFlex="20">
+        <p class="bold desk mt-0 text-gray-800">Remarcado?</p>
+        <div fxLayout="row" class="align-items-start" fxLayoutGap="10px">
+          <mat-button-toggle-group name="remarcado" [id]="utility.getElementId(7, 'remarcado')"
+            formControlName="remarcado" aria-label="remarcado">
+            <mat-button-toggle [id]="utility.getElementId(2, 'remarcado-sim')" value="true"
+              class="btn-toggle">Sim</mat-button-toggle>
+            <mat-button-toggle [id]="utility.getElementId(2, 'remarcado-nao')" value="false"
+              class="btn-toggle">Não</mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+      </div>
+
+      <div class="pt-1 toggle-default">
+        <p class="bold desk mt-0 text-gray-800">Emplacado?</p>
+        <div fxLayout="row" class="align-items-start" fxLayoutGap="10px">
+          <mat-button-toggle-group name="emplacado" [id]="utility.getElementId(7, 'emplacado')"
+            formControlName="emplacado" aria-label="emplacado" #emplacado="matButtonToggleGroup">
+            <mat-button-toggle [id]="utility.getElementId(2, 'emplacado-sim')" value="true"
+              class="btn-toggle">Sim</mat-button-toggle>
+            <mat-button-toggle [id]="utility.getElementId(2, 'emplacado-nao')" value="false"
+              class="btn-toggle">Não</mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-2" fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="10px grid">
+      <mat-form-field fxFlex="25" appearance="outline">
+        <mat-label>Placa</mat-label>
+        <input type="text" matInput [id]="utility.getElementId(0, 'placa')" alphanumerics-only #placa minlength="5"
+          maxlength="7" name="placa" formControlName="placa" placeholder="Digite o placa do veículo">
+      </mat-form-field>
+
+      <mat-form-field fxFlex="20" appearance="outline">
+        <mat-label>UF da placa</mat-label>
+        <mat-select [id]="utility.getElementId(5, 'uf-placa')" name="ufPlaca" formControlName="ufPlaca">
+          <mat-option>Selecione</mat-option>
+          <mat-option *ngFor="let uf of ufsLicenciamento" [value]="uf">{{ uf }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field fxFlex="25" appearance="outline">
+        <mat-label>Renavam</mat-label>
+        <input type="text" [id]="utility.getElementId(0, 'renavam')" numbers-only matInput name="renavam" #renavam
+          numbers-only maxlength="11" formControlName="renavam" placeholder="Digite o renavam do veículo">
+      </mat-form-field>
+
+      <mat-form-field fxFlex="30" appearance="outline">
+        <mat-label>N.º do gravame</mat-label>
+        <input type="text" matInput [id]="utility.getElementId(0, 'numeroRestricao')" #gravameveiculo
+          name="numeroRestricao" formControlName="numeroRestricao" placeholder="Digite o número do gravame" numbers-only
+          maxlength="8">
+        <mat-hint>Obrigatório</mat-hint>
+        <mat-error *ngIf="formulario.get('numeroRestricao').hasError('required')">Obrigatório
+        </mat-error>
+        <mat-error *ngIf="formulario.get('numeroRestricao').hasError('minlength')">N.º do gravame
+          inválido</mat-error>
+        <mat-error *ngIf="formulario.get('numeroRestricao').hasError('maxlength')">N.º do gravame
+          inválido</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div fxLayout="row wrap" fxLayoutAlign="space-between" fxLayoutGap="10px grid">
+      <mat-form-field fxFlex="20" appearance="outline">
+        <mat-label>Marca</mat-label>
+        <input type="text" matInput [id]="utility.getElementId(0, 'marca')" name="marca" formControlName="marca"
+          placeholder="Marca do veículo">
+      </mat-form-field>
+
+      <mat-form-field fxFlex="20" appearance="outline">
+        <mat-label>Modelo</mat-label>
+        <input type="text" matInput [id]="utility.getElementId(0, 'modelo')" name="modelo" formControlName="modelo"
+          placeholder="Modelo do veículo">
+      </mat-form-field>
+
+      <mat-form-field fxFlex="40" appearance="outline">
+        <mat-label>Espécie</mat-label>
+        <mat-select name="especie" [id]="utility.getElementId(5, 'especie')" formControlName="especie">
+          <mat-option>--</mat-option>
+          <mat-option *ngFor="let especie of especiesVeiculo" [value]="especie.id">{{especie.nome}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field fxFlex="20" appearance="outline">
+        <mat-label>Cor</mat-label>
+        <input type="text" matInput [id]="utility.getElementId(0, 'cor')" name="cor" formControlName="cor"
+          placeholder="Cor do véiculo">
+      </mat-form-field>
+    </div>
+  </div>
+</form>

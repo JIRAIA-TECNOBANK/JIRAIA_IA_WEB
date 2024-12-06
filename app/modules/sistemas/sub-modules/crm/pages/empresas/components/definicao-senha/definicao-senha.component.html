@@ -1,0 +1,8 @@
+<p class="justify-content-center text-center">
+    Escolha uma das opções abaixo, para o usuário <span class="fw-bold">{{ email }}</span> receber:
+</p>
+<form [formGroup]="resetarSenhaForm" class="justify-content-center text-center">
+    <mat-radio-group [formControl]="resetarSenhaForm.get('resetarSenha')" class="justify-content-center text-center">
+        <mat-radio-button [value]="1" class="mt-2 mb-2">Enviar e-mail de “alteração de senha”</mat-radio-button>
+    </mat-radio-group>
+</form>

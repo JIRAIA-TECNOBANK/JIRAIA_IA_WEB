@@ -1,0 +1,25 @@
+@import "$settings";
+@import "$tools";
+
+.conteudo-complementar {
+    @include border-radius(5px);
+    color: $blue-600;
+    background-color: transparent;
+    border: 1px dashed $blue-600;
+    padding: 24px 82px;
+    font-size: 30px;
+    cursor: pointer;
+
+    &.preenchido {
+        background-color: $blue-500;
+        color: $white;
+
+        p {
+            color: $white;
+        }
+    }
+
+    p {
+        font-size: 12px;
+    }
+}

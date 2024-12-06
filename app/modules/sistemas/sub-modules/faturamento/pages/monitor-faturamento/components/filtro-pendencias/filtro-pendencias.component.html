@@ -1,0 +1,20 @@
+<app-grid-filter [filter]="filter" (pesquisar)="search($event)" (customControls)="setCustomControls($event)" (redefinir)="redefinirFiltros()" [radiusTop]="false"
+  [showRedefinir]="showRedefinirBtn">
+  <section class="first-row d-flex" fxLayout.sm="column">
+    <app-filter-field [field]="fieldNomeEmpresa" [control]="empresaNomeControl" [searchControl]="empresaNomeSearchControl" (searchInput)="searchFilterEmpresas($event)"
+      [redefinirField]="refreshGrid">
+    </app-filter-field>
+
+    <app-filter-field [field]="fieldCodigoEmpresa" [control]="codigoEmpresaControl">
+    </app-filter-field>
+
+    <app-filter-field [field]="fieldUf" [control]="ufControl" (selectAll)="selectAll($event)">
+    </app-filter-field>
+
+		<app-filter-field [field]="fieldDataReferencia" [control]="dataReferenciaControl" (selectAll)="selectAll($event)">
+    </app-filter-field>
+
+		<app-filter-field [field]="fieldStatus" [control]="statusControl" (selectAll)="selectAll($event)">
+    </app-filter-field>
+  </section>
+</app-grid-filter>

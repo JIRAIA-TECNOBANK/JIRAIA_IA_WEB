@@ -1,0 +1,124 @@
+<div fxLayout="column" fxLayoutGap="24px">
+    <mat-card class="grafico-linhas">
+        <div fxLayout="row" fxLayoutAlign="space-between">
+            <section fxLayout="row">
+                <p class="bold mt-1">Resumo</p>
+                <button mat-flat-button type="button" class="bold periodo"
+                    [id]="utility.getElementId(2, 'grafico-filtro-7d')"
+                    [ngClass]="{ 'selected': periodoPadrao && periodoSelecionado === 7 }"
+                    (click)="selecionarPeriodo(7)"> 7D </button>
+                <button mat-flat-button type="button" class="bold periodo"
+                    [id]="utility.getElementId(2, 'grafico-filtro-30d')"
+                    [ngClass]="{ 'selected': periodoPadrao && periodoSelecionado === 30 }"
+                    (click)="selecionarPeriodo(30)"> 30D </button>
+                <button mat-flat-button type="button" class="bold periodo"
+                    [id]="utility.getElementId(2, 'grafico-filtro-60d')"
+                    [ngClass]="{ 'selected': periodoPadrao && periodoSelecionado === 90 }"
+                    (click)="selecionarPeriodo(90)"> 90D </button>
+            </section>
+
+            <section>
+                <button mat-flat-button type="button" class="bold periodo"
+                    [class.selected]="verificarFiltrosPersonalizados()" [matMenuTriggerFor]="filtrarGrafico"
+                    [id]="utility.getElementId(2, 'grafico-filtrar')"><i class="fa-solid fa-sliders"></i> Filtrar
+                </button>
+
+            </section>
+        </div>
+
+        <mat-menu #filtrarGrafico="matMenu" class="mat-elevation-z8 filtro-resumo pt-0" xPosition="before">
+            <div class="filter-search" (click)="stopPropagation($event)">
+                <div class="filter-header d-flex justify-content-between align-items-center pl-2">
+                    <span> Filtrar</span>
+                    <button [id]="utility.getElementId(2, 'limpar-filtro', 'grafico-linha')" mat-button color="primary"
+                        class="btn-redefinir filter-header" (click)="limparFiltros()">
+                        Redefinir
+                    </button>
+                </div>
+
+                <form [formGroup]="filtroForm" fxLayout="column">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Filtre por UF </mat-label>
+                        <mat-select formControlName="uf" name="uf" [id]="utility.getElementId(5, 'grafico-filtro-uf')"
+                            multiple>
+                            <mat-option #todasUFs value="todas" (click)="selecionarTodasUfs()">Todas</mat-option>
+                            <mat-option *ngFor="let ufDetran of ufDetrans" [value]="ufDetran" (click)="selecionarUf()">
+                                {{ ufDetran }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" fxFlex="100">
+                        <mat-label>Selecione uma empresa </mat-label>
+                        <input type="text" matInput [id]="utility.getElementId(5, 'grafico-filtro-empresa')"
+                            name="empresaNome" formControlName="empresaNome" placeholder="Digite a empresa"
+                            (blur)="selecionaEmpresaId()" (input)="carregarEmpresas($event.target.value)"
+                            [matAutocomplete]="empresasselect">
+                        <mat-autocomplete #empresasselect="matAutocomplete">
+                            <mat-option *ngFor="let empresa of empresasFiltradas"
+                                [value]="empresa.nomeFantasia + ' - ' + empresa.cnpj" class="usuario-email"
+                                [matTooltip]="empresa.nomeFantasia + ' - ' + empresa.cnpj">{{
+                                empresa.nomeFantasia }} - {{ empresa.cnpj }}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+
+                    <div class="row">
+                        <i class="fa-regular fa-circle-info text-primary info pr-0"
+                            [id]="utility.getElementId(14, 'info-data-resumo')"
+                            matTooltip="Na pesquisa, informe intervalo de data limitado até 90 dias."></i>
+                    </div>
+
+                    <div fxLayout="row" class="filtro-datas">
+                        <mat-form-field appearance="outline" fxFlex="50" class="mr-1">
+                            <mat-label>Data inicial</mat-label>
+                            <input [id]="utility.getElementId(6, 'grafico-filtro-data-inicial')"
+                                formControlName="dataInicial" matInput placeholder="dd/mm/aaaa"
+                                [min]="addDays(filtroForm.get('dataFinal').value, -90)"
+                                [max]="addDays(filtroForm.get('dataFinal').value, 0)" [matDatepicker]="de"
+                                (click)="de.open()" (keydown.tab)="de.close()" />
+                            <mat-datepicker-toggle matSuffix [for]="de"
+                                [id]="utility.getElementId(6, 'data-inicial', 'picker')"></mat-datepicker-toggle>
+                            <mat-datepicker #de></mat-datepicker>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" fxFlex="50">
+                            <mat-label>Data final</mat-label>
+                            <input [id]="utility.getElementId(6, 'grafico-filtro-data-final')"
+                                formControlName="dataFinal" matInput placeholder="dd/mm/aaaa"
+                                [min]="addDays(filtroForm.get('dataInicial').value, 0)"
+                                [max]="addDays(filtroForm.get('dataInicial').value, 90)" [matDatepicker]="ate"
+                                (click)="ate.open()" (keydown.tab)="ate.close()" />
+                            <mat-datepicker-toggle matSuffix [for]="ate"
+                                [id]="utility.getElementId(6, 'data-final', 'picker')"></mat-datepicker-toggle>
+                            <mat-datepicker #ate></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+
+                    <div fxLayout="row">
+                        <button mat-flat-button type="button" class="bold confirmar w-100"
+                            [id]="utility.getElementId(2, 'grafico-filtro-confirmar')"
+                            (click)="confirmarFiltros(); trigger.closeMenu()">
+                            Pesquisar
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </mat-menu>
+
+        <div class="conteudo">
+            <section class="w-100 h-100 d-flex align-items-center justify-content-center" *ngIf="loading">
+                <mat-spinner [diameter]="50"></mat-spinner>
+            </section>
+
+            <div [ngClass]="{ 'opacity-0': loading || chartOptions?.series?.length === 0 }">
+                <div id="chartLines" #chartLines></div>
+            </div>
+
+            <app-bloco-vazio *ngIf="!loading && chartOptions?.series?.length === 0"
+                [options]="blocoVazio"></app-bloco-vazio>
+
+        </div>
+    </mat-card>
+</div>

@@ -1,0 +1,77 @@
+@import '$objects';
+@import '$settings';
+@import '$tools';
+
+.btn-incluir {
+  height: 56px;
+  margin-left: 25px;
+  margin-top: 4px;
+}
+
+.box-choices {
+  @include border-radius(10px);
+  align-content: center;
+  align-items: center;
+  background-color: $gray-300;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 30px;
+  width: 718px;
+
+  figure {
+    margin: 0;
+  }
+
+  p {
+    @include fontMontserratBold;
+    text-align: center;
+  }
+
+  .buttons {
+    button {
+      height: 48px;
+      margin-right: 20px;
+    }
+  }
+}
+
+.vincular-empresas {
+  background-color: #DFEEFC;
+  border: none;
+  padding: 6px 10px;
+  font-weight: bold;
+  color: #626E78;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.vincular-empresas:hover {
+  background-color: #CEE8FF;
+}
+
+.btn-telefone {
+  @include fontMontserratBold;
+  padding: 0 !important;
+  border: none;
+  height: 60px;
+  background: none;
+  font-size: 16px;
+  cursor: pointer;
+
+  &.add-telefone {
+    color: $blue-700;
+  }
+
+  &.remove-telefone {
+    color: $error-900;
+  }
+}
+
+.tab-grupo-child {
+  position: absolute;
+  right: 0;
+  margin-right: 20px;
+  margin-top: 0 !important;
+  z-index: 5;
+}

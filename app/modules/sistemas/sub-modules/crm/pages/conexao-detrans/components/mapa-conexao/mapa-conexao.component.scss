@@ -1,0 +1,133 @@
+// Settings
+@import "$settings";
+
+// Tools
+@import "$tools";
+
+#map {
+  display: none;
+}
+
+#map .state {
+  cursor: pointer;
+}
+
+#map .state-disabled {
+  cursor: default;
+}
+
+#map .state-disabled .shape {
+  cursor: default;
+  -width: 0;
+}
+
+#map .state .shape {
+  cursor: pointer;
+  -width: 0;
+}
+
+#map .state .label_icon_state, #map .state-disabled .label_icon_state {
+  fill: #fff;
+  @include fontMontserratBold;
+  font-size: 11px;
+  line-height: 12px;
+  font-weight: normal;
+}
+
+#map .state .label_state, #map .state-disabled .label_state {
+  display: none;
+  font-family: Arial;
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: bold;
+}
+
+// #map .model-blue .state .shape {
+//   fill: $primary;
+// }
+
+#map .model-blue .state.conectado .shape {
+  fill: $primary;
+}
+
+#map .model-blue .state.nao-identificado .shape {
+  fill: $warning-800;
+}
+
+
+#map .model-blue .state-disabled .shape {
+  fill: $gray-400;
+}
+
+#map .model-blue .state.conectado .icon_state {
+  fill: $primary;
+  stroke: #FFF;
+}
+
+#map .model-blue .state.nao-identificado .icon_state {
+  fill: $warning-800;
+  stroke: #FFF;
+}
+
+#map .model-blue .state-disabled .icon_state {
+  fill: $gray-400;
+}
+
+#map .model-blue .state .label_icon_state {
+  fill: #fff;
+}
+
+#map .state .shape:hover {
+  opacity: 0.8;
+}
+
+#map .model-blue .state.conectado:hover .shape,
+#map .model-blue .state.conectado.hover .shape {
+  fill: lighten($primary, 8);
+}
+
+#map .model-blue .state.nao-identificado:hover .shape,
+#map .model-blue .state.nao-identificado.hover .shape {
+  fill: lighten($warning-800, 8);
+}
+
+#map .model-blue .state:hover .icon_state,
+#map .model-blue .state.hover .icon_state {
+  fill: lighten($primary, 8);
+  stroke: #FFF;
+}
+
+#map .model-blue .state.nao-identificado:hover .icon_state,
+#map .model-blue .state.nao-identificado.hover .icon_state {
+  fill: lighten($warning-800, 8);
+  stroke: #FFF;
+}
+
+#tooltip {
+  background: #FFF;
+  padding: 11px;
+  border-radius: 10px;
+  min-width: 140px;
+  position:absolute;
+  box-shadow: 0px 12px 17px rgba(0, 0, 0, 0.08), 0px 5px 22px rgba(0, 0, 0, 0.08), 0px 7px 8px rgba(0, 0, 0, 0.05);
+  font-size: .8em;
+  z-index: 9;
+}
+
+#tooltip:after {
+  content: '';
+  position: absolute;
+  display: block;
+  width: 0;
+  z-index: 1;
+  border-style: solid;
+  border-color: #ffffff transparent;
+  border-width: 20px 13px 0;
+  bottom: -20px;
+  left: 50%;
+  margin-left: -13px;
+}
+
+.tooltip-title {
+  @include fontMontserratBold;
+}

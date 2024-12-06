@@ -1,0 +1,120 @@
+@import "$settings";
+@import "$tools";
+
+.modelo-regulamento {
+  overflow: initial;
+
+  p,
+  span {
+    font-size: 12px;
+    letter-spacing: 0.25px;
+  }
+
+  p {
+    @include fontMontserratBold;
+    color: $gray-800;
+  }
+
+  span {
+    @include fontMontserratRegular;
+    color: #99a1b7;
+    line-height: 18.52px;
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+    width: 100%;
+    gap: 13px;
+
+    li {
+      @include fontMontserratBold;
+      font-size: 12.4px;
+      line-height: 18.52px;
+      color: #99a1b7;
+
+      div {
+        flex: 1;
+        gap: 10px;
+
+        span {
+          font-weight: 600;
+        }
+
+        .bullet {
+          display: flex;
+          border-radius: 3px;
+          max-width: 8px !important;
+          max-height: 8px !important;
+          background-color: $blue-600;
+        }
+      }
+
+      span {
+        flex: 1;
+      }
+    }
+  }
+
+  ul:last-child {
+    span {
+      @include fontMontserratBold;
+      color: $gray-900;
+    }
+  }
+}
+
+.periodo {
+  background-color: #DFEEFC;
+  color: $blue-700;
+  font-size: 12px;
+  margin-left: 1rem;
+
+  &:first-child {
+    margin-left: 0;
+  }
+
+  &:hover {
+    color: $white;
+    background-color: $blue-600;
+  }
+
+  &.selected {
+    color: $white;
+    background-color: $primary;
+  }
+}
+
+.dropdown {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  width: 100%;
+  background-color: #DFEEFC;
+  border: 1px solid #DBDFE9;
+  border-radius: 8px;
+}
+
+.expansiveis {
+
+  .registros-inconsistencia,
+  .registros-sucesso {
+    transition: all .5s linear;
+    height: 98px;
+
+    &.expandido {
+      height: 525px;
+    }
+  }
+
+  .top-10 {
+    transition: all .5s linear;
+    height: 55px;
+    overflow: hidden;
+
+    &.expandido {
+      height: auto;
+    }
+  }
+}

@@ -1,0 +1,23 @@
+@import "$settings";
+@import "$tools";
+
+.timepicker-button {
+    @include fontMontserratBold;
+    display: inline-block;
+    height: 36px;
+    min-width: 88px;
+    line-height: 36px;
+    border: 12px;
+    border-radius: 2px;
+    background-color: transparent;
+    text-align: center;
+    transition: all .45s cubic-bezier(.23, 1, .32, 1);
+    overflow: hidden;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    color: $blue-800;
+}

@@ -1,0 +1,65 @@
+<div fxLayout="column" fxLayoutAlign="start center" class="text-center">
+    <i class="fa-solid fa-hexagon-exclamation text-danger cabecalho"></i>
+    <p class="bold mb-0">Atenção!</p>
+    <section class="content mx-3">
+        <p [innerHTML]="mensagem"></p>
+
+        <form [formGroup]="formulario" fxLayout="column" fxLayoutGap="10px">
+            <mat-form-field appearance="outline" fxFlex [id]="utility.getElementId(5, 'acao-excluir-duplicidade')"
+                class="mb-0">
+                <mat-label>Selecione uma opção </mat-label>
+                <mat-select formControlName="motivo" required>
+                    <mat-option *ngFor="let motivo of motivos" [value]="motivo.id"
+                        [matTooltip]="retornoTooltip(motivo)">
+                        {{ motivo.motivo }}
+                        <span class="texto-adicional" *ngIf="motivo.textoAdicional">{{ motivo.textoAdicional }}</span>
+                    </mat-option>
+                </mat-select>
+                <mat-hint>Obrigatório</mat-hint>
+                <mat-error *ngIf="formulario.controls['acao'].hasError('required')">Obrigatório
+                </mat-error>
+            </mat-form-field>
+
+            <div class="toggle-default inline mb-2">
+                <p class="bold desk my-0 mr-1 text-gray-800">Contabilizar como prejuízo?</p>
+                <mat-button-toggle-group name="prejuizo" [id]="utility.getElementId(7, 'notificacao-tipo')"
+                    formControlName="acao" aria-label="prejuizo">
+                    <mat-button-toggle [id]="utility.getElementId(2, 'contabilizar-prejuizo')" [value]="2"
+                        class="btn-toggle">Sim</mat-button-toggle>
+                    <mat-button-toggle [id]="utility.getElementId(2, 'manter-cobranca')" [value]="1"
+                        class="btn-toggle">Não</mat-button-toggle>
+                </mat-button-toggle-group>
+            </div>
+        </form>
+    </section>
+
+    <div class="info-warning mx-3 text-justify" fxLayout="row" fxLayoutGap="15px" *ngIf="duplicidade"><i
+            class="fa-regular fa-memo-circle-info"></i>
+        <section>
+            <p class="bold mt-0">IMPORTANTE</p>
+            <ul class="pl-2 mb-0">
+                <li>
+                    <p class="bold">Ao selecionar a opção "Contabilizar como prejuízo", a Tecnobank não irá cobrar
+                        do cliente o registro de contrato, no entanto, quando aplicável, a Tecnobank irá pagar a taxa do
+                        DETRAN em nome desse cliente.
+                    </p>
+                </li>
+                <li>
+                    <p class="bold mb-0">
+                        Essa ação é irreversível.
+                    </p>
+                </li>
+            </ul>
+        </section>
+    </div>
+</div>
+
+<mat-dialog-actions class="d-flex justify-content-end">
+    <button mat-stroked-button class="btn-outline-primary" color="primary" type="button" [mat-dialog-close]="false"
+        [id]="utility.getElementId(2, 'excluir-duplicidade-cancelar')">Cancelar</button>
+
+    <button mat-flat-button color="primary" type="button" [mat-dialog-close]="formulario.value"
+        [disabled]="!formulario.valid" [id]="utility.getElementId(2, 'excluir-duplicidade-confirmar')">
+        Confirmar
+    </button>
+</mat-dialog-actions>

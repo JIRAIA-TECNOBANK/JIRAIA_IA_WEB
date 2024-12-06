@@ -1,0 +1,78 @@
+@import '$settings';
+@import '$tools';
+
+.header-notifier {
+    @include fontMontserratBold;
+
+    span {
+        @include fontMontserratBold;
+    }
+}
+
+.title-notifier {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    width: calc(100% - 70px);
+    margin-top: 10px;
+}
+
+.title-notifier span {
+    @include fontMontserratRegular;
+    padding-left: 10px;
+    vertical-align: middle;
+}
+
+.content-notifier {
+    @include fontMontserratRegular;
+    font-size: 14px;
+    margin-left: 5px;
+
+    strong {
+        @include fontMontserratBold;
+    }
+}
+
+.btn-dismiss {
+    cursor: pointer;
+}
+
+.mat-snack-bar-container {
+    margin-top: 70px !important;
+}
+
+.error.mat-snack-bar-container {
+    @include border-radius(10px);
+    background-color: $spotlight-300  !important;
+    color: $spotlight-900;
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.15), 0px 1px 18px rgba(0, 0, 0, 0.15), 0px 3px 5px rgba(0, 0, 0, 0.15);
+    font-size: 14px;
+    width: 370px;
+}
+
+.success.mat-snack-bar-container {
+    @include border-radius(10px);
+    background-color: $success-300  !important;
+    color: $text-success;
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.15), 0px 1px 18px rgba(0, 0, 0, 0.15), 0px 3px 5px rgba(0, 0, 0, 0.15);
+    font-size: 14px;
+    width: 370px;
+}
+
+.info.mat-snack-bar-container {
+    @include border-radius(10px);
+    background-color: $blue-500  !important;
+    color: $blue-900;
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.15), 0px 1px 18px rgba(0, 0, 0, 0.15), 0px 3px 5px rgba(0, 0, 0, 0.15);
+    font-size: 14px;
+    width: 370px;
+}
+
+.warning.mat-snack-bar-container {
+    @include border-radius(10px);
+    background-color: $warning-400  !important;
+    color: $text-warning;
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.15), 0px 1px 18px rgba(0, 0, 0, 0.15), 0px 3px 5px rgba(0, 0, 0, 0.15);
+    font-size: 14px;
+    width: 370px;
+}

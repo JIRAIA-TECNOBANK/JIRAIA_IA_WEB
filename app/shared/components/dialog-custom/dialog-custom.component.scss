@@ -1,0 +1,20 @@
+@import '$settings';
+@import '$tools';
+
+.close-dialog {
+    @include border-radius(5px);
+    position: absolute;
+    margin-top: -29px;
+    margin-left: 23.5rem;
+    padding: 0;
+    font-size: 17px;
+    border: none;
+    width: 25px;
+    height: 25px;
+    background: none;
+    cursor: pointer;
+
+    &:hover {
+        background: $gray-200;
+    }
+}

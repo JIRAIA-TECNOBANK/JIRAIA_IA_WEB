@@ -1,0 +1,17 @@
+<div class="profile-dialog">
+  <mat-nav-list>
+    <a mat-list-item>
+      <span>Gerenciar conta</span>
+    </a>
+    <a mat-list-item [routerLink]="['trocar-senha']">
+      <span>Trocar senha</span>
+    </a>
+    <a mat-list-item>
+      <span>Logs</span>
+    </a>
+    <mat-divider></mat-divider>
+    <a mat-list-item (click)="logout()">
+      <span>Sair</span>
+    </a>
+  </mat-nav-list>
+</div>

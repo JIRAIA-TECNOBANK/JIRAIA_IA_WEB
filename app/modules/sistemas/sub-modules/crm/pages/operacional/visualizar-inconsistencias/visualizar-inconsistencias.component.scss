@@ -1,0 +1,106 @@
+@import '$settings';
+@import '$tools';
+
+.headline {
+  @include fontMontserratBold;
+  font-size: 16px;
+  color: $gray-800;
+  margin: 0;
+}
+
+.titulo-revisao {
+  @include fontMontserratBold;
+  color: $gray-800;
+  font-size: 14px;
+  align-items: end;
+}
+
+.revisar-inconsistencia {
+  color: $warning-900;
+  font-size: 20px;
+  margin-left: 1rem;
+}
+
+.controlador-accordion-texto {
+  @include fontMontserratBold;
+  font-size: 14px;
+  color: $blue-600;
+  text-decoration: none
+}
+
+.link-editar-resumo {
+  @include fontMontserratBold;
+  @include border-radius(5px);
+  text-decoration: none;
+  color: #70B2E7;
+  background: #E0EFFF;
+  border: 2px solid #70B2E7;
+  padding: 5px;
+  font-size: 14px;
+  margin-right: 2rem;
+  width: 95px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.card {
+  background-color: #e1e7ec;
+  border-radius: 10px;
+
+  i {
+    color: $warning-900;
+    font-size: 20px;
+  }
+}
+.centralize {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.gray-700 {
+  color: $gray-700;
+}
+
+.bloco-descricao {
+  font-size: 0.8em;
+}
+
+// @import '$settings';
+// @import '$tools';
+
+// .fa-chevron-circle-down {
+//   color: $blue-600;
+//   margin-top: 5px;
+// }
+
+// .panel-title {
+//   @include fontMontserratBold;
+//   padding-bottom:2px;
+// }
+
+// .mat-expanded .panel-title {
+//   border-bottom: solid 3px $blue-600
+// }
+
+
+// .info-description {
+//   @include fontMontserratBold;
+// }
+
+// .revisar-inconsistencia {
+//   margin-top: 2px;
+//   margin-right: 1rem;
+//   color: $warning-900;
+// }
+
+// .header-warning {
+//   background: $warning-300 !important;
+// }
+
+// .layout-icon {
+//   padding-top: 4px;
+// }

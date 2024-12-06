@@ -1,0 +1,77 @@
+@import '$settings';
+@import '$tools';
+
+.grupo-header {
+    @include border-radius(0);
+    height: 51px;
+    background: $gray-200;
+    padding: 0;
+
+    &:hover,
+    &:focus {
+        background: $gray-200  !important;
+    }
+
+    i {
+        color: $blue-600;
+        font-size: 20px;
+        line-height: 66px;
+    }
+}
+
+.enable-pointer-events {
+    pointer-events: all;
+}
+
+.panel-title {
+    @include fontMontserratBold;
+    color: $gray-700;
+}
+
+.funcionalidade-permissao {
+    width: 208px;
+}
+
+tr {
+    height: 60px;
+
+    &:hover {
+        background: none !important;
+    }
+}
+
+.permissoes-body {
+    border-collapse: collapse;
+
+    tr {
+        border-top: 1px solid $gray-500;
+    }
+}
+
+.grupo-permissoes {
+    box-shadow: none !important;
+    border: 1px solid $gray-500;
+}
+
+td.funcionalidade-nome {
+    padding-left: 44px;
+    width: 100%;
+}
+
+td.last-td {
+    width: 50px;
+}
+
+.permissoes-title td.funcionalidade-nome {
+    padding-left: calc(44px - 26px);
+}
+
+.disabled-pointer {
+    pointer-events: none;
+    color: $gray-400 !important;
+}
+
+.grupos-permissoes {
+    width: 50%;
+    display: block;
+}

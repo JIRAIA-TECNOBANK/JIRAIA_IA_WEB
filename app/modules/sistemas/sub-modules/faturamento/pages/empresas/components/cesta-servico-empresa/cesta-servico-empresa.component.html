@@ -1,0 +1,66 @@
+<form [formGroup]="formulario" fxLayout="column" fxLayoutAlign="space-between">
+
+    <app-bloco-vazio *ngIf="listaPrecoPrivado?.length === 0 && !cadastroEmpresa"
+        [options]="blocoVazio"></app-bloco-vazio>
+
+    <ng-container *ngIf="listaPrecoPrivado?.length > 0; then formPrecoTecnobank"></ng-container>
+
+    <ng-template #formPrecoTecnobank>
+        <section fxLayout="column" fxLayoutAlign="space-between" [ngClass]="{ 'conteudo': !cadastroEmpresa }">
+            <div fxLayout="row" fxLayoutAlign="space-between center" *ngFor="let preco of listaPrecoPrivado"
+                class="wrap-taxa mb-1">
+
+                <mat-accordion class="gestao-detran w-100">
+                    <mat-expansion-panel class="w-100" (opened)="panelOpenState = true"
+                        (closed)="panelOpenState = false">
+                        <mat-expansion-panel-header class="p-0">
+                            <p class="nome bold"> {{ preco.nome }} </p>
+                        </mat-expansion-panel-header>
+
+                        <section fxLayout="row" class="mb-2 vigencia">
+                            <span class="bold gray-600 fnt-12">Início da vigência: </span>&nbsp;
+                            <span class="bold desk">{{ preco.dataInicioVigencia | date:"dd/MM/yyyy" }}</span>
+                            <div class="icone edicao ml-1" fxLayoutAlign="center center"
+                                [id]="utility.getElementId(2, 'editar-taxa', preco.id)"
+                                matTooltip="Editar início da vigência" (click)="editarInicioVigencia(preco)">
+                                <i class="fa-regular fa-pen"></i>
+                            </div>
+                        </section>
+
+                        <div class="detalhes-taxa" fxLayout="column" fxLayoutGap="10px">
+
+                            <app-tabela-listagem-precos [taxaDetran]="taxaDetran"
+                                [preco]="preco"></app-tabela-listagem-precos>
+
+                            <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100 mr-1">
+                                <div fxLayout="row" fxLayoutGap="20px" class="mt-1">
+                                    <section fxLayout="row">
+                                        <span class="bold gray-600 fnt-12">Criado por: </span>&nbsp;
+                                        <span class="bold desk fnt-12">{{ preco.criadoPor }}</span>
+                                    </section>
+
+                                    <section fxLayout="row">
+                                        <span class="bold gray-600 fnt-12">Data/horário: </span>&nbsp;
+                                        <span class="bold desk fnt-12">{{ preco.criadoEm | date:"dd/MM/yyyy
+                                            HH:mm"
+                                            }}</span>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </div>
+
+            <section *ngIf="!cadastroEmpresa">
+                <mat-slide-toggle formControlName="emitirNota">Emitir nota de débito</mat-slide-toggle>
+
+                <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="end center" class="mt-1">
+                    <button mat-flat-button color="secondary" type="submit" (click)="onSalvar()"
+                        [id]="utility.getElementId(2, 'salvar-preco-servico')">Salvar e
+                        continuar</button>
+                </div>
+            </section>
+        </section>
+    </ng-template>
+</form>

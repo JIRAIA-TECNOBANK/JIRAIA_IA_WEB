@@ -1,0 +1,109 @@
+<div class="px-2 pb-3">
+  <div [hidden]="childstate">
+    <!-- teste para pipeline -->
+    <div>
+      <div class="box__btn">
+        <button mat-flat-button class="box__btn--btn" type="button" color="secondary" (click)="criarDetran()">
+          Incluir Detran
+        </button>
+      </div>
+      <app-grid-filter [filter]="filter" (pesquisar)="search($event)" (redefinir)="redefinir()" [radiusTop]="false"
+        [showRedefinir]="showRedefinirBtn"></app-grid-filter>
+      <mat-card class="mat-elevation-z8 mt-2 p-0">
+        <section class="text-paginator">
+          <div class="row d-flex">
+            <section class="default-text" *ngIf="paginator">
+              Mostrando
+              {{
+              paginator?.pageSize > totalItems
+              ? totalItems
+              : paginator?.pageSize
+              }}
+              de {{ totalItems }} resultados
+            </section>
+          </div>
+        </section>
+        <mat-paginator [pageSizeOptions]="[25, 50, 75, 100]" [length]="totalItems" aria-label="Itens por página"
+          #paginator>
+        </mat-paginator>
+
+        <div>
+          <table mat-table [dataSource]="items$ | async">
+
+            <ng-container matColumnDef="uf">
+              <th mat-header-cell *matHeaderCellDef>Estado</th>
+              <td mat-cell *matCellDef="let element" [title]="element.uf">{{ element.uf }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="atualizadoEm">
+              <th mat-header-cell *matHeaderCellDef>Data atualização</th>
+              <td mat-cell *matCellDef="let element">{{ element.atualizadoEm ?? '-' }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="ativo">
+              <th mat-header-cell *matHeaderCellDef>Status</th>
+              <td mat-cell *matCellDef="let element">
+                <div class="status-pill" [ngClass]="
+                  element.ativo ? 'status-pill__active' : 'status-pill__inactive'
+                  ">
+                  {{ element.ativo ? "Ativo" : "Inativo" }}
+                </div>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="acoes">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td style="text-align: right;" mat-cell *matCellDef="let element">
+                <div>
+                  <button mat-button [matMenuTriggerFor]="menu">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item [id]="utility.getElementId(2, 'editar', element.id)"
+                      (click)="editarDetran(element)">
+                      Editar
+                    </button>
+       
+                  </mat-menu>
+                </div>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="semRegistro">
+              <th class="text-center feedBack pt-1" mat-cell *matFooterCellDef colspan="11">
+                <img src="./../../../../../../../../assets/img/custom-icons/icon-vazio-artigos.svg" />
+                <p class="desk bold text-gray-700"> Não há registros. </p>
+              </th>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsDetrans"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsDetrans"></tr>
+            <tr mat-row *matFooterRowDef="['semRegistro']"
+              [ngClass]="{'d-none': !(totalItems == 0 || totalItems == undefined) }">
+            </tr>
+          </table>
+          <section class="text-paginator">
+            <div class="row d-flex">
+              <section class="default-text">
+                Mostrando
+                {{
+                paginator?.pageSize > totalItems
+                ? totalItems
+                : paginator?.pageSize
+                }}
+                de {{ totalItems }} resultados
+              </section>
+            </div>
+          </section>
+          <mat-paginator (page)="syncPrimaryPaginator($event)" [pageSize]="paginator.pageSize"
+            [pageIndex]="paginator.pageIndex" [length]="paginator.length"
+            [pageSizeOptions]="paginator?.pageSizeOptions">
+          </mat-paginator>
+        </div>
+      </mat-card>
+
+    </div>
+  </div>
+
+  <router-outlet></router-outlet>
+</div>

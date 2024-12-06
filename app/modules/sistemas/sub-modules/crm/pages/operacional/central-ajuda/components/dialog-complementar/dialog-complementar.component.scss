@@ -1,0 +1,87 @@
+@import '$settings';
+@import '$tools';
+
+.dropzone {
+    @include border-radius(5px);
+    border: 1px dashed $blue-600;
+    display: flex;
+    justify-content: center;
+
+    .desk {
+        color: $gray-700;
+        font-size: 12px;
+
+        i {
+            font-size: 12px;
+        }
+
+        u {
+            cursor: pointer;
+            font-size: 12px;
+        }
+    }
+
+    &.disabled {
+        border: 1px dashed $gray-400 !important;
+
+        .text-primary {
+            color: $gray-400 !important;
+        }
+    }
+}
+
+.legenda {
+    color: $gray-800;
+    font-size: 12px;
+}
+
+.fileList {
+
+    .file-size {
+        margin: 2px 0 0 0;
+        align-self: center;
+        font-size: 12px;
+        font-weight: 700;
+        color: #8E8E8E;
+    }
+
+    .file {
+        @include border-radius(5px);
+        margin: 2px 0 2px 0;
+        min-height: 72px;
+        border: 2px solid $gray-300;
+
+        h4 {
+            @include fontMontserratBold;
+            color: $gray-900;
+            font-size: 12px;
+            margin: 0;
+        }
+
+        .file-size {
+            @include fontMontserratBold;
+            color: #8E8E8E;
+        }
+
+        .deleteButton {
+            @include border-radius(100%);
+            width: 20px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            background-color: $blue-600;
+            border: none;
+            align-items: center;
+            color: $white;
+            font-size: 9px;
+            cursor: pointer
+        }
+
+        span {
+            @include fontMontserratBold;
+            font-size: 14px;
+            color: $gray-800;
+            align-self: center;
+        }
+    }
+}

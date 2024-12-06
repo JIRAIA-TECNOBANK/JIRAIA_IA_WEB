@@ -1,0 +1,161 @@
+<section class="pb-0">
+  <div class="row">
+    <form [formGroup]="sendFileForm">
+      <input
+        type="file"
+        hidden
+        #fileDropRef
+        id="fileDropRef"
+        (change)="fileBrowseHandler($event.target.files)"
+        [accept]="acceptedTypes"
+        formControlName="arquivo"
+        [disabled]="disableCadastro"
+        [ngClass]="{ 'btn-disabled': disableCadastro }"
+      />
+
+      <div
+        class="dropzone"
+        appDragAndDrop
+        (fileDropped)="onFileDropped($event)"
+        (click)="onClickFile(fileDropRef)"
+        [ngClass]="{ 'dropzone-disabled': disableCadastro }"
+      >
+        <div class="dropzone-label" fxLayout="row" fxLayoutAlign="center">
+          <i class="fa-solid fa-folder-open"></i>
+          <p>Arraste o arquivo aqui, ou&nbsp;</p>
+          <p>procure no seu dispositivo</p>
+        </div>
+      </div>
+      <div
+        class="dropzone-hint"
+        fxLayout="row"
+        fxLayoutAlign="space-between center"
+      >
+        <mat-hint>Formatos PDF, DOC, DOCX. </mat-hint>
+        <mat-hint>Tamanho máximo 10MB</mat-hint>
+      </div>
+
+      <br />
+      <div fxLayout="row" fxLayoutAlign=" center" fxLayoutGap="10px">
+        <mat-form-field appearance="outline" fxFlex="50">
+          <mat-label>Nome do arquivo </mat-label>
+          <input
+            matInput
+            placeholder="Nome do arquivo"
+            formControlName="nome"
+            required
+          />
+          <mat-error *ngIf="sendFileForm.controls['nome'].hasError('required')"
+            >Campo obrigatório</mat-error
+          >
+          <mat-error *ngIf="sendFileForm.controls['nome'].hasError('maxlength')"
+            >O nome deve conter até 20 caracteres.</mat-error
+          >
+        </mat-form-field>
+        <mat-form-field appearance="outline" fxFlex="50">
+          <mat-label>Descrição </mat-label>
+          <input
+            matInput
+            placeholder="Nome do arquivo"
+            formControlName="descricao"
+          />
+          <mat-error
+            *ngIf="sendFileForm.controls['descricao'].hasError('maxlength')"
+            >A descrição deve conter até 50 caracteres.</mat-error
+          >
+        </mat-form-field>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="15px" class="mt-3">
+        <button
+          mat-flat-button
+          color="primary"
+          fxFlex="10"
+          type="button"
+          (click)="prepareFilesList(addFile)"
+          [disabled]="sendFileForm.invalid || !addFile"
+        >
+          Incluir
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="row">
+    <p class="desk bold mb-0">Arquivos enviados</p>
+  </div>
+  <div class="files-list" *ngIf="filesList && filesList.length > 0">
+    <div class="single-file" *ngFor="let file of filesList; let i = index">
+      <div class="file-name">
+        <div [ngSwitch]="getExtension(file)">
+          <div class="icon" *ngSwitchCase="'PDF'">
+            <img
+              src="./../../../../assets/img/custom-icons/icon-file-pdf.svg"
+            />
+          </div>
+          <div class="icon" *ngSwitchCase="'DOC'">
+            <img
+              src="./../../../../assets/img/custom-icons/icon-file-doc.svg"
+            />
+          </div>
+          <div class="icon" *ngSwitchCase="'DOCX'">
+            <img
+              src="./../../../../assets/img/custom-icons/icon-file-docx.svg"
+            />
+          </div>
+          <div class="icon" *ngSwitchDefault>
+            <img
+              src="./../../../../assets/img/custom-icons/icon-file-none.svg"
+            />
+          </div>
+        </div>
+        <div class="info">
+          <h4 class="name">
+            {{ file.nome }} &nbsp;
+            <i class="fas fa-check-circle text-success"></i>
+          </h4>
+          <p class="size">
+            {{ formatDate(file.criadoEm) }} -
+            {{ formatBytes(file.tamanhoByte, 2) }}
+          </p>
+        </div>
+      </div>
+
+      <div class="file-detail-description">
+        <div class="file-title">Descrição</div>
+        {{ file.descricao ? file.descricao : "-" }}
+      </div>
+      <div class="file-actions">
+        <div
+          class="file-delete"
+          (click)="onClickDelete(file.documentoGuid)"
+          matTooltip="Deletar arquivo"
+          title="Deletar arquivo"
+          [ngClass]="{ 'btn-disabled': disableCadastro }"
+        >
+          <i class="fa-solid fa-trash-alt"></i>
+        </div>
+        <div
+          class="file-download"
+          (click)="onClickDownload(file.documentoGuid, file.nome, i)"
+          matTooltip="Download do arquivo"
+          title="Download do arquivo"
+          *ngIf="!loading"
+        >
+          <i class="far fa-arrow-to-bottom"></i>
+        </div>
+        <div class="file-download" *ngIf="loading && downloadingItem === i">
+          <i class="fas fa-circle-notch fa-spin"></i>
+        </div>
+        <div
+          class="file-download"
+          (click)="onClickDownload()"
+          matTooltip="Download do arquivo"
+          title="Download do arquivo"
+          *ngIf="false"
+        >
+          <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

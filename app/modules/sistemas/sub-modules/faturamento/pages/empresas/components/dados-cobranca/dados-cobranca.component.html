@@ -1,0 +1,32 @@
+<section (click)="formularioAberto = true" fxLayout="row" [ngClass]="{ 'cursor-pointer': !formularioAberto }">
+    <h6>Gerenciar o vencimento dos boletos de cobrança (nota fiscal e nota de débito)
+        <i *ngIf="!formularioAberto" class="fas fa-check text-success"></i>
+    </h6>
+</section>
+
+<form [formGroup]="formulario" (ngSubmit)="confirmar()" fxLayout="column" [ngClass]="{ 'd-none': !formularioAberto }">
+    <mat-form-field appearance="outline" class="w-35">
+        <mat-label>Dia do vencimento do boleto</mat-label>
+        <input matInput placeholder="Dia do vencimento" formControlName="vencimento"
+            [id]="utility.getElementId(0, 'vencimento')" maxlength="2" type="number" max="31" min="1" required />
+        <mat-error class="bold" *ngIf="formulario.controls['vencimento'].hasError('required')">Campo
+            obrigatório</mat-error>
+        <mat-error class="bold"
+            *ngIf="formulario.controls['vencimento'].hasError('max') || formulario.controls['vencimento'].hasError('min')">Digite
+            um dia válido</mat-error>
+        <mat-hint *ngIf="!formulario.get('ultimoDia').value">Obrigatório</mat-hint>
+    </mat-form-field>
+
+    <mat-slide-toggle formControlName="ultimoDia" class="bold desk w-35">Vencimento no último dia do
+        mês</mat-slide-toggle>
+
+    <app-alert [color]="'warning'" [icone]="'fa-regular fa-memo-circle-info'" [titulo]="'Importante'"
+        [mensagem]="mensagemAlerta"></app-alert>
+
+    <div fxLayout="row" fxLayoutAlign="end" class="mt-2">
+        <button mat-flat-button color="primary" [id]="utility.getElementId(2, 'salvar-dados-cobranca')" type="submit"
+            [disabled]="!formulario.valid" class="bold">
+            Salvar
+        </button>
+    </div>
+</form>

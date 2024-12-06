@@ -1,0 +1,18 @@
+<section class="top-options mb-2">
+    <button mat-flat-button class="box__btn--btn" color="secondary"
+        [id]="utility.getElementId(2, 'solicitar-relatorio')" (click)="onSolicitarRelatorio()">
+        <i class="fa-regular fa-file-chart-column"></i>
+        &nbsp;Solicitar relatório
+    </button>
+</section>
+
+<div class="default-tab px-2 pb-3">
+
+    <app-grid-filter [filter]="filter" (pesquisar)="search($event)" (onSearchInput)="searchField($event)"
+        (redefinir)="redefinirFiltros()" [showRedefinir]="showRedefinirBtn">
+    </app-grid-filter>
+
+    <mat-card class="mat-elevation-z8 mt-2 p-0">
+        <app-table-relatorios-faturamento [atualizar]="atualizarGrid" [filtro]="filtroRelatorio"></app-table-relatorios-faturamento>
+    </mat-card>
+</div>

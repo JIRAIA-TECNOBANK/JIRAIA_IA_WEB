@@ -1,0 +1,27 @@
+@import '$settings';
+@import '$tools';
+
+h2 {
+  text-align: center;
+  @include fontMontserratBold;
+}
+
+.item {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 32px;
+}
+
+.item-icon {
+  color: $primary;
+  text-align: center;
+  font-size:1.2em;
+}
+
+.ico {
+  line-height: 1.8;
+}
+
+.icon-background {
+  color: $blue-400;
+}

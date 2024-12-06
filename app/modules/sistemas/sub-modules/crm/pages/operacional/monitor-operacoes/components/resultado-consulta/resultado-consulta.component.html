@@ -1,0 +1,260 @@
+<app-skeleton-grid [colunas]="columnsToDisplay" [hidden]="!loading"></app-skeleton-grid>
+
+<div [hidden]="loading">
+  <section class="text-paginator">
+    <div class="row d-flex">
+      <section class="select-options mr-4 d-flex" *ngIf="selection.selected.length > 0">
+        {{ selection.selected.length }} operaç{{ selection.selected.length > 1 ? 'ões' : 'ão' }} selecionada{{
+        selection.selected.length > 1 ? 's' : '' }} <div class="btn-wrapper" matTooltip="Reenviar"
+          (click)="onReenviar()" [id]="getElementId(2, 'reenvio')" *ngIf="habilitaReenvio"
+          [ngClass]="{ 'btn-disabled': !utility.getPermission([Permissoes.GESTAO_OPERACOES_CONTRATO_REENVIAR]) }"> <i
+            class="fa-solid fa-arrows-turn-right"></i> </div>
+        <div class="btn-wrapper" matTooltip="Reenviar 700" (click)="onReenviar(true)"
+          [id]="getElementId(2, 'reenvio-700')" *ngIf="habilitaBotaoReenvio700()"
+          [ngClass]="{ 'btn-disabled': !utility.getPermission([Permissoes.GESTAO_OPERACOES_CONTRATO_REENVIAR]) }"> <i
+            class="fa-solid fa-arrows-turn-right"></i> </div>
+        <div class="btn-wrapper" matTooltip="Editar manualmente" (click)="onEditarManualmente()"
+          [id]="getElementId(2, 'reenvio')" *ngIf="habilitaEditarManualmente"
+          [ngClass]="{ 'btn-disabled': !utility.getPermission([Permissoes.GESTAO_OPERACOES_CONTRATO_REGISTRAR]) }"> <i
+            class="fa-regular fa-money-check-pen"></i> </div>
+        <div class="btn-wrapper" matTooltip="Reprocessar" (click)="reprocessar()" [id]="getElementId(2, 'reenvio')"
+          *ngIf="habilitaReprocessamento"
+          [ngClass]="{ 'btn-disabled': !utility.getPermission([Permissoes.GESTAO_OPERACOES_CONTRATO_REGISTRAR]) }"> <i
+            class="fa-solid fa-arrows-repeat"></i> </div>
+
+      </section>
+
+      <section class="default-text" *ngIf="paginator">
+        Mostrando {{ paginator?.pageSize > totalRegistros ? totalRegistros : paginator?.pageSize }} de {{
+        totalRegistros }} resultados
+      </section>
+    </div>
+  </section>
+  <mat-paginator [pageSizeOptions]="[25, 50, 75, 100]" [length]="totalRegistros" #paginator></mat-paginator>
+  <table aria-describedby="transacoes" mat-table [dataSource]="items$ | async" multiTemplateDataRows
+    (matSortChange)="sortData($event)" matSort>
+    <ng-container matColumnDef="Select">
+      <th mat-header-cell *matHeaderCellDef class="pr-1">
+        <mat-checkbox [id]="getElementId(4, 'select-all-op')" (change)="$event ? toggleAllRows() : null"
+          [checked]="verifyPageSelection() == 1" [indeterminate]="verifyPageSelection() == 2"
+          [disabled]="!habilitaReenvio && !habilitaEditarManualmente">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <mat-checkbox [id]="getElementId(4, element.protocolo)" (click)="$event.stopPropagation()"
+          (change)="$event ? check(element) : null" [checked]="isSelected(element)"
+          [disabled]="!element.habilitaCheckbox">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="Login">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Login</th>
+      <td mat-cell *matCellDef="let element" [matTooltip]="element.email" class="column-max-width">{{ element.email }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="DataRegistro">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Data/Hora</th>
+      <td mat-cell *matCellDef="let element">{{ formatCriadoEm(element.criadoEm) }}</td>
+    </ng-container>
+    <ng-container matColumnDef="UF">
+      <th mat-header-cell *matHeaderCellDef class="space-column" mat-sort-header>UF</th>
+      <td mat-cell *matCellDef="let element">{{ element.uf }}</td>
+    </ng-container>
+    <ng-container matColumnDef="Empresa">
+      <th mat-header-cell *matHeaderCellDef class="space-column" mat-sort-header>Empresa</th>
+      <td mat-cell *matCellDef="let element" [matTooltip]="element.nomeEmpresa" class="column-max-width">
+        {{ element.nomeEmpresa }}</td>
+    </ng-container>
+    <ng-container matColumnDef="Chassi">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Chassi</th>
+      <td mat-cell *matCellDef="let element" [matTooltip]="element.chassi" class="column-max-width">
+        {{ element.ehFrota ? '-' : element.chassi }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="Canal">
+      <th mat-header-cell *matHeaderCellDef class="space-column" mat-sort-header>Canal</th>
+      <td mat-cell *matCellDef="let element">{{ getCanalLabel(element.canalServico) }}</td>
+    </ng-container>
+    <ng-container matColumnDef="Operacao">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Operação</th>
+      <td mat-cell *matCellDef="let element" [matTooltip]="formatTipoOperacao(element.tipoOperacao)"
+        class="column-max-width">
+        {{ formatTipoOperacao(element.tipoOperacao) }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="Contrato">
+      <th mat-header-cell *matHeaderCellDef class="space-column" mat-sort-header>N.º Contrato</th>
+      <td mat-cell *matCellDef="let element" [matTooltip]="element.numeroContrato">
+        <span class="icon-contrato icon-frota bold" *ngIf="element.ehFrota">F</span>
+        <span class="icon-contrato icon-cancelado bold" *ngIf="element.baixadoCancelado == 'C'"
+          matTooltip="Cancelado">C</span>
+        <span class="icon-contrato icon-baixado bold" *ngIf="element.baixadoCancelado == 'B'"
+          matTooltip="Baixado">B</span>
+        {{ element.numeroContrato }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="Status">
+      <th mat-header-cell *matHeaderCellDef class="space-column" mat-sort-header>Status</th>
+      <td mat-cell *matCellDef="let element"
+        [matTooltip]="element.idStatusTransacao + ' - ' + element.nomeStatusTransacao">
+        {{ element.idStatusTransacao }} - {{
+        element.nomeStatusTransacao }}</td>
+    </ng-container>
+    <ng-container matColumnDef="Imagem">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Imagem</th>
+      <td mat-cell *matCellDef="let element" class="column__image">
+        <ng-container *ngIf="element.iconeStatusImagem != 0">
+          <p class="success">
+            <i class="fas fa-check-circle success"></i>
+          </p>
+        </ng-container>
+        <ng-container *ngIf="element.iconeStatusImagem == 0">
+          <p class="warnig">
+            <i class="fas fa-exclamation-triangle warnig"></i>
+          </p>
+        </ng-container>
+        <!-- <ng-container *ngIf="element.iconeStatusImagem == 2">
+          <p class="text-secondary">
+            <i class="fa-solid fa-ban "></i>
+          </p>
+        </ng-container> -->
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="semRegistro">
+      <th class="text-center feedBack pt-1" mat-cell *matFooterCellDef colspan="11">
+        <img src="./../../../../../../../../../../assets/img/custom-icons/icon-vazio-artigos.svg" />
+        <p class="desk bold text-gray-700"> Não há registros. </p>
+      </th>
+    </ng-container>
+
+    <ng-container matColumnDef="expand">
+      <th mat-header-cell *matHeaderCellDef aria-label="row actions"></th>
+      <td mat-cell *matCellDef="let element">
+        <button [id]="getElementId(2, 'expand', element.protocolo)" mat-icon-button aria-label="expand row"
+          (click)="(expandedElement = expandedElement === element ? null : element); expandDetail(element.protocolo, expandedElement === element); $event.stopPropagation(); ">
+          <div class="wrapper">
+            <i [ngClass]="expandedElement !== element ? 'fa-solid fa-chevron-down' : 'fa-solid fa-chevron-up' "
+              aria-hidden="true"> </i>
+          </div>
+        </button>
+      </td>
+    </ng-container>
+    <!-- Expanded Content Column -->
+    <ng-container matColumnDef="expandedDetail">
+      <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
+        <div class="example__element--detail" fxLayout.sm="column" fxFlexLayout="column"
+          [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+          <div class="example__element--boxLeft">
+            <ul fxLayout="row" fxLayoutAlign="start" fxLayoutGap="24px">
+              <li>
+                <button [id]="getElementId(2, 'espelho', element.protocolo)" mat-flat-button color="primary"
+                  (click)="openEspelho(element.protocolo)"> Espelho</button>
+              </li>
+              <li *ngIf="transacaoDetalhes.codigoRetorno == 30">
+                <button [id]="getElementId(2, 'emitir-certidao', element.protocolo)" mat-flat-button color="primary"
+                  (click)="emitirCertidao(element.protocolo, element.documento)">
+                  Emitir certidão</button>
+              </li>
+              <li *ngIf="transacaoDetalhes.codigoRetorno == 30">
+                <button [id]="getElementId(2, 'envio-img', element.protocolo)" mat-flat-button color="primary"
+                  class="btn-primary" (click)="onClickImagem()"
+                  [disabled]="!utility.getPermission([Permissoes.GESTAO_OPERACOES_IMAGEM_CONSULTAR])">
+                  Imagem</button>
+              </li>
+              <li *ngIf="element['existeInconsistencia']">
+                <button [id]="getElementId(2, 'inconsistencia', element.protocolo)" mat-flat-button
+                  class="btn btn_warning" (click)="visualizarInconsistencias(element)"><i
+                    class="fa-solid fa-circle-info"></i> Verificar
+                  inconsistência</button>
+              </li>
+              <li>
+                <button [id]="getElementId(2, 'dsenvio-dsretorno', element.protocolo)" mat-flat-button color="primary"
+                  (click)="openDsMensagem(element.protocolo)"
+                  [disabled]="!utility.getPermission([Permissoes.GESTAO_OPERACOES_DSENVIO_DSRETORNO_CONSULTAR])">
+                  DsEnvio/DsRetorno</button>
+              </li>
+            </ul>
+
+            <section class="detalhes-registro">
+              <p class="titulo mt-1">Dados do contrato</p>
+              <ul class="bb-1">
+                <li>
+                  <p>Usuário: <strong>{{ transacaoDetalhes.nomeUsuario }}</strong></p>
+                  <p *ngIf="!element.ehFrota">Renavam: <strong>{{ transacaoDetalhes.renavam }}</strong></p>
+                  <p *ngIf="element.ehFrota">Quant. de veículos: <strong>{{ transacaoDetalhes.quantidadeVeiculos
+                      }}</strong></p>
+                </li>
+                <li *ngIf="!element.ehFrota">
+                  <p>&nbsp;</p>
+                  <p>Gravame: <strong>{{ transacaoDetalhes.gravame }}</strong></p>
+                </li>
+                <li>
+                  <p>CNPJ: <strong>{{ transacaoDetalhes.documento }}</strong></p>
+                  <p *ngIf="!element.ehFrota">Placa: <strong>{{ transacaoDetalhes.placa }}</strong></p>
+                  <p *ngIf="element.ehFrota">Operação: <strong>{{ element.tipoOperacao }}</strong></p>
+                </li>
+                <li>
+                  <p>Tipo Restrição: <strong>{{ getTipoRestricao(transacaoDetalhes.tipoRestricao) }}</strong></p>
+                  <p *ngIf="!element.ehFrota">Operação: <strong>{{ element.tipoOperacao }}</strong></p>
+                </li>
+              </ul>
+
+              <p class="titulo"> Dados de processamento </p>
+              <ul>
+                <li>
+                  <p>Código do retorno: <strong>{{ transacaoDetalhes.codigoRetorno }}</strong></p>
+                </li>
+                <li>
+                  <p>Descrição do Retorno: <strong>{{ transacaoDetalhes.descricaoRetorno }}</strong></p>
+                </li>
+              </ul>
+              <div *ngIf="
+                transacaoDetalhes?.quantidadeInconsistencias > 0 &&
+                transacaoDetalhes?.existeInconsistencia 
+              " > 
+                <p class="titulo"> 
+                  <svg xmlns="http://www.w3.org/2000/svg" width="17" height="15" viewBox="0 0 17 15" fill="none"
+                  class="mr-1">
+                    <path
+                      d="M16.8103 12.8906L9.73349 0.703125C9.46144 0.234375 8.98367 0 8.50591 0C8.02815 0 7.55039 0.234375 7.24847 0.703125L0.174934 12.8906C-0.338992 13.8248 0.339198 15 1.43039 15H15.5841C16.671 15 17.3511 13.8281 16.8103 12.8906ZM1.75686 13.3929L8.47605 1.76786L15.2543 13.3929H1.75686ZM8.50591 10.2154C7.92994 10.2154 7.4628 10.6868 7.4628 11.2681C7.4628 11.8493 7.93094 12.3208 8.50724 12.3208C9.08354 12.3208 9.54903 11.8493 9.54903 11.2681C9.5477 10.6875 9.08321 10.2154 8.50591 10.2154ZM7.70964 5.08929V8.30357C7.70964 8.74888 8.06796 9.10714 8.50591 9.10714C8.94386 9.10714 9.30218 8.74721 9.30218 8.30357V5.08929C9.30218 4.64732 8.94718 4.28571 8.50591 4.28571C8.06464 4.28571 7.70964 4.64732 7.70964 5.08929Z"
+                      fill="#FFAF3F" style="mix-blend-mode: multiply" />
+                  </svg>
+                  Dados da inconsistência 
+                </p>
+                <ul *ngFor="let inconsistencia of mensagemInconsistencias ">
+                  <li>
+                    <p>Código do validador: <strong>{{inconsistencia.Code}}</strong></p>
+                  </li>
+                  <li>
+                    <p>Mensagem do validador: <strong>{{inconsistencia.Message}}</strong></p>
+                  </li>
+                </ul>
+              </div>
+            </section>
+          </div>
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
+    <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand;" class="example-element-row"
+      [class.expanded-row]="expandedElement === element"
+      (click)="expandedElement = expandedElement === element ? null : element; expandDetail(element.protocolo, expandedElement === element)">
+    </tr>
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+    <tr mat-row *matFooterRowDef="['semRegistro']"
+      [ngClass]="{'d-none': !(totalRegistros == 0 || totalRegistros == undefined) }"></tr>
+  </table>
+  <section class="text-paginator expandido">
+    <div class="row d-flex">
+      <section class="default-text">
+        Mostrando {{ paginator?.pageSize > totalRegistros ? totalRegistros : paginator?.pageSize }} de {{
+        totalRegistros }} resultados
+      </section>
+    </div>
+  </section>
+  <mat-paginator (page)="syncPrimaryPaginator($event)" [pageSize]="paginator?.pageSize"
+    [pageIndex]="paginator?.pageIndex" [length]="paginator?.length"
+    [pageSizeOptions]="paginator?.pageSizeOptions"></mat-paginator>
+</div>

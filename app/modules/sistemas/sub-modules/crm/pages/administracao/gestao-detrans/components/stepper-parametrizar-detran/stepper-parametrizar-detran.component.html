@@ -1,0 +1,67 @@
+<mat-stepper orientation="horizontal" [linear]="true" #stepper (selectionChange)="alterarAba($event)"
+    class="form-stepper-{{ etapaAtual }} form-stepper__plus-etapaAtual">
+    <!-- Step 1 - Dados do DETRAN -->
+    <mat-step state="dadosDetran">
+        <ng-template matStepLabel>Dados do DETRAN</ng-template>
+        <ng-template matStepContent class="mt-2">
+            <div fxLayout="row" fxLayoutGap="15px" class="mt-2" fxLayoutAlign="space-between">
+                <div fxFlex="75" class="conteudo-step-detran">
+                    <app-criar-detran (confirmar)="navegarParaEtapa(1)" (uf)="uf = $event"></app-criar-detran>
+                </div>
+                <div fxLayout="column" fxFlex="25">
+                    <app-bloco-informacoes [options]="blocoInformacoes.dadosDetran"></app-bloco-informacoes>
+                </div>
+            </div>
+        </ng-template>
+    </mat-step>
+
+    <!-- Step 2 - Taxa DETRAN -->
+    <mat-step state="taxaDetran">
+        <ng-template matStepLabel>Taxa DETRAN</ng-template>
+        <ng-template matStepContent class="mt-2">
+            <div fxLayout="row" fxLayoutGap="15px" class="mt-2" fxLayoutAlign="space-between">
+                <div fxFlex="75" class="conteudo-step-detran">
+                    <mat-card class="h-100">
+                        <app-taxa-detran [uf]="uf" (transacoesElegiveis)="carregarTransacoesElegiveis($event)"
+                            (taxaVigenteOuProxima)="carregarTaxaDetran($event)"
+                            (continuar)="navegarParaEtapa(2)"></app-taxa-detran>
+                    </mat-card>
+                </div>
+                <div fxFlex="25">
+                    <app-bloco-informacoes [options]="blocoInformacoes.taxaDetran"></app-bloco-informacoes>
+                </div>
+            </div>
+        </ng-template>
+    </mat-step>
+
+    <!-- Step 3 - Preço TBK -->
+    <mat-step state="precoTbk">
+        <ng-template matStepLabel>Preço TBK</ng-template>
+        <ng-template matStepContent class="mt-2">
+            <div fxLayout="row" fxLayoutGap="15px" class="mt-2" fxLayoutAlign="space-between">
+                <div fxFlex="75" class="conteudo-step-detran">
+                    <mat-card class="h-100">
+                        <app-preco-tbk [uf]="uf" [transacoesElegiveis]="transacoesElegiveis"
+                            [taxaDetran]="taxaVigenteOuProxima"></app-preco-tbk>
+                    </mat-card>
+                </div>
+                <div fxFlex="25">
+                    <div class="mb-2">
+                        <app-bloco-informacoes [options]="blocoInformacoes.precoDetran"></app-bloco-informacoes>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </mat-step>
+
+    <!-- troca de icons do stepper -->
+    <ng-template matStepperIcon="dadosDetran">
+        <i class="fa-regular fa-building"></i>
+    </ng-template>
+    <ng-template matStepperIcon="taxaDetran">
+        <i class="fa-regular fa-money-check-dollar"></i>
+    </ng-template>
+    <ng-template matStepperIcon="precoTbk">
+        <i class="fa-regular fa-money-check-dollar-pen"></i>
+    </ng-template>
+</mat-stepper>

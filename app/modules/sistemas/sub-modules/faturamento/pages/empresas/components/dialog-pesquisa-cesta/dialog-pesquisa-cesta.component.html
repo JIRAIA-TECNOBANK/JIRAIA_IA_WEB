@@ -1,0 +1,83 @@
+<p class="bold desk mt-0">Encontrar cesta de serviço</p>
+
+<form class="formulario" [formGroup]="formulario" [ngClass]="{ 'pb-24': resultadoPrecos?.length > 0 }">
+    <section>
+        <mat-form-field class="mr-1" appearance="outline" fxFlex="90">
+            <mat-label>Selecione uma cesta de serviços</mat-label>
+            <input type="text" placeholder="Digite o nome" aria-label="Selecione uma cesta de serviços" matInput
+                [formControl]="precoControl" [matAutocomplete]="auto" [id]="utility.getElementId(5, 'preco')">
+            <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let option of filteredOptions | async" [value]="option" [matTooltip]="option">
+                    {{option}}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+
+        <div fxLayout="row" fxLayoutAlign="center center">
+            <button mat-flat-button color="secondary" class="card__button" type="button" (click)="pesquisar()"
+                [id]="utility.getElementId(2, 'pesquisar-preco')">
+                Pesquisar
+            </button>
+        </div>
+
+    </section>
+
+    <section class="contem-resultado" *ngIf="resultadoPrecos?.length > 0" fxLayout="column"
+        fxLayoutAlign="space-between">
+        <section class="resultado">
+            <mat-radio-group formControlName="preco" [id]="utility.getElementId(3, 'preco')" class="w-100">
+                <div fxLayout="row" fxLayoutAlign="space-between center" *ngFor="let preco of resultadoPrecos"
+                    class="wrap-taxa mb-1" [ngClass]="{ 'selected': formulario.get('preco').value === preco.id }">
+
+                    <mat-accordion class="gestao-detran w-100">
+                        <mat-expansion-panel class="mt-1 w-100" (opened)="panelOpenState = true"
+                            (closed)="panelOpenState = false">
+                            <mat-expansion-panel-header class="p-0">
+                                <mat-radio-button [value]="preco.id" class="mb-1 w-100">
+
+                                    <p class="nome bold"> {{ preco.nome }} </p>
+                                </mat-radio-button>
+                            </mat-expansion-panel-header>
+
+                            <app-tabela-listagem-precos [taxaDetran]="taxaDetran"
+                                [preco]="resultadoPrecos[0]"></app-tabela-listagem-precos>
+
+                            <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100 mr-1">
+                                <div fxLayout="row" fxLayoutGap="20px" class="mt-1">
+                                    <section fxLayout="row">
+                                        <span class="bold gray-600 fnt-12">Criado por: </span>&nbsp;
+                                        <span class="bold desk fnt-12">{{ resultadoPrecos[0].criadoPor }}</span>
+                                    </section>
+
+                                    <section fxLayout="row">
+                                        <span class="bold gray-600 fnt-12">Data/horário: </span>&nbsp;
+                                        <span class="bold desk fnt-12">{{ resultadoPrecos[0].criadoEm | date:"dd/MM/yyyy
+                                            HH:mm"
+                                            }}</span>
+                                    </section>
+                                </div>
+
+                            </div>
+
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                </div>
+
+            </mat-radio-group>
+        </section>
+
+        <section>
+            <app-escolha-vigencia-cesta [opcaoVigenciaControl]="formulario.get('periodoVigencia')"
+                [dataInicioVigenciaControl]="formulario.get('dataInicioVigencia')"></app-escolha-vigencia-cesta>
+        </section>
+
+        <mat-dialog-actions class="d-flex justify-content-end p-0">
+            <button mat-stroked-button class="btn-outline-primary" color="primary" type="button"
+                [mat-dialog-close]="false" [id]="utility.getElementId(2, 'selecionar-preco-cancelar')">Cancelar</button>
+
+            <button mat-flat-button color="secondary" [mat-dialog-close]="formulario.value" type="button"
+                [disabled]="!formulario.valid"
+                [id]="utility.getElementId(2, 'selecionar-preco-servico-confirmar')">Selecionar</button>
+        </mat-dialog-actions>
+    </section>
+</form>

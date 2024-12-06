@@ -1,0 +1,495 @@
+<div class="listar-empresas" [hidden]="childstate">
+  <div
+    class="d-flex justify-content-end top-options"
+    style="gap: 10px"
+    *ngIf="activeIndex == 0"
+  >
+    <button
+      mat-flat-button
+      color="secondary"
+      [id]="utility.getElementId(2, 'incluir-grupo')"
+      (click)="goTo('../organizacoes/grupos-economicos/criar-grupo', true)"
+      [disabled]="
+        !utility.getPermission([
+          Permissoes.GESTAO_EMPRESA_GRUPO_ECONOMICO_CADASTRAR
+        ])
+      "
+    >
+      Incluir grupo
+    </button>
+  </div>
+  <div
+    class="d-flex justify-content-end top-options"
+    style="gap: 10px"
+    *ngIf="activeIndex == 1"
+  >
+    <button
+      mat-flat-button
+      color="secondary"
+      [id]="utility.getElementId(2, 'incluir-empresa')"
+      (click)="goTo('../organizacoes/empresas/criar-empresa', false)"
+      [disabled]="!utility.getPermission([Permissoes.GESTAO_EMPRESA_CADASTRAR])"
+    >
+      Incluir empresa
+    </button>
+  </div>
+
+  <mat-tab-group
+    (selectedTabChange)="onTabChange($event)"
+    [selectedIndex]="activeIndex"
+  >
+    <mat-tab
+      [disabled]="
+        !utility.getPermission([
+          Permissoes.GESTAO_EMPRESA_GRUPO_ECONOMICO_CONSULTAR,
+          Permissoes.GESTAO_EMPRESA_GRUPO_ECONOMICO_CADASTRAR
+        ])
+      "
+    >
+      <ng-template mat-tab-label>
+        <div class="empresas-tab-label">
+          <i class="far fa-layer-group"></i>
+          <span>Grupos econômicos</span>
+        </div>
+      </ng-template>
+      <div class="px-2">
+        <app-grid-filter
+          [filter]="filterGrupos"
+          (pesquisar)="searchGrupos($event)"
+          (customControls)="setGrupoCustomControls($event)"
+          (redefinir)="redefinirGrupos()"
+          [radiusTop]="false"
+          [showRedefinir]="showRedefinirGruposBtn"
+        >
+          <section class="first-row d-flex" fxLayout.sm="column">
+            <app-filter-field
+              [field]="fieldCodigoGrupo"
+              [control]="codigoGrupoControl"
+            >
+            </app-filter-field>
+
+            <app-filter-field
+              [field]="fieldNomeGrupo"
+              [control]="grupoNomeControl"
+              [searchControl]="grupoNomeSearchControl"
+              (searchInput)="searchFilter($event)"
+              [redefinirField]="refreshGruposGrid"
+            >
+            </app-filter-field>
+
+            <button
+              mat-stroked-button
+              [matMenuTriggerFor]="menuRadioGrupo"
+              class="filter-button mt-2"
+              [id]="getElementId(2, 'filter', fieldPeriodoGrupo.id)"
+              type="button"
+              [ngClass]="{
+                'filter-active':
+                  (periodoGrupoControl.value ||
+                    dataInicialGrupoControl.value ||
+                    dataFinalGrupoControl.value) &&
+                  !dataInicialGrupoControl.invalid &&
+                  !dataFinalGrupoControl.invalid,
+                'filter-error':
+                  requiredFieldsError ||
+                  dataInicialGrupoControl.invalid ||
+                  dataFinalGrupoControl.invalid
+              }"
+              fxFlex
+            >
+              <span class="filter-title">{{ fieldPeriodoGrupo.titulo }}</span>
+              <i class="fal fa-chevron-down mr-1"></i>
+            </button>
+            <mat-menu #menuRadioGrupo="matMenu" class="mat-elevation-z8 filter">
+              <div class="filter-search" (click)="stopPropagation($event)">
+                <div
+                  class="filter-header d-flex justify-content-between pl-2 b-divider"
+                >
+                  <span> Por período</span>
+                  <button
+                    [id]="getElementId(2, 'filter-clean', fieldPeriodoGrupo.id)"
+                    mat-button
+                    color="primary"
+                    class="btn-redefinir"
+                    (click)="redefinir(periodoGrupoControl, fieldPeriodoGrupo)"
+                  >
+                    Limpar
+                  </button>
+                </div>
+
+                <section class="filter-options py-1 px-2">
+                  <mat-radio-group
+                    [formControl]="periodoGrupoControl"
+                    [id]="getElementId(3, 'filter', fieldPeriodoGrupo.id)"
+                  >
+                    <mat-radio-button
+                      *ngFor="let option of fieldPeriodoGrupo.options"
+                      [value]="option.value"
+                      class="mb-1"
+                      (change)="cleanDatesGrupos()"
+                    >
+                      {{ option.label }}</mat-radio-button
+                    >
+                  </mat-radio-group>
+
+                  <div class="row pt-1" fxLayoutGap="10">
+                    <mat-form-field
+                      appearance="outline"
+                      fxFlex="50"
+                      class="mat-field-small mr-1"
+                    >
+                      <mat-label>DE</mat-label>
+                      <input
+                        [id]="
+                          getElementId(6, 'filter-de', fieldPeriodoGrupo.id)
+                        "
+                        [formControl]="dataInicialGrupoControl"
+                        matInput
+                        placeholder="dd/mm/aaaa"
+                        (keydown.Tab)="stopMatMenuClosing($event)"
+                        (dateChange)="
+                          onChangePeriodoGrupo($event.target.value, true)
+                        "
+                        [min]="minInitialGrupoDate"
+                        [max]="maxDateGrupo"
+                        [matDatepicker]="grupode"
+                        [required]="
+                          dataFinalGrupoControl.value != null &&
+                          dataFinalGrupoControl.value != ''
+                        "
+                        (click)="grupode.open()"
+                      />
+                      <mat-datepicker-toggle matSuffix [for]="grupode" hidden>
+                      </mat-datepicker-toggle>
+                      <mat-datepicker #grupode></mat-datepicker>
+                      <mat-hint
+                        class="text-danger bold"
+                        *ngIf="dataInicialGrupoControl.hasError('required')"
+                      >
+                        Campo obrigatório
+                      </mat-hint>
+                      <mat-hint
+                        class="text-danger bold"
+                        *ngIf="
+                          dataInicialGrupoControl.hasError('matDatepickerMax')
+                        "
+                      >
+                        Data inicial não pode ser maior que hoje
+                      </mat-hint>
+                    </mat-form-field>
+
+                    <mat-form-field
+                      appearance="outline"
+                      fxFlex="50"
+                      class="mat-field-small"
+                    >
+                      <mat-label>ATÉ</mat-label>
+                      <input
+                        [id]="
+                          getElementId(6, 'filter-ate', fieldPeriodoGrupo.id)
+                        "
+                        [formControl]="dataFinalGrupoControl"
+                        matInput
+                        placeholder="dd/mm/aaaa"
+                        (keydown.tab)="grupoate.close()"
+                        (dateChange)="
+                          onChangePeriodoGrupo($event.target.value, false)
+                        "
+                        [min]="minDateGrupo"
+                        [matDatepicker]="grupoate"
+                        (click)="grupoate.open()"
+                        [required]="
+                          dataInicialGrupoControl.value != null &&
+                          dataInicialGrupoControl.value != ''
+                        "
+                      />
+                      <mat-datepicker-toggle matSuffix [for]="grupoate" hidden>
+                      </mat-datepicker-toggle>
+                      <mat-datepicker #grupoate></mat-datepicker>
+                      <mat-error
+                        class="text-danger bold"
+                        *ngIf="
+                          erroDataFinal ||
+                          dataFinalGrupoControl.hasError('matDatepickerMin')
+                        "
+                      >
+                        Data final deve ser maior que a data inicial
+                      </mat-error>
+                      <mat-hint
+                        class="text-danger bold"
+                        *ngIf="dataFinalGrupoControl.hasError('required')"
+                      >
+                        Campo obrigatório
+                      </mat-hint>
+                      <mat-hint
+                        class="text-danger bold"
+                        *ngIf="
+                          dataFinalGrupoControl.hasError('matDatepickerMax')
+                        "
+                      >
+                        Data final não pode ser maior que hoje
+                      </mat-hint>
+                    </mat-form-field>
+                  </div>
+                </section>
+              </div>
+            </mat-menu>
+
+            <app-filter-field
+              [field]="fieldStatusGrupo"
+              [control]="statusGrupoControl"
+              (selectAll)="selectAllGrupo($event)"
+            >
+            </app-filter-field>
+          </section>
+
+          <section class="second-row d-flex" fxLayout.sm="column">
+            <app-filter-field
+            [field]="fieldDocumentoEmpresaGrupo"
+            [control]="documentoEmpresaGrupo"
+            >
+          </app-filter-field>
+         </section>
+
+        </app-grid-filter>
+      </div>
+
+      <div class="default-tab px-2 pb-3">
+        <mat-card class="mat-elevation-z8 mt-2 p-0">
+          <app-table-grupos-economicos
+            [filtro]="filtroGrupos"
+          ></app-table-grupos-economicos>
+        </mat-card>
+      </div>
+    </mat-tab>
+
+    <mat-tab
+      [disabled]="
+        !utility.getPermission([
+          Permissoes.GESTAO_EMPRESA_CONSULTAR,
+          Permissoes.GESTAO_EMPRESA_CADASTRAR
+        ])
+      "
+    >
+      <ng-template mat-tab-label>
+        <div class="empresas-tab-label">
+          <i class="fa-regular fa-buildings"></i>
+          <span>Empresas</span>
+        </div>
+      </ng-template>
+      <div class="px-2">
+        <app-grid-filter
+          [filter]="filterEmpresas"
+          (pesquisar)="searchEmpresas($event)"
+          (customControls)="setCustomControls($event)"
+          (redefinir)="redefinirEmpresas()"
+          [radiusTop]="false"
+          [showRedefinir]="showRedefinirGruposBtn"
+        >
+          <section class="first-row d-flex" fxLayout.sm="column">
+            <app-filter-field
+              [field]="fieldCodigoEmpresa"
+              [control]="codigoEmpresaControl"
+            >
+            </app-filter-field>
+
+            <app-filter-field
+              [field]="fieldNomeEmpresa"
+              [control]="empresaNomeControl"
+              [searchControl]="empresaNomeSearchControl"
+              (searchInput)="searchFilterEmpresas($event)"
+              [redefinirField]="refreshEmpresasGrid"
+            >
+            </app-filter-field>
+
+            <app-filter-field
+              [field]="fieldDocumentoEmpresa"
+              [control]="documentoEmpresaControl"
+            >
+            </app-filter-field>
+
+            <button
+              mat-stroked-button
+              [matMenuTriggerFor]="menuRadio"
+              class="filter-button mt-2"
+              [id]="getElementId(2, 'filter', fieldPeriodoEmpresa.id)"
+              type="button"
+              [ngClass]="{
+                'filter-active':
+                  (periodoEmpresaControl.value ||
+                    dataInicialEmpresaControl.value ||
+                    dataFinalEmpresaControl.value) &&
+                  !dataInicialEmpresaControl.invalid &&
+                  !dataFinalEmpresaControl.invalid,
+                'filter-error':
+                  requiredFieldsError ||
+                  dataInicialEmpresaControl.invalid ||
+                  dataFinalEmpresaControl.invalid
+              }"
+              fxFlex
+            >
+              <span class="filter-title">{{ fieldPeriodoEmpresa.titulo }}</span>
+              <i class="fal fa-chevron-down mr-1"></i>
+            </button>
+            <mat-menu #menuRadio="matMenu" class="mat-elevation-z8 filter">
+              <div class="filter-search" (click)="stopPropagation($event)">
+                <div
+                  class="filter-header d-flex justify-content-between pl-2 b-divider"
+                >
+                  <span> Por período</span>
+                  <button
+                    [id]="
+                      getElementId(2, 'filter-clean', fieldPeriodoEmpresa.id)
+                    "
+                    mat-button
+                    color="primary"
+                    class="btn-redefinir"
+                    (click)="
+                      redefinir(periodoEmpresaControl, fieldPeriodoEmpresa)
+                    "
+                  >
+                    Limpar
+                  </button>
+                </div>
+
+                <section class="filter-options py-1 px-2">
+                  <mat-radio-group
+                    [formControl]="periodoEmpresaControl"
+                    [id]="getElementId(3, 'filter', fieldPeriodoEmpresa.id)"
+                  >
+                    <mat-radio-button
+                      *ngFor="let option of fieldPeriodoEmpresa.options"
+                      [value]="option.value"
+                      class="mb-1"
+                      (change)="cleanDates()"
+                    >
+                      {{ option.label }}</mat-radio-button
+                    >
+                  </mat-radio-group>
+
+                  <div class="row pt-1" fxLayoutGap="10">
+                    <mat-form-field
+                      appearance="outline"
+                      fxFlex="50"
+                      class="mat-field-small mr-1"
+                    >
+                      <mat-label>DE</mat-label>
+                      <input
+                        [id]="
+                          getElementId(6, 'filter-de', fieldPeriodoEmpresa.id)
+                        "
+                        [formControl]="dataInicialEmpresaControl"
+                        matInput
+                        placeholder="dd/mm/aaaa"
+                        (keydown.Tab)="stopMatMenuClosing($event)"
+                        (dateChange)="
+                          onChangePeriodo($event.target.value, true)
+                        "
+                        [min]="minInitialEmpresaDate"
+                        [max]="maxDate"
+                        [matDatepicker]="de"
+                        [required]="
+                          dataFinalEmpresaControl.value != null &&
+                          dataFinalEmpresaControl.value != ''
+                        "
+                        (click)="de.open()"
+                      />
+                      <mat-datepicker-toggle matSuffix [for]="de" hidden>
+                      </mat-datepicker-toggle>
+                      <mat-datepicker #de></mat-datepicker>
+                      <mat-hint
+                        class="text-danger bold"
+                        *ngIf="dataInicialEmpresaControl.hasError('required')"
+                      >
+                        Campo obrigatório
+                      </mat-hint>
+                      <mat-hint
+                        class="text-danger bold"
+                        *ngIf="
+                          dataInicialEmpresaControl.hasError('matDatepickerMax')
+                        "
+                      >
+                        Data inicial não pode ser maior que hoje
+                      </mat-hint>
+                    </mat-form-field>
+
+                    <mat-form-field
+                      appearance="outline"
+                      fxFlex="50"
+                      class="mat-field-small"
+                    >
+                      <mat-label>ATÉ</mat-label>
+                      <input
+                        [id]="
+                          getElementId(6, 'filter-ate', fieldPeriodoEmpresa.id)
+                        "
+                        [formControl]="dataFinalEmpresaControl"
+                        matInput
+                        placeholder="dd/mm/aaaa"
+                        (keydown.tab)="ate.close()"
+                        (dateChange)="
+                          onChangePeriodo($event.target.value, false)
+                        "
+                        [min]="minDate"
+                        [matDatepicker]="ate"
+                        (click)="ate.open()"
+                        [required]="
+                          dataInicialEmpresaControl.value != null &&
+                          dataInicialEmpresaControl.value != ''
+                        "
+                      />
+                      <mat-datepicker-toggle matSuffix [for]="ate" hidden>
+                      </mat-datepicker-toggle>
+                      <mat-datepicker #ate></mat-datepicker>
+                      <mat-error
+                        class="text-danger bold"
+                        *ngIf="
+                          erroDataFinalEmpresa ||
+                          dataFinalEmpresaControl.hasError('matDatepickerMin')
+                        "
+                      >
+                        Data final deve ser maior que a data inicial
+                      </mat-error>
+                      <mat-hint
+                        class="text-danger bold"
+                        *ngIf="dataFinalEmpresaControl.hasError('required')"
+                      >
+                        Campo obrigatório
+                      </mat-hint>
+                      <mat-hint
+                        class="text-danger bold"
+                        *ngIf="
+                          dataFinalEmpresaControl.hasError('matDatepickerMax')
+                        "
+                      >
+                        Data final não pode ser maior que hoje
+                      </mat-hint>
+                    </mat-form-field>
+                  </div>
+                </section>
+              </div>
+            </mat-menu>
+          </section>
+
+          <section class="second-row d-flex" fxLayout.sm="column">
+            <app-filter-field
+              [field]="fieldStatusEmpresas"
+              [control]="statusEmpresaControl"
+              (selectAll)="selectAll($event)"
+            >
+            </app-filter-field>
+          </section>
+        </app-grid-filter>
+      </div>
+      <div class="default-tab px-2 pb-3">
+        <mat-card class="mat-elevation-z8 mt-2 p-0">
+          <div class="empresas-default-tab">
+            <app-table-empresas [filtro]="filtroEmpresas"></app-table-empresas>
+          </div>
+        </mat-card>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+
+<router-outlet></router-outlet>

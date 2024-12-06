@@ -1,0 +1,95 @@
+<div>
+    <section class="text-paginator">
+        <div class="row d-flex">
+            <section class="default-text" *ngIf="paginator">
+                Mostrando {{ paginator?.pageSize > totalItems ? totalItems : paginator?.pageSize }} de {{
+                totalItems }} resultados
+            </section>
+        </div>
+    </section>
+    <mat-paginator [pageSizeOptions]="[25, 50, 75, 100]" [length]="totalItems" #paginator></mat-paginator>
+    <table mat-table [dataSource]="items$ | async">
+    
+        <!-- UF Column -->
+        <ng-container matColumnDef="uf">
+            <th mat-header-cell *matHeaderCellDef>UF</th>
+            <td mat-cell *matCellDef="let element">
+            {{ element.uf }}
+            </td>
+        </ng-container>
+
+        <!-- tipoRegistro Column -->
+        <ng-container matColumnDef="tipoRegistro">
+            <th mat-header-cell *matHeaderCellDef>Tipo de registro</th>
+            <td mat-cell *matCellDef="let element" class="column-max-width">
+                {{ element.tipoRegistro }}
+            </td>
+        </ng-container>
+
+        <!-- valorRegistradora Column -->
+        <ng-container matColumnDef="valorRegistradora">
+            <th mat-header-cell *matHeaderCellDef>Valor registradora</th>
+            <td mat-cell *matCellDef="let element" class="column-max-width">
+                {{ element.valorPrivado }}
+            </td>
+        </ng-container>
+
+        <!-- valorPublico Column -->
+        <ng-container matColumnDef="valorPublico">
+            <th mat-header-cell *matHeaderCellDef>Taxa Detran</th>
+            <td mat-cell *matCellDef="let element" class="column-max-width">
+                {{ element.valorPublico }}
+            </td>
+        </ng-container>
+
+        <!-- valorTotal Column -->
+        <ng-container matColumnDef="valorTotal">
+            <th mat-header-cell *matHeaderCellDef>Valor total</th>
+            <td mat-cell *matCellDef="let element" class="column-max-width">
+                {{ element.valorTotal }}
+            </td>
+        </ng-container>
+    
+        <!-- Options Column-->
+        <ng-container matColumnDef="opcoes">
+            <th mat-header-cell *matHeaderCellDef>{{ grupoEconomicoId != null ? 'Ação' : '' }}</th>
+            <td mat-cell *matCellDef="let element">
+            <div *ngIf="grupoEconomicoId == null">
+                <button mat-button [matMenuTriggerFor]="menu" [id]="utility.getElementId(2, 'registros-acoes', element.id)">
+                <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                <button mat-menu-item [routerLink]="['/registros/editar-registro', element.id]" [id]="utility.getElementId(2, 'registros-editar')">
+                    Editar/consultar
+                </button>
+                <button mat-menu-item (click)="deletarRegistro(element)" [id]="utility.getElementId(2, 'registros-deletar')">
+                    Deletar
+                </button>
+                </mat-menu>
+            </div>
+            </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="semRegistro">
+          <th class="text-center feedBack pt-1" mat-cell *matFooterCellDef colspan="11">
+            <img src="./../../../../../../../../../assets/img/custom-icons/icon-vazio-artigos.svg" />
+            <p class="desk bold text-gray-700"> Não há registros. </p>
+          </th>
+        </ng-container>
+    
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr mat-row *matFooterRowDef="['semRegistro']" [ngClass]="{'d-none': totalItems > 0 }"></tr>
+      </table>
+      <section class="text-paginator">
+        <div class="row d-flex">
+          <section class="default-text">
+            Mostrando {{ paginator?.pageSize > totalItems ? totalItems : paginator?.pageSize }} de {{
+            totalItems }} resultados
+          </section>
+        </div>
+      </section>
+      <mat-paginator (page)="syncPrimaryPaginator($event)" [pageSize]="paginator?.pageSize"
+        [pageIndex]="paginator?.pageIndex" [length]="paginator?.length" [pageSizeOptions]="paginator?.pageSizeOptions">
+      </mat-paginator>
+</div>

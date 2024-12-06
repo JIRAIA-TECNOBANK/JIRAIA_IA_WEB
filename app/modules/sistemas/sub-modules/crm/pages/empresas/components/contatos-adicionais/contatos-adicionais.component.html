@@ -1,0 +1,260 @@
+<div fxLayout="column">
+  <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" novalidate>
+    <div>
+      <div *ngIf="!isEdition; else editionBlock">
+        <!-- Head Title - Adicionar contatos -->
+        <div
+          fxLayout="row wrap"
+          fxLayoutGap="20px"
+          fxLayoutAlign="space-between"
+        >
+          <h6 class="headline">Contatos adicionais</h6>
+          <button
+            mat-flat-button
+            class="editAddButton"
+            (click)="addContact()"
+            id="abrir_formulario_contato"
+            *ngIf="
+              utility.getPermission([Permissoes.GESTAO_EMPRESA_CADASTRAR]) &&
+              contacts.length <= 4
+            "
+          >
+            <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Add novo contato
+          </button>
+        </div>
+
+        <div
+          class="edition-block"
+          fxLayout="column"
+          fxLayoutAlign="space-between"
+        >
+          <div
+            *ngIf="!hasContact(); else contactListBlock"
+            fxLayout="column wrap"
+            fxLayoutGap="20px"
+            fxLayoutAlign="space-around center"
+            class="mt-3"
+          >
+            <img
+              src="./../../../../../../../../../assets/img/e-contrato/no-contact.svg"
+              alt=""
+              class="mt-3"
+            />
+            <h6 class="headline">
+              Nenhum contato adicional foi adicionado ainda.
+            </h6>
+          </div>
+          <ng-template #contactListBlock>
+            <div class="contact-list">
+              <div
+                fxLayout="column"
+                *ngFor="let contact of contacts; let i = index"
+              >
+                <div
+                  fxLayout="row"
+                  fxLayoutAlign="space-between center"
+                  class="contact"
+                >
+                  <div class="contact-info" fxLayout="column">
+                    <span>{{ contact.nome }}</span>
+                    <span class="cellphone">{{
+                      contact.telefone | phoneFormat
+                    }}</span>
+                  </div>
+                  <div>
+                    <span
+                      >{{ getRoleName(contact.cargoId) }}/{{
+                        getDepartmentName(contact.departamentoId)
+                      }}</span
+                    >
+                  </div>
+                  <div fxLayout="row">
+                    <button
+                      mat-flat-button
+                      class="editAddButton"
+                      id="editar_contato_botao_{{ i }}"
+                      (click)="editContact(contact)"
+                    >
+                      <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </button>
+                    <button
+                      mat-flat-button
+                      class="cancelButton"
+                      id="deletar_contato_botao_{{ i }}"
+                      (click)="openDialog(contact.id)"
+                      *ngIf="
+                        utility.getPermission([
+                          Permissoes.GESTAO_EMPRESA_CADASTRAR
+                        ])
+                      "
+                    >
+                      <i class="fa fa-trash" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+          <!-- next step button -->
+          <div
+            fxLayout="row"
+            fxLayoutAlign="end"
+            fxLayoutGap="15px"
+            class="mt-3"
+          >
+            <button
+              mat-raised-button
+              type="button"
+              (click)="goToNextStep(2)"
+              class="btn btn-primary bold"
+              id="avancar_etapa_contato"
+              *ngIf="
+                utility.getPermission([Permissoes.GESTAO_EMPRESA_CADASTRAR])
+              "
+            >
+              Salvar e continuar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Head Title - Cancelar contato -->
+      <ng-template #editionBlock>
+        <div
+          class="edition-block"
+          fxLayout="column"
+          fxLayoutAlign="space-between"
+        >
+          <div>
+            <div
+              fxLayout="row wrap"
+              fxLayoutGap="20px"
+              fxLayoutAlign="space-between"
+            >
+              <h6 class="headline">Adicionar contato</h6>
+              <button
+                mat-flat-button
+                class="cancelButton"
+                (click)="cancelContact()"
+                id="cancelar_contato"
+              >
+                Cancelar
+              </button>
+            </div>
+            <!-- First Row -->
+            <div fxLayout="row wrap" fxLayoutGap="10px" class="mt-3">
+              <mat-form-field appearance="outline" fxFlex="auto">
+                <mat-label>Nome</mat-label>
+                <input
+                  matInput
+                  placeholder="Nome"
+                  formControlName="nome"
+                  required
+                  [id]="utility.getElementId(0, 'nome', 'contato')"
+                />
+                <mat-hint>Obrigatório</mat-hint>
+                <mat-error
+                  *ngIf="contactForm.controls['nome'].hasError('required')"
+                  >Campo obrigatório
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="outline" fxFlex="20">
+                <mat-label>Telefone</mat-label>
+                <input
+                  matInput
+                  placeholder="DDD + telefone"
+                  formControlName="telefone"
+                  mask="(00) 0000-0000 || (00) 00000-0000"
+                  required
+                  id="telefone_contato"
+                />
+                <mat-hint>Obrigatório</mat-hint>
+                <mat-error
+                  *ngIf="contactForm.controls['telefone'].hasError('required')"
+                  >Campo obrigatório
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="outline" fxFlex="35">
+                <mat-label>E-mail</mat-label>
+                <input
+                  matInput
+                  placeholder="E-mail"
+                  type="text"
+                  formControlName="email"
+                  required
+                  id="email_contato"
+                  required
+                />
+                <mat-hint>Obrigatório</mat-hint>
+                <mat-error
+                  *ngIf="contactForm.controls['email'].hasError('required')"
+                  >Campo obrigatório</mat-error
+                >
+                <mat-error *ngIf="contactForm.get('email').hasError('pattern')">
+                  E-mail inválido
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <!-- Second Row -->
+            <div fxLayout="row wrap" fxLayoutGap="10px">
+              <mat-form-field appearance="outline" fxFlex="auto">
+                <mat-label>Departamento</mat-label>
+                <mat-select
+                  formControlName="departamento"
+                  required
+                  id="departamento_contato"
+                >
+                  <mat-option>Departamento</mat-option>
+                  <mat-option
+                    *ngFor="let departamento of departamentos"
+                    [value]="departamento.id"
+                    >{{ departamento.nome }}
+                  </mat-option>
+                </mat-select>
+                <mat-hint>Obrigatório</mat-hint>
+                <mat-error
+                  *ngIf="
+                    contactForm.controls['departamento'].hasError('required')
+                  "
+                  >Campo obrigatório
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="outline" fxFlex="auto">
+                <mat-label>Cargo</mat-label>
+                <mat-select formControlName="cargo" required id="cargo_contato">
+                  <mat-option>Cargo</mat-option>
+                  <mat-option [id]="utility.getElementId(7, 'cargo_contato', cargo.id)" *ngFor="let cargo of cargos" [value]="cargo.id"
+                    >{{ cargo.nome }}
+                  </mat-option>
+                </mat-select>
+                <mat-hint>Obrigatório</mat-hint>
+                <mat-error
+                  *ngIf="contactForm.controls['cargo'].hasError('required')"
+                  >Campo obrigatório
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div
+            fxLayout="row"
+            fxLayoutAlign="end"
+            fxLayoutGap="15px"
+            class="mt-3"
+          >
+            <button
+              mat-raised-button
+              class="btn btn-primary bold"
+              id="adicionar_contato"
+              [disabled]="
+                (contactForm.invalid && !companyId) ||
+                !utility.getPermission([Permissoes.GESTAO_EMPRESA_CADASTRAR])
+              "
+            >
+              {{ hasContactId() }}
+            </button>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </form>
+</div>

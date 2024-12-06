@@ -1,0 +1,35 @@
+<div class="operacoes-registradas h-100" fxLayout="column" fxLayoutAlign="space-between"
+    *ngIf="dadosGrafico.length > 0">
+    <p class="bold mt-0">Operações registradas</p>
+
+    <section class="grafico">
+        <div class="grafico-rosquinha">
+            <apx-chart #graficoAux [series]="chartOptionsAux.series" [chart]="chartOptionsAux.chart"
+                [legend]="chartOptionsAux.legend" [colors]="chartOptionsAux.colors"
+                [dataLabels]="chartOptionsAux.dataLabels" [stroke]="chartOptionsAux.stroke"
+                [tooltip]="chartOptionsAux.tooltip" [plotOptions]="chartOptionsAux.plotOptions"
+                [fill]="chartOptionsAux.fill"></apx-chart>
+        </div>
+        <div class="grafico-rosquinha">
+            <apx-chart #grafico [series]="chartOptions.series" [chart]="chartOptions.chart"
+                [legend]="chartOptions.legend" [colors]="chartOptions.colors" [dataLabels]="chartOptions.dataLabels"
+                [stroke]="chartOptions.stroke" [tooltip]="chartOptions.tooltip"
+                [plotOptions]="chartOptions.plotOptions"></apx-chart>
+        </div>
+    </section>
+
+    <section fxLayout="row" fxALayoutAlign="start" fxLayoutGap="24px" class="legenda">
+        <div fxLayout="row" fxLayoutAlign="start center">
+            <div class="bullet sucesso mr-1"></div> Sucesso
+        </div>
+        <div fxLayout="row" fxLayoutAlign="start center">
+            <div class="bullet inconsistencia mr-1"></div> Inconsistência
+        </div>
+    </section>
+</div>
+
+<app-bloco-vazio *ngIf="!loading && dadosGrafico.length === 0" [options]="blocoVazio"></app-bloco-vazio>
+
+<section class="w-100 h-100 d-flex align-items-center justify-content-center" *ngIf="loading">
+    <mat-spinner [diameter]="50"></mat-spinner>
+</section>

@@ -1,0 +1,36 @@
+@import '$settings';
+@import '$tools';
+
+.btn-customize {
+    max-width: 164px;
+    min-width: 164px;
+    min-height: 34px;
+    background: #f9fbfd;
+    border-radius: 5px;
+    padding: 8px 14px 8px 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid #dbdbdb;
+    cursor: pointer;
+}
+
+.btn-customize:hover {
+    background: #fff;
+}
+
+.btn-customize-icon {
+    transform: scale(2);
+    margin-top: 15px;
+    padding-bottom: 12px !important;
+}
+
+.btn-customize mat-icon {
+    color: #84b8e1;
+}
+
+.btn-customize-text {
+    @include fontMontserratRegular;
+    color: #003e69;
+    font-size: 16px;
+}

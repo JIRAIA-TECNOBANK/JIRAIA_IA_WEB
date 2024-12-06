@@ -1,0 +1,83 @@
+@import '$settings';
+@import '$tools';
+
+.pre-visualizacao {
+    @include border-radius(10px);
+    background-color: $gray-300;
+    padding: 2rem;
+    height: calc(100% - 2rem);
+
+    p {
+        @include fontMontserratBold;
+        color: $gray-500;
+        font-size: 14px;
+    }
+
+    #cabecalho {
+        @include border-radius(10px);
+        object-fit: cover;
+        width: 425px;
+
+        &.promocional {
+            height: 300px;
+        }
+
+        &.carrossel {
+            height: 99.42px;
+        }
+    }
+
+    mat-card {
+        width: 425px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &.promocional {
+            height: 300px;
+        }
+
+        &.carrossel {
+            height: 99.42px;
+        }
+
+        i {
+            font-size: 4rem;
+            color: $gray-400;
+        }
+    }
+}
+
+.dropzone {
+    @include border-radius(5px);
+    border: 1px dashed $blue-600;
+    display: flex;
+    justify-content: center;
+
+    .desk {
+        color: $gray-700;
+        font-size: 12px;
+
+        i {
+            font-size: 12px;
+        }
+
+        u {
+            cursor: pointer;
+            font-size: 12px;
+        }
+    }
+
+    &.disabled {
+        border: 1px dashed $gray-400 !important;
+
+        .text-primary {
+            color: $gray-400 !important;
+        }
+    }
+}
+
+.legenda {
+    color: $gray-800;
+    font-size: 12px;
+}

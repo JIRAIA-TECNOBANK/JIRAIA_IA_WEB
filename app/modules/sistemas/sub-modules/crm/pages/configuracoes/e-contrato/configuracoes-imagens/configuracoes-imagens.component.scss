@@ -1,0 +1,19 @@
+@import '$settings';
+@import '$tools';
+
+.no-items {
+  text-align: center;
+  color: $gray-700;
+  padding: 30px 0;
+}
+
+.box__btn {
+  display: flex;
+  justify-content: right;
+  position: relative;
+
+  .box__btn--btn {
+    position: absolute;
+    top: -68px;
+  }
+}

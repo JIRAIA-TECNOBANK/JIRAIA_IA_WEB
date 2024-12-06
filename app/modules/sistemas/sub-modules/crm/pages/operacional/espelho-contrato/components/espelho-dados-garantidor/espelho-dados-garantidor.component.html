@@ -1,0 +1,49 @@
+<mat-card class="espelho-contrato">
+  <div class="panel-title"> Dados do terceiro garantidor </div>
+
+  <div fxLayout="row wrap" fxLayoutGap="10px grid" class="mt-2">
+    <div fxFlex="50" class="item">
+      <div class="item-title">Nome</div>
+      <div class="item-description">{{ contrato?.terceiroGarantidor.nomeDoTerceiroGarantidor ?? '-' }}</div>
+    </div>
+    <div fxFlex="50" class="item">
+      <div class="item-title">Tipo - Número</div>
+      <div class="item-description">{{ contrato?.terceiroGarantidor?.documento?.tipoDocumento ?
+        (contrato?.terceiroGarantidor?.documento?.tipoDocumento == 1 ? 'CPF' : 'CNPJ') : '-'}} - {{
+        contrato?.terceiroGarantidor.documento.numero ?? '-' }}</div>
+    </div>
+    <div fxFlex="50" class="item">
+      <div class="item-title">Logradouro</div>
+      <div class="item-description">{{ contrato?.terceiroGarantidor.endereco.logradouro ?? '-' }}</div>
+    </div>
+    <div fxFlex="50" class="item">
+      <div class="item-title">Número</div>
+      <div class="item-description">{{ contrato?.terceiroGarantidor.endereco.numero ?? '-' }}</div>
+    </div>
+    <div fxFlex="50" class="item">
+      <div class="item-title">Complemento</div>
+      <div class="item-description">{{ contrato?.terceiroGarantidor.endereco.complemento ?? '-' }} </div>
+    </div>
+    <div fxFlex="50" class="item">
+      <div class="item-title">Bairro</div>
+      <div class="item-description">{{ contrato?.terceiroGarantidor?.endereco.bairro ?? '-'}}</div>
+    </div>
+    <div fxFlex="50" class="item">
+      <div class="item-title">Município - UF</div>
+      <div class="item-description">{{ contrato?.terceiroGarantidor?.endereco.municipio ?? '-' }} - {{
+        contrato?.terceiroGarantidor.endereco.uf ?? '-' }}</div>
+    </div>
+    <div fxFlex="50" class="item">
+      <div class="item-title">CEP</div>
+      <div class="item-description">{{ contrato?.terceiroGarantidor?.endereco.cep ?? '-'}}</div>
+    </div>
+    <div fxFlex="50" class="item">
+      <div class="item-title">Telefone</div>
+      <div class="item-description">{{ contrato?.terceiroGarantidor?.contato.telefone ?? '-' }}</div>
+    </div>
+    <div fxFlex="50" class="item">
+      <div class="item-title">E-mail</div>
+      <div class="item-description">{{ contrato?.terceiroGarantidor?.contato.email ?? '-' }}</div>
+    </div>
+  </div>
+</mat-card>

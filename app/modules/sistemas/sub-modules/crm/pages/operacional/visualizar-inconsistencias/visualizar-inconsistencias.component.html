@@ -1,0 +1,134 @@
+<div fxLayout="row" fxLayoutGap="25px" fxLayoutAlign="space-between">
+  <mat-card fxFlex="auto" fxLayout="column" fxLayoutWrap>
+    <div fxLayout="row" fxLayoutAlign="space-between" class="mt-1">
+      <h6 class="headline">Resumo do contrato</h6>
+      <a (click)="accordion.openAll()" *ngIf="!panelOpenState" [id]="utility.getElementId(8, 'expandir-todos')">
+        <span class="controlador-accordion-texto">Expandir todos</span>
+      </a>
+      <a (click)="accordion.closeAll()" *ngIf="panelOpenState" [id]="utility.getElementId(8, 'recolher-todos')">
+        <span class="controlador-accordion-texto">Recolher todos</span>
+      </a>
+    </div>
+    <div class="revisao-registro mt-1" fxFlex="auto">
+      <mat-accordion class="painel-resumo-contrato" #accordion="matAccordion" multi="true">
+        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false"
+          class="header-warning">
+          <mat-expansion-panel-header [id]="utility.getElementId(9, 'inconsistencia-veiculo')">
+            <mat-panel-title class="titulo-revisao">Resumo (Críticas do validador) <i
+                class="fa-regular fa-triangle-exclamation revisar-inconsistencia"></i></mat-panel-title>
+          </mat-expansion-panel-header>
+          <ng-template matExpansionPanelContent>
+            <app-visualizar-inconsistencias-resumo [protocolo]="protocolo">
+            </app-visualizar-inconsistencias-resumo>
+          </ng-template>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false"
+          [ngClass]="{ 'header-warning': inconsistenciaVeiculo }">
+          <mat-expansion-panel-header [id]="utility.getElementId(9, 'inconsistencia-veiculo')">
+            <mat-panel-title class="titulo-revisao">Dados do veículo <i
+                class="fa-regular fa-triangle-exclamation revisar-inconsistencia"
+                *ngIf="inconsistenciaVeiculo"></i></mat-panel-title>
+          </mat-expansion-panel-header>
+          <ng-template matExpansionPanelContent>
+            <app-visualizar-inconsistencias-dados-veiculo [protocolo]="protocolo"
+              (inconsistencia)="changeInconsistencia('veiculo', $event)">
+            </app-visualizar-inconsistencias-dados-veiculo>
+          </ng-template>
+        </mat-expansion-panel>
+        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false"
+          [ngClass]="{ 'header-warning': inconsistenciaContrato }">
+          <mat-expansion-panel-header [id]="utility.getElementId(9, 'inconsistencia-contrato')">
+            <mat-panel-title class="titulo-revisao">Dados do contrato <i
+                class="fa-regular fa-triangle-exclamation revisar-inconsistencia"
+                *ngIf="inconsistenciaContrato"></i></mat-panel-title>
+          </mat-expansion-panel-header>
+          <ng-template matExpansionPanelContent>
+            <app-visualizar-inconsistencias-dados-contrato [protocolo]="protocolo"
+              (inconsistencia)="changeInconsistencia('contrato', $event)">
+            </app-visualizar-inconsistencias-dados-contrato>
+          </ng-template>
+        </mat-expansion-panel>
+        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false"
+          [ngClass]="{ 'header-warning': inconsistenciaComplementar }">
+          <mat-expansion-panel-header [id]="utility.getElementId(9, 'inconsistencia-complementar')">
+            <mat-panel-title class="titulo-revisao">Dados complementares <i
+                class="fa-regular fa-triangle-exclamation revisar-inconsistencia"
+                *ngIf="inconsistenciaComplementar"></i></mat-panel-title>
+          </mat-expansion-panel-header>
+          <ng-template matExpansionPanelContent>
+            <app-visualizar-inconsistencias-dados-complementar [protocolo]="protocolo"
+              (inconsistencia)="changeInconsistencia('complementar', $event)">
+            </app-visualizar-inconsistencias-dados-complementar>
+          </ng-template>
+        </mat-expansion-panel>
+        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false"
+          [ngClass]="{ 'header-warning': inconsistenciaFinanciamento }">
+          <mat-expansion-panel-header [id]="utility.getElementId(9, 'inconsistencia-financiamento')">
+            <mat-panel-title class="titulo-revisao">Dados do financiamento <i
+                class="fa-regular fa-triangle-exclamation revisar-inconsistencia"
+                *ngIf="inconsistenciaFinanciamento"></i></mat-panel-title>
+          </mat-expansion-panel-header>
+          <ng-template matExpansionPanelContent>
+            <app-visualizar-inconsistencias-dados-financiamento [protocolo]="protocolo"
+              (inconsistencia)="changeInconsistencia('financiamento', $event)">
+            </app-visualizar-inconsistencias-dados-financiamento>
+          </ng-template>
+        </mat-expansion-panel>
+        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false"
+          [ngClass]="{ 'header-warning': inconsistenciaCredor }">
+          <mat-expansion-panel-header [id]="utility.getElementId(9, 'inconsistencia-credor')">
+            <mat-panel-title class="titulo-revisao">Dados do credor <i
+                class="fa-regular fa-triangle-exclamation revisar-inconsistencia"
+                *ngIf="inconsistenciaCredor"></i></mat-panel-title>
+          </mat-expansion-panel-header>
+          <ng-template matExpansionPanelContent>
+            <app-visualizar-inconsistencias-dados-credor [protocolo]="protocolo"
+              (inconsistencia)="changeInconsistencia('credor', $event)">
+            </app-visualizar-inconsistencias-dados-credor>
+          </ng-template>
+        </mat-expansion-panel>
+        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false"
+          [ngClass]="{ 'header-warning': inconsistenciaDevedor }">
+          <mat-expansion-panel-header [id]="utility.getElementId(9, 'inconsistencia-devedor')">
+            <mat-panel-title class="titulo-revisao">Dados do devedor <i
+                class="fa-regular fa-triangle-exclamation revisar-inconsistencia"
+                *ngIf="inconsistenciaDevedor"></i></mat-panel-title>
+          </mat-expansion-panel-header>
+          <ng-template matExpansionPanelContent>
+            <app-visualizar-inconsistencias-dados-devedor [protocolo]="protocolo"
+              (inconsistencia)="changeInconsistencia('devedor', $event)">
+            </app-visualizar-inconsistencias-dados-devedor>
+          </ng-template>
+        </mat-expansion-panel>
+        <!-- <mat-expansion-panel *ngIf="uf === 'PR'" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                <mat-expansion-panel-header [ngClass]="{ 'header-warning': inconsistenciaTerceiroGarantidor }">
+                    <mat-icon class="revisar-inconsistencia" *ngIf="inconsistenciaTerceiroGarantidor">warning</mat-icon>
+                    <mat-panel-title class="titulo-revisao">Dados do Terceiro Garantidor</mat-panel-title>
+                </mat-expansion-panel-header>
+                <ng-template matExpansionPanelContent>
+                    <app-visualizar-inconsistencias-terceiro-garantidor [protocolo]="protocolo" (inconsistencia)="changeInconsistencia('terceiroGarantidor', $event)">
+                    </app-visualizar-inconsistencias-terceiro-garantidor>
+                </ng-template>
+            </mat-expansion-panel> -->
+      </mat-accordion>
+
+      <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="15px">
+        <button mat-raised-button [id]="utility.getElementId(2, 'corrigir-inconsistencias')"
+          (click)="onReenvioContratoEditar()" class="btn btn-primary bold">Corrigir inconsistências</button>
+      </div>
+    </div>
+  </mat-card>
+
+  <div fxFlex="25">
+    <div class="p-2 card" fxLayout="row" fxLayoutALign="start">
+      <i class="fa-regular fa-triangle-exclamation"></i>
+      <p class="desk gray-700 bloco-descricao my-0 ml-1">Os locais em laranja indicam onde existem erros. Revise estas
+        informações clicando em corrigir inconsistências.</p>
+    </div>
+    <div class="d-flex mt-1">
+      <button mat-raised-button class="btn btn-primary btn-lg bold w-100" (click)="onReenvioContratoEditar()"
+        [id]="utility.getElementId(2, 'corrigir-inconsistencias')">Corrigir inconsistências</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,109 @@
+<div class="pb-4" fxLayout="column" fxLayoutGap="25px">
+  <section class="top-options mb-2">
+    <app-atualizar-pagina (atualizar)="atualizarPagina()"></app-atualizar-pagina>
+  </section>
+
+  <section class="px-2" fxLayout="column" fxLayoutGap="24px">
+    <div fxLayoutAlign="space-between" fxLayout="row" fxLayoutGap="24px">
+      <div class="shortcut" fxLayoutAlign="space-between" fxLayout="row" fxFlex="auto" fxLayoutGap="24px">
+        <div class="shortcut-option" (click)="onClickAtalho('organizacoes', 'empresas')"
+          [id]="utility.getElementId(2, 'dashboard-empresas')">
+          <mat-card class="d-flex justify-content-center align-items-center h-100 w-100 p-0 text-center">
+            <app-atalhos [icon]="'fa-regular fa-building-circle-check'" [title]="'Consultar empresas'"></app-atalhos>
+          </mat-card>
+        </div>
+        <div class="shortcut-option" (click)="onClickAtalho('usuarios')"
+          [id]="utility.getElementId(2, 'dashboard-usuarios')">
+          <mat-card class="d-flex justify-content-center align-items-center h-100 w-100 p-0 text-center">
+            <app-atalhos [icon]="'fa-regular fa-users-medical'" [title]="'Cadastrar usuário TBK'"></app-atalhos>
+          </mat-card>
+        </div>
+        <div class="shortcut-option" (click)="onClickAtalho('monitor-operacoes-lotes', 'lotes')"
+          [id]="utility.getElementId(2, 'dashboard-lotes')">
+          <mat-card class="d-flex justify-content-center align-items-center h-100 w-100 p-0 text-center">
+            <app-atalhos [icon]="'fa-regular fa-file-import'" [title]="'Consultar lotes'"></app-atalhos>
+          </mat-card>
+        </div>
+        <div class="shortcut-option" (click)="onClickAtalho('monitor-operacoes-lotes')"
+          [id]="utility.getElementId(2, 'dashboard-operacoes')">
+          <mat-card class="d-flex justify-content-center align-items-center h-100 w-100 p-0 text-center">
+            <app-atalhos [icon]="'fa-regular fa-file-magnifying-glass'" [title]="'Consultar contratos'"></app-atalhos>
+          </mat-card>
+        </div>
+      </div>
+
+      <div class="shortcut" fxLayout="row" fxFlex="33" fxLayoutGap="24px">
+        <div class="shortcut-option side" (click)="onClickAtalho('notificacoes')"
+          [id]="utility.getElementId(2, 'dashboard-notificacoes')">
+          <mat-card class="d-flex justify-content-center align-items-center h-100 w-100 p-0 text-center">
+            <app-atalhos [icon]="'fa-regular fa-envelope-open-text'" [title]="'Gerenciar notificações'"></app-atalhos>
+          </mat-card>
+        </div>
+        <div class="shortcut-option side" (click)="onClickAtalho('central-ajuda')"
+          [id]="utility.getElementId(2, 'dashboard-ajuda')">
+          <mat-card class="d-flex justify-content-center align-items-center h-100 w-100 p-0 text-center">
+            <app-atalhos [icon]="'fa-regular fa-comments-question-check'"
+              [title]="'Gerenciar central de ajuda'"></app-atalhos>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+
+    <div fxLayout="row" fxLayoutGap="24px" class="resumo-conexao">
+      <section fxFlex="65.2" fxLayout="column" fxLayoutGap="24px">
+        <app-grafico-resumo [refresh]="refresh" [linhaGrafico]="linhaGrafico" (filtros)="carregarFiltrosResumo($event)"
+          [consultaMonitorOperacoes]="consultaMonitorOperacoes"></app-grafico-resumo>
+
+        <app-resumo-botoes (mostrarLinhaGrafico)="mostrarLinhaGrafico($event)" [filtros]="filtrosResumo"
+          (consultar)="consultarMonitorOperacoes($event)"></app-resumo-botoes>
+      </section>
+      <mat-card fxFlex="33" class="mapa-conexao">
+        <app-conexao-detrans [refresh]="refresh"></app-conexao-detrans>
+      </mat-card>
+    </div>
+  </section>
+
+  <mat-card class="mx-2 py-1 filtro-dashboard">
+    <app-filtro-graficos (filtrosComplementares)="filtrarGraficosComplementares($event)"
+      [refresh]="refresh"></app-filtro-graficos>
+  </mat-card>
+
+  <section fxLayout="row" fxLayoutGap="24px" fxLayoutAlign="start" class="mx-2 graficos-complementares">
+    <mat-card class="grafico-rosquinha w-100" fxFlex=33>
+      <app-operacoes-registradas [filtro]="filtroGraficosComplementares" (totalSucesso)="totalRegistrosSucesso = $event"
+        (totalInconsistencia)="totalRegistrosInconsistencia = $event"></app-operacoes-registradas>
+    </mat-card>
+
+    <mat-card fxFlex="33" class="registros-estado">
+      <app-registros-estado [filtro]="filtroGraficosComplementares"></app-registros-estado>
+    </mat-card>
+
+    <mat-card class="grafico-barras w-100" fxFlex=33>
+      <app-registros-operacao [filtro]="filtroGraficosComplementares"></app-registros-operacao>
+    </mat-card>
+  </section>
+
+  <section fxLayout="row" fxLayoutGap="24px" fxLayoutAlign="start" class="mx-2 expansiveis">
+    <mat-card class="registros-sucesso w-100" fxFlex=50 [ngClass]="{'expandido': sucessoExpandido}">
+      <app-registros-sucesso [total]="totalRegistrosSucesso" [filtro]="filtroGraficosComplementares"
+        (mostrarDetalhes)="sucessoExpandido = $event"></app-registros-sucesso>
+    </mat-card>
+
+    <mat-card class="registros-inconsistencia w-100" fxFlex=50 [ngClass]="{'expandido': inconsistenciasExpandido}">
+      <app-registros-inconsistencia [total]="totalRegistrosInconsistencia" [filtro]="filtroGraficosComplementares"
+        (mostrarDetalhes)="inconsistenciasExpandido = $event"></app-registros-inconsistencia>
+    </mat-card>
+  </section>
+
+  <section fxLayout="row" fxLayoutGap="24px" fxLayoutAlign="start" class="mx-2 expansiveis">
+    <mat-card class="top-10 w-100" fxFlex="50" [ngClass]="{'expandido': topEmpresasExpandido}">
+      <app-top-empresas (mostrarDetalhes)="topEmpresasExpandido = $event"
+        [filtro]="filtroGraficosComplementares"></app-top-empresas>
+    </mat-card>
+
+    <mat-card class="top-10 w-100" fxFlex="50" [ngClass]="{'expandido': topInconsistenciasExpandido}">
+      <app-top-inconsistencias (mostrarDetalhes)="topInconsistenciasExpandido = $event"
+        [filtro]="filtroGraficosComplementares"></app-top-inconsistencias>
+    </mat-card>
+  </section>
+</div>

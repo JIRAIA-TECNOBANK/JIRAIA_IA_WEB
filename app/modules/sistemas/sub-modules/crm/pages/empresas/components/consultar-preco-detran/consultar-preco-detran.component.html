@@ -1,0 +1,14 @@
+<section class="cesta" fxLayout="column" fxLayoutAlign="space-between">
+    <app-preco-tbk [uf]="uf" [taxaDetran]="taxaDetran" [consulta]="true" [tipoPreco]="tipoPreco"
+        (cancelar)="cancelar()"></app-preco-tbk>
+
+    <form [formGroup]="formulario" (submit)="salvarContinuar()" class="mt-1">
+        <mat-slide-toggle formControlName="emitirNota">Emitir nota de débito</mat-slide-toggle>
+
+        <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="end center" class="mt-1">
+            <button mat-flat-button color="secondary" type="submit"
+                [id]="utility.getElementId(2, 'salvar-preco-tbk')">Salvar e
+                continuar</button>
+        </div>
+    </form>
+</section>

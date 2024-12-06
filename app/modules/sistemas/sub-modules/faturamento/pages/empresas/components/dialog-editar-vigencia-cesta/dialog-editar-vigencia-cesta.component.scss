@@ -1,0 +1,14 @@
+@import '$settings';
+@import '$tools';
+
+.titulo {
+    @include border-radius(5px);
+    @include fontMontserratBold;
+    background: $gray-200;
+    padding: 1rem;
+    font-size: 14px;
+
+    span {
+        color: $gray-600;
+    }
+}

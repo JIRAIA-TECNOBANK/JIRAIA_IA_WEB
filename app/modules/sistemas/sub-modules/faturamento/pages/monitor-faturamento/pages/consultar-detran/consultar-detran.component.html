@@ -1,0 +1,72 @@
+<section class="top-options mb-2">
+    <button mat-flat-button color="primary" class="card__button" type="button" [id]="utility.getElementId(2, 'baixar')"
+        [disabled]="!possuiResultado" (click)="exportarArquivos = !exportarArquivos"
+        [matTooltip]="!possuiResultado ? 'Realize uma consulta para poder exportar os resultados.' : 'Exportar resultado'">
+        <i class="fa-regular fa-file-export"></i>&nbsp;
+        Exportar
+    </button>
+</section>
+
+<section class="mx-2">
+    <mat-card class="mat-elevation-z8">
+        <form [formGroup]="formulario" (submit)="submitForm()" #form="ngForm" fxLayout="row "
+            fxLayoutAlign="space-between center">
+            <section fxFlex="90" fxLayout="row wrap" fxLayoutGap="10px" fxLayoutAlign="start grid">
+                <mat-form-field appearance="outline" fxFlex="10" [id]="utility.getElementId(5, 'consultar-detran-uf')">
+                    <mat-label>UF </mat-label>
+                    <mat-select formControlName="uf" required>
+                        <mat-option *ngFor="let uf of ufs" [value]="uf.valor"> {{ uf.valor }} </mat-option>
+                    </mat-select>
+                    <mat-hint>Obrigatório</mat-hint>
+                    <mat-error *ngIf="formulario.controls['uf'].hasError('required')">Obrigatório
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" fxFlex="20"
+                    [id]="utility.getElementId(5, 'consultar-detran-mes-competencia')">
+                    <mat-label>Mês competência </mat-label>
+                    <mat-select formControlName="mes" required>
+                        <mat-option *ngFor="let mes of utility.listaNomesMesas(); let i = index" [value]="i+1"> {{ mes
+                            }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-hint>Obrigatório</mat-hint>
+                    <mat-error *ngIf="formulario.controls['mes'].hasError('required')">Obrigatório
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" fxFlex="15">
+                    <mat-label>Ano</mat-label>
+                    <input matInput placeholder="Ano" formControlName="ano" required
+                        [id]="utility.getElementId(0, 'consultar-detran-ano')" type="number" maxlength="4"
+                        [max]="retornarAnoAtual()" min="1900" />
+                    <mat-hint>Obrigatório</mat-hint>
+                    <mat-error class="text-danger bold"
+                        *ngIf="formulario.get('ano').hasError('required')">Obrigatório</mat-error>
+                    <mat-error class="text-danger bold" *ngIf="formulario.get('ano').hasError('max')">Ano
+                        inválido</mat-error>
+                    <mat-error class="text-danger bold" *ngIf="formulario.get('ano').hasError('min')">Ano
+                        inválido</mat-error>
+                </mat-form-field>
+
+                <mat-form-field fxFlex="25" appearance="outline">
+                    <mat-label>CNPJ</mat-label>
+                    <input type="text" matInput name="cnpj" formControlName="cnpj" mask="00.000.000/0000-00"
+                        [id]="utility.getElementId(0, 'consultar-detran-cnpj')">
+                </mat-form-field>
+            </section>
+
+            <section fxLayout="row wrap" fxLayoutGap="10px" fxLayoutAlign="start grid">
+                <button mat-flat-button color="secondary" class="card__button" type="submit"
+                    [disabled]="!formulario.valid" [id]="utility.getElementId(2, 'consultar')">
+                    Consultar
+                </button>
+            </section>
+        </form>
+    </mat-card>
+
+    <mat-card class="mat-elevation-z8 mt-2 p-0">
+        <app-table-consultar-detran [filtro]="filtro" [exportar]="exportarArquivos"
+            (resultado)="possuiResultado = $event"></app-table-consultar-detran>
+    </mat-card>
+</section>

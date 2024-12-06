@@ -1,0 +1,11 @@
+<app-listar-enderecos [selecaoEnderecos]="true" [listaEnderecos]="listaEnderecos" [empresaId]="empresaId" (concluir)="concluirEndereco($event)" (add)="addEndereco()" (delete)="carregarDadosEnderecos()" (edit)="editEndereco($event)"
+  *ngIf="!criarEndereco"></app-listar-enderecos>
+<app-form-endereco *ngIf="criarEndereco" [empresaId]="data.empresaId" [isCreate]="enderecoToEdit? true : false"
+  (submitEndereco)="submitNovoEndereco()" (delete)="carregarDadosEnderecos(empresaId)"
+  [hasEnderecos]="listaEnderecos.length > 0" [editEndereco]="enderecoToEdit"></app-form-endereco>
+<mat-dialog-actions class="d-flex justify-content-between" *ngIf="!criarEndereco">
+  <button mat-stroked-button class="btn-outline-primary" color="primary" type="button"
+    [mat-dialog-close]="false">Cancelar</button>
+  <button *ngIf="enderecoSelecionado != null " mat-flat-button color="primary" [mat-dialog-close]="enderecoSelecionado"
+    cdkFocusInitial>Selecionar</button>
+</mat-dialog-actions>

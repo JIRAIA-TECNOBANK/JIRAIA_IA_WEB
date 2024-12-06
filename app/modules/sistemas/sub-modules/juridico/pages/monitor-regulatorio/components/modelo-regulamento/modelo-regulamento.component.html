@@ -1,0 +1,90 @@
+<div class="modelo-regulamento">
+    <mat-card class="modelo-regulamento">
+        <p *ngIf="!registroDeInstituicao">
+            {{utility.converterUfParaSiglaENome(uf)}} - Modelo: {{dadosModeloRegulamento ?
+            dadosModeloRegulamento.tipoRegistro ? dadosModeloRegulamento.tipoRegistro : '' : ''}}
+        </p>
+     
+        <p *ngIf="registroDeInstituicao">
+            {{utility.converterUfParaSiglaENome(uf)}}: Procedimentos para Cadastro de Instituição Financeira perante o Detran
+        </p>
+     
+        <section *ngIf="dadosModeloRegulamento && !skeletonGrid && !registroDeInstituicao">
+            <span>{{ subtitulo }}</span>
+            <ul fxLayout="column">
+                <li fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxLayout="row" fxLayoutAlign="start center">
+                        <span class="bullet"></span> {{registroDeContrato ? 'Valor Registradora' : 'Valor B3'}}
+                    </div>
+                    <span>{{ dadosModeloRegulamento.valorPrivado ? dadosModeloRegulamento.valorPrivado : '-' }}</span>
+                </li>
+     
+                <li fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxLayout="row" fxLayoutAlign="start center">
+                        <span class="bullet"></span> Taxa Detran
+                    </div>
+                    <span>{{ dadosModeloRegulamento.valorPublico ? dadosModeloRegulamento.valorPublico : '-' }}</span>
+                </li>
+     
+                <li fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxLayout="row" fxLayoutAlign="start center">
+                        <span class="bullet"></span> Preço total
+                    </div>
+                    <span>{{ dadosModeloRegulamento.valorTotal ? dadosModeloRegulamento.valorTotal : '-' }}</span>
+                </li>
+            </ul>
+        </section>
+       
+     
+        <section *ngIf="dadosModeloRegulamento && !skeletonGrid && registroDeInstituicao">
+            <span>{{ subtitulo }}</span>
+     
+            <ul fxLayout="column">
+                <li fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxLayout="row" fxLayoutAlign="start center">
+                        <span class="bullet"></span> Preço de cadastro
+                    </div>
+                    <span>{{ dadosModeloRegulamento.precoCadastro ? dadosModeloRegulamento.precoCadastro : '-' }}</span>
+                </li>
+     
+                <li fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxLayout="row" fxLayoutAlign="start center">
+                        <span class="bullet"></span> Preço de renovaçãoo
+                    </div>
+                    <span>{{ dadosModeloRegulamento.precoRenovacaoCadastro ? dadosModeloRegulamento.precoRenovacaoCadastro :
+                        '-' }}</span>
+                </li>
+     
+                <li fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxLayout="row" fxLayoutAlign="start center">
+                        <span class="bullet"></span> Periodicidade de renovação
+                    </div>
+                    <span>{{ dadosModeloRegulamento.periodicidade ? dadosModeloRegulamento.periodicidade : '-' }}</span>
+                </li>
+                <li>
+                    <section fxLayout="row" class="my-2 expansiveis">
+                        <div
+                            class="top-10 dropdown"
+                            fxFlex="100"
+                            [ngClass]="{'expandido': sucessoExpandido}"
+                        >
+                            <app-documentos-credenciamento
+                                class="w-100"
+                                (mostrarDetalhes)="sucessoExpandido = $event"
+                                [UF]="uf"
+                            ></app-documentos-credenciamento>
+                        </div>
+                    </section>
+                </li>
+            </ul>
+        </section>
+       
+        <div fxLayout="column" fxLayoutGap="20px" *ngIf="skeletonGrid">
+            <div *skeleton="true; className: ''; height: '15px'; width: '40%'"></div>
+            <div *skeleton="true; className: ''; height: '15px'; width: '80%'"></div>
+            <div *skeleton="true; className: ''; height: '15px'; width: '70%'"></div>
+            <div *skeleton="true; className: ''; height: '15px'; width: '70%'"></div>
+            <div *skeleton="true; className: ''; height: '15px'; width: '70%'"></div>
+        </div>
+    </mat-card>    
+</div>

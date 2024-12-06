@@ -1,0 +1,176 @@
+<section class="px-2">
+    <form [formGroup]="criarNormativoForm">
+        <section fxLayout="column" class="mt-2">
+            <!-- Campos do formulário -->
+            <div fxLayout="row" fxFlex>
+                <mat-form-field class="input-padrao-height" fxFlex="auto" appearance="outline">
+                    <mat-label>Nome da portaria</mat-label>
+                    <textarea placeholder="Digite o nome da portaria" matInput rows="1" name="nomePortaria"
+                        formControlName="nomePortaria" maxlength="1000"></textarea>
+                    <mat-hint>Obrigatório</mat-hint>
+                    <mat-error *ngIf="criarNormativoForm.controls['nomePortaria'].hasError('required')">Obrigatório
+                    </mat-error>
+                    <mat-error *ngIf="criarNormativoForm.controls['nomePortaria'].hasError('minlength')">Nome deve
+                        conter ao
+                        menos 3 caracteres</mat-error>
+                </mat-form-field>
+            </div>
+            <div fxFlex>
+                <div class="files-list mt-1" fxLayout="column">
+                    <div class="single-file" *ngIf="arquivo != null">
+                        <div class="d-flex justify-content-between" fxLayout="row">
+                            <div class="file-name">
+                                <div class="icon">
+                                    <img src="./../../../../../../../assets//img//custom-icons/icon-file-pdf.svg"
+                                        alt="icon file PDF" />
+                                </div>
+                                <div class="info">
+                                    <h4 class="name">
+                                        {{ arquivo.nome ?? "Arquivo do normativo" }} &nbsp;
+                                        <span [ngSwitch]="arquivo.statusArquivo">
+                                            <i *ngSwitchCase="5" class="fas fa-check-circle text-success"></i>
+                                            <i *ngSwitchCase="1" class="fas fa-times-circle text-danger"></i>
+                                            <i *ngSwitchCase="2"
+                                                class="fa-solid fa-circle-exclamation text-warning"></i>
+                                            <i *ngSwitchCase="3"
+                                                class="fa-solid fa-circle-exclamation text-warning"></i>
+                                            <i *ngSwitchCase="4" class="fas fa-times-circle text-danger"></i>
+                                        </span>
+                                    </h4>
+                                    <div [ngSwitch]="arquivo.statusArquivo">
+                                        <div *ngSwitchCase="1" class="error text-danger">Falha no upload, o formato é
+                                            incompatível.</div>
+                                        <div *ngSwitchCase="2" class="error text-warning">Falha no upload, o tamanho é
+                                            superior ao
+                                            permitido.
+                                        </div>
+                                        <div *ngSwitchCase="3" class="error text-warning">Falha no upload, o nome do
+                                            arquivo é inválido.
+                                        </div>
+                                        <div *ngSwitchCase="4" class="error text-danger">Falha no upload, tente
+                                            novamente.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Informações do normativo -->
+            <div class="d-flex justify-content-start align-items-center mt-2 mb-1">
+                <div class="fw-bold">Informações do normativo</div>
+            </div>
+            <div fxLayout="row wrap" fxLayoutGap="10px grid" fxFlex>
+                <div fxLayout="row" fxLayoutGap="10px" fxFlex="100">
+                    <mat-form-field appearance="outline" fxFlex="33">
+                        <mat-label>Visão do normativo</mat-label>
+
+                        <mat-select formControlName="visao">
+                            <mat-option [value]="true">Visão nacional</mat-option>
+                            <mat-option [value]="false">Visão estadual</mat-option>
+                        </mat-select>
+
+                        <mat-hint>Obrigatório</mat-hint>
+
+                        <mat-error *ngIf="criarNormativoForm.controls['visao'].hasError('required')">Obrigatório
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" fxFlex="33">
+                        <mat-label>Tipo de normativo</mat-label>
+
+                        <mat-select formControlName="tipoNormativo">
+                            <mat-option *ngFor="let tipo of opcoesTipoNormativo.tiposNormativo"
+                                [value]="tipo.id">{{tipo.nome}}</mat-option>
+                        </mat-select>
+
+                        <mat-hint>Obrigatório</mat-hint>
+
+                        <mat-error *ngIf="criarNormativoForm.controls['tipoNormativo'].hasError('required')">Obrigatório
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" fxFlex="33">
+                        <mat-label>Tipo de registro</mat-label>
+
+                        <mat-select formControlName="tipoRegistro">
+                            <mat-option [value]="1">Registro de contrato</mat-option>
+                            <mat-option [value]="2">Registro de garantia</mat-option>
+                            <mat-option [value]="3">Registro de instituição financeira</mat-option>
+                        </mat-select>
+
+                        <mat-hint>Obrigatório</mat-hint>
+
+                        <mat-error *ngIf="criarNormativoForm.controls['tipoRegistro'].hasError('required')">Obrigatório
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div fxLayout="row" fxLayoutGap="10px" fxFlex="100">
+                    <mat-form-field appearance="outline" fxFlex="50">
+                        <mat-label *ngIf="criarNormativoForm.controls['visao'].value == true">Estado de
+                            origem</mat-label>
+                        <mat-label *ngIf="criarNormativoForm.controls['visao'].value != true">Estado</mat-label>
+
+                        <mat-select formControlName="uf">
+                            <mat-option value="AC">Acre</mat-option>
+                            <mat-option value="AL">Alagoas</mat-option>
+                            <mat-option value="AP">Amapá</mat-option>
+                            <mat-option value="AM">Amazonas</mat-option>
+                            <mat-option value="BA">Bahia</mat-option>
+                            <mat-option value="CE">Ceará</mat-option>
+                            <mat-option value="DF">Distrito Federal</mat-option>
+                            <mat-option value="ES">Espírito Santo</mat-option>
+                            <mat-option value="GO">Goiás</mat-option>
+                            <mat-option value="MA">Maranhão</mat-option>
+                            <mat-option value="MT">Mato Grosso</mat-option>
+                            <mat-option value="MS">Mato Grosso do Sul</mat-option>
+                            <mat-option value="MG">Minas Gerais</mat-option>
+                            <mat-option value="PA">Pará</mat-option>
+                            <mat-option value="PB">Paraíba</mat-option>
+                            <mat-option value="PR">Paraná</mat-option>
+                            <mat-option value="PE">Pernambuco</mat-option>
+                            <mat-option value="PI">Piauí</mat-option>
+                            <mat-option value="RJ">Rio de Janeiro</mat-option>
+                            <mat-option value="RN">Rio Grande do Norte</mat-option>
+                            <mat-option value="RS">Rio Grande do Sul</mat-option>
+                            <mat-option value="RO">Rondônia</mat-option>
+                            <mat-option value="RR">Roraima</mat-option>
+                            <mat-option value="SC">Santa Catarina</mat-option>
+                            <mat-option value="SP">São Paulo</mat-option>
+                            <mat-option value="SE">Sergipe</mat-option>
+                            <mat-option value="TO">Tocantins</mat-option>
+                        </mat-select>
+
+                        <mat-hint *ngIf="criarNormativoForm.controls['visao'].value != true">Obrigatório</mat-hint>
+                        <mat-error
+                            *ngIf="criarNormativoForm.controls['uf'].hasError('required') && criarNormativoForm.controls['visao'].value == false">Obrigatório
+                        </mat-error>
+
+                        <mat-hint *ngIf="criarNormativoForm.controls['visao'].value == true">Opcional</mat-hint>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" fxFlex="50">
+                        <mat-label>Data de vigência</mat-label>
+
+                        <input matInput [matDatepicker]="picker" formControlName="dataVigencia" />
+
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+
+                        <mat-datepicker #picker></mat-datepicker>
+
+                        <mat-hint>Opcional</mat-hint>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10" class="mt-3">
+                <button mat-stroked-button class="btn-outline-primary" color="primary"
+                    (click)="cancelar()">Cancelar</button>
+                <button mat-flat-button color="primary" (click)="salvar()"
+                    [disabled]="criarNormativoForm.invalid">Aprovar Normativo</button>
+            </div>
+        </section>
+    </form>
+</section>

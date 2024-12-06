@@ -1,0 +1,14 @@
+@import '$tools';
+@import '$settings';
+
+.icon {
+	color: #fff;
+	padding: 4px 11px;
+	border-radius: 50px;
+	font-size: 1.1em;
+	background-color: $primary;
+}
+
+.medium-width {
+    width: 7rem;
+}

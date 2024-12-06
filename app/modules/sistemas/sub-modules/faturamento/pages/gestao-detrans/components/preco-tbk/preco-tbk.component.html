@@ -1,0 +1,48 @@
+<div fxLayout="row" fxLayoutAlign="space-between" [ngClass]="{ 'mb-2': !cadastroEmpresa }">
+    <p class="bold desk mt-0 text-gray-800"> Preço TBK - DETRAN {{ uf }}</p>
+
+    <button mat-flat-button class="btn-add" [id]="utility.getElementId(2, 'add-taxa')"
+        *ngIf="!criarPrecoDetran && !consulta && utility.getPermission([permissoes.GESTAO_FINANCEIRO_PRECO_CADASTRAR])"
+        (click)="criarPrecoDetran = true">
+        <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Add novo preço
+    </button>
+
+    <button mat-flat-button class="btn-cancelar" [id]="utility.getElementId(2, 'cancelar-taxa')"
+        *ngIf="(criarPrecoDetran || consulta) && !cadastroEmpresa" (click)="cancelar()">
+        Cancelar
+    </button>
+</div>
+
+<ng-container *ngIf="!criarPrecoDetran && listaPrecoTbk.length > 0; then gridPrecoTbk"></ng-container>
+<ng-container *ngIf="criarPrecoDetran; then formPrecoTbk"></ng-container>
+
+<app-bloco-vazio *ngIf="!criarPrecoDetran && listaPrecoTbk.length === 0 && !cadastroEmpresa"
+    [options]="blocoVazio"></app-bloco-vazio>
+
+<div *ngIf="cadastroEmpresa && listaPrecoTbk.length === 0" class="info-primary mr-2 w-100 mb-2" fxLayout="row"
+    fxLayoutGap="15px"><i class="fa-regular fa-memo-circle-info"></i>
+    <ul class="pl-2">
+        <li>
+            <p>Nenhum preço foi adicionado ao DETRAN {{ uf }}.</p>
+        </li>
+    </ul>
+</div>
+
+<ng-template #gridPrecoTbk>
+    <section fxLayout="column" fxLayoutAlign="space-between" class="conteudo">
+        <app-lista-preco-tbk [listaPrecoTbk]="listaPrecoTbk" (resumoPreco)="editarPreco($event)"
+            (excluirPrecoTbk)="carregarPrecoTbk()" [taxaDetran]="taxaDetran"
+            [consulta]="consulta"></app-lista-preco-tbk>
+
+        <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="end center" class="mt-1" *ngIf="!consulta">
+            <button mat-flat-button color="secondary" type="button" (click)="onClickContinuar()"
+                [id]="utility.getElementId(2, 'continuar-preco-tbk')">Finalizar</button>
+        </div>
+    </section>
+</ng-template>
+
+<ng-template #formPrecoTbk>
+    <app-criar-preco-tbk [uf]="uf" (fecharFormulario)="fecharCriarPreco()" [precoTbk]="editarPrecoTbk"
+        [transacoesElegiveis]="transacoesElegiveis" [taxaDetran]="taxaDetran"
+        [primeiroPreco]="listaPrecoTbk.length == 0"></app-criar-preco-tbk>
+</ng-template>

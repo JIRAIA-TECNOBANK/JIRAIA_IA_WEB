@@ -1,0 +1,104 @@
+<section class="text-paginator">
+  <div class="row d-flex">
+    <section class="default-text" *ngIf="paginator">
+      Mostrando {{ paginator?.pageSize > totalItems ? totalItems : paginator?.pageSize }} de {{
+      totalItems }} resultados
+    </section>
+  </div>
+</section>
+<mat-paginator [pageSizeOptions]="[25, 50, 75, 100]" [length]="totalItems" #paginator></mat-paginator>
+
+<table mat-table [dataSource]="items$ | async" matSort>
+  <!-- Código Column -->
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Código</th>
+    <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+  </ng-container>
+
+  <!-- Grupo Column -->
+  <ng-container matColumnDef="nome">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Nome grupo</th>
+    <td mat-cell *matCellDef="let element">{{ element.nome }}</td>
+  </ng-container>
+
+  <!-- Quantidade Column -->
+  <ng-container matColumnDef="quantidadeEmpresa">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Quant. de empresas</th>
+    <td mat-cell *matCellDef="let element">
+      <p>{{element.quantidadeEmpresa}} empresa{{ element.quantidadeEmpresa != 1 ? 's' : '' }}</p>
+    </td>
+  </ng-container>
+
+  <!-- Criado em Column -->
+  <ng-container matColumnDef="criadoEm">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Data de cadastro</th>
+    <td mat-cell *matCellDef="let element">
+      {{ formatDate(element.criadoEm) }}
+    </td>
+  </ng-container>
+
+  <!-- Alterado em Column -->
+  <ng-container matColumnDef="modificadoEm">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Data de atualização</th>
+    <td mat-cell *matCellDef="let element">
+      {{ formatDate(element.modificadoEm) }}
+
+    </td>
+  </ng-container>
+
+  <!-- Status Column -->
+  <ng-container matColumnDef="ativo">
+    <th mat-header-cell *matHeaderCellDef>Status</th>
+    <td mat-cell *matCellDef="let element">
+      <div class="status-pill" [ngClass]="
+              element.ativo ? 'status-pill__active' : 'status-pill__inactive'
+            ">
+        {{ element.ativo ? "Ativo" : "Inativo" }}
+      </div>
+    </td>
+  </ng-container>
+
+  <!-- Options Column-->
+  <ng-container matColumnDef="opcoes">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let element">
+      <button mat-button [matMenuTriggerFor]="menu">
+        <mat-icon [id]="utility.getElementId(2, 'acoes', element.id)">more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <div>
+          <button mat-menu-item id="btn-editar-consultar-grupo" (click)="editarGrupoEconomico(element.id)">
+            Editar/consultar
+          </button>
+          <button mat-menu-item id="btn-ativar-inativar-grupo" (click)="inativarGrupo(element.id, element.ativo)"
+            [disabled]="!utility.getPermission([Permissoes.GESTAO_EMPRESA_GRUPO_ECONOMICO_CADASTRAR])">
+            {{ element.ativo ? "Inativar" : "Ativar" }}
+          </button>
+        </div>
+
+      </mat-menu>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="semRegistro">
+    <th class="text-center feedBack pt-1" mat-cell *matFooterCellDef colspan="11">
+      <img src="./../../../../../../../../../assets/img/custom-icons/icon-vazio-artigos.svg" />
+      <p class="desk bold text-gray-700"> Não há registros. </p>
+    </th>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  <tr mat-row *matFooterRowDef="['semRegistro']" [ngClass]="{'d-none': totalItems > 0 }"></tr>
+</table>
+<section class="text-paginator">
+  <div class="row d-flex">
+    <section class="default-text">
+      Mostrando {{ paginator?.pageSize > totalItems ? totalItems : paginator?.pageSize }} de {{
+      totalItems }} resultados
+    </section>
+  </div>
+</section>
+<mat-paginator (page)="syncPrimaryPaginator($event)" [pageSize]="paginator?.pageSize" [pageIndex]="paginator?.pageIndex"
+  [length]="paginator?.length" [pageSizeOptions]="paginator?.pageSizeOptions">
+</mat-paginator>

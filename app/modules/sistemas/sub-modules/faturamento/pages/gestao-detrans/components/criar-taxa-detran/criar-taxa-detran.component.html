@@ -1,0 +1,199 @@
+<form [formGroup]="formulario" class="criar-taxa-detran">
+		<div class="wrap-flags" fxLayout="column">
+
+				<div fxLayout="row" class="cabecalho">
+						<section fxLayout="row" fxFlex="70">
+								<div fxFlex="10" class="celula">
+										<mat-checkbox [id]="utility.getElementId(4, 'selecionar-todas-flags')" fxLayout="row"
+												(change)="selecionarTodasFlags($event)" [checked]="verificarFlagSelecionada() === 1"
+												[indeterminate]="verificarFlagSelecionada() === 2"
+												[disabled]="taxaDetran?.status === 'Vigente'">
+										</mat-checkbox>
+								</div>
+								<div fxFlex class="celula meio operacao-label">
+										<span class="bold pl-2">
+												Operação
+										</span>
+								</div>
+						</section>
+						<div fxFlex class="celula">
+								<span class="bold">
+										Taxa DETRAN
+								</span>
+						</div>
+				</div>
+
+				<div fxLayout="row" class="corpo">
+						<section fxLayout="row" fxFlex="70">
+								<div fxFlex="10" class="celula pt-2">
+										<mat-checkbox [id]="utility.getElementId(4, 'flag-1')" fxLayout="row"
+												[disabled]="desabilitarFlag(1)" (click)="$event.stopPropagation()"
+												(change)="$event ? check('flag1') : null" [checked]="selecionada('flag1')">
+										</mat-checkbox>
+								</div>
+								<div fxFlex class="celula meio pt-2 operacao-label">
+										<span class="bold pl-2" [ngClass]="{ 'desabilitada': desabilitarFlag(1) }">
+												Registro de contrato
+										</span>
+								</div>
+						</section>
+						<div fxFlex class="celula pt-2">
+								<span class="bold">
+										<mat-form-field appearance="outline" fxFlex="auto">
+												<mat-label>Taxa DETRAN </mat-label>
+												<input matInput placeholder="Taxa DETRAN" formControlName="flag1" class="p-0"
+														[id]="utility.getElementId(0, 'flag-1-taxa-detran')" required currencyMask
+														[options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }" maxlength="18" />
+												<!--maxlength para atender a regra de 10 posicoes + 2 casas decimais + R$ e pontuacao -->
+												<mat-hint *ngIf="selecionada('flag1')">Obrigatório</mat-hint>
+										</mat-form-field>
+								</span>
+						</div>
+				</div>
+
+				<div fxLayout="row" class="corpo">
+						<section fxLayout="row" fxFlex="70">
+								<div fxFlex="10" class="celula">
+										<mat-checkbox [id]="utility.getElementId(4, 'flag-2')" fxLayout="row"
+												[disabled]="desabilitarFlag(2)" (click)="$event.stopPropagation()"
+												(change)="$event ? check('flag2') : null" [checked]="selecionada('flag2')">
+										</mat-checkbox>
+								</div>
+								<div fxFlex class="celula meio operacao-label">
+										<span class="bold pl-2" [ngClass]="{ 'desabilitada': desabilitarFlag(2) }">
+												Alteração de contrato
+										</span>
+								</div>
+						</section>
+						<div fxFlex class="celula">
+								<span class="bold">
+										<mat-form-field appearance="outline" fxFlex="auto">
+												<mat-label>Taxa DETRAN </mat-label>
+												<input matInput placeholder="Taxa DETRAN" formControlName="flag2"
+														[id]="utility.getElementId(0, 'flag-2-taxa-detran')" required currencyMask
+														[options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }" maxlength="18" />
+												<!--maxlength para atender a regra de 10 posicoes + 2 casas decimais + R$ e pontuacao -->
+												<mat-hint *ngIf="selecionada('flag2')">Obrigatório</mat-hint>
+										</mat-form-field>
+								</span>
+						</div>
+				</div>
+
+				<div fxLayout="row" class="corpo">
+						<section fxLayout="row" fxFlex="70">
+								<div fxFlex="10" class="celula">
+										<mat-checkbox [id]="utility.getElementId(4, 'flag-3')" fxLayout="row"
+												[disabled]="desabilitarFlag(3)" (click)="$event.stopPropagation()"
+												(change)="$event ? check('flag3') : null" [checked]="selecionada('flag3')">
+										</mat-checkbox>
+								</div>
+								<div fxFlex class="celula meio operacao-label">
+										<span class="bold pl-2" [ngClass]="{ 'desabilitada': desabilitarFlag(3) }">
+												Registro de aditivo
+										</span>
+								</div>
+						</section>
+						<div fxFlex class="celula">
+								<span class="bold">
+										<mat-form-field appearance="outline" fxFlex="auto">
+												<mat-label>Taxa DETRAN </mat-label>
+												<input matInput placeholder="Taxa DETRAN" formControlName="flag3"
+														[id]="utility.getElementId(0, 'flag-3-taxa-detran')" required currencyMask
+														[options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }" maxlength="18" />
+												<!--maxlength para atender a regra de 10 posicoes + 2 casas decimais + R$ e pontuacao -->
+												<mat-hint *ngIf="selecionada('flag3')">Obrigatório</mat-hint>
+										</mat-form-field>
+								</span>
+						</div>
+				</div>
+
+				<div fxLayout="row" class="corpo">
+						<section fxLayout="row" fxFlex="70">
+								<div fxFlex="10" class="celula">
+										<mat-checkbox [id]="utility.getElementId(4, 'flag-4')" fxLayout="row"
+												[disabled]="desabilitarFlag(4)" (click)="$event.stopPropagation()"
+												(change)="$event ? check('flag4') : null" [checked]="selecionada('flag4')">
+										</mat-checkbox>
+								</div>
+								<div fxFlex class="celula meio operacao-label">
+										<span class="bold pl-2" [ngClass]="{ 'desabilitada': desabilitarFlag(4) }">
+												Alteração de aditivo
+										</span>
+								</div>
+						</section>
+						<div fxFlex class="celula">
+								<span class="bold">
+										<mat-form-field appearance="outline" fxFlex="auto">
+												<mat-label>Taxa DETRAN </mat-label>
+												<input matInput placeholder="Taxa DETRAN" formControlName="flag4"
+														[id]="utility.getElementId(0, 'flag-4-taxa-detran')" required currencyMask
+														[options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }" maxlength="18" />
+												<!--maxlength para atender a regra de 10 posicoes + 2 casas decimais + R$ e pontuacao -->
+												<mat-hint *ngIf="selecionada('flag4')">Obrigatório</mat-hint>
+										</mat-form-field>
+								</span>
+						</div>
+				</div>
+		</div>
+
+		<div class="wrap-flags mt-2" fxLayout="column">
+				<div fxLayout="row" class="cabecalho">
+						<div class="celula">
+								<span class="bold">Período em que este valor será praticado</span>
+						</div>
+				</div>
+				<div fxLayout="row" class="corpo" fxLayoutAlign="center">
+						<div class="celula py-2">
+								<mat-form-field appearance="outline" fxFlex="50" class="mr-1">
+										<mat-label>Início vigência</mat-label>
+										<input [id]="utility.getElementId(6, 'taxa-detran-inicio')" formControlName="inicio" matInput
+												placeholder="dd/mm/aaaa" [matDatepicker]="de" (click)="de.open()" (keydown.tab)="de.close()"
+												[min]="inicioMinimo" required />
+										<mat-datepicker-toggle matSuffix [for]="de"
+												[id]="utility.getElementId(6, 'taxa-detran-inicio', 'picker')"></mat-datepicker-toggle>
+										<mat-datepicker #de></mat-datepicker>
+										<mat-hint>Obrigatório</mat-hint>
+										<mat-error *ngIf="formulario.get('inicio').getError('required')">Obrigatório</mat-error>
+										<mat-error *ngIf="erroDataInicial || formulario.get('inicio').getError('invalidIdentifier') === 'dataMinima'
+										">Data digitada é inferior a data permitida ou igual a data já cadastrada</mat-error>
+								</mat-form-field>
+
+								<mat-form-field appearance="outline" fxFlex="50">
+										<mat-label>Término vigência</mat-label>
+										<input [id]="utility.getElementId(6, 'taxa-detran-termino')" formControlName="termino" matInput
+												placeholder="dd/mm/aaaa" [matDatepicker]="ate" (click)="ate.open()" (keydown.tab)="ate.close()"
+												[min]="retornarDataMinimaTermino() || inicioMinimo" required />
+										<mat-datepicker-toggle matSuffix [for]="ate"
+												[id]="utility.getElementId(6, 'taxa-detran-termino', 'picker')"></mat-datepicker-toggle>
+										<mat-datepicker #ate></mat-datepicker>
+										<mat-hint>Obrigatório</mat-hint>
+										<mat-error *ngIf="formulario.get('termino').getError('required')">Obrigatório</mat-error>
+										<mat-error *ngIf="erroDataFinal || formulario.get('termino').getError('invalidIdentifier') === 'dataMinima'
+										">Data digitada é inferior a data permitida ou igual a data já cadastrada</mat-error>
+								</mat-form-field>
+						</div>
+				</div>
+		</div>
+
+		<div class="info-primary mt-2 w-100" fxLayout="row" fxLayoutGap="15px"><i
+						class="fa-regular fa-memo-circle-info"></i>
+				<ul class="pl-2">
+						<li>
+								<p>Ao inserir a data de início de vigência da taxa DETRAN atente-se para que seja maior do que a data do
+										seu cadastro.
+								</p>
+								<br>
+						</li>
+						<li>
+								<p>O início da vigência da taxa do DETRAN quando agendada deve ser superior ao término da data vigente.
+								</p>
+						</li>
+				</ul>
+		</div>
+
+		<div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="end center" class="mt-1">
+				<button mat-flat-button color="secondary" type="button" (click)="onClickConfirmar()"
+						[id]="utility.getElementId(2, 'confirmar-taxa-detran')"
+						[disabled]="!verificarValidadeFormulario()">Confirmar</button>
+		</div>
+</form>

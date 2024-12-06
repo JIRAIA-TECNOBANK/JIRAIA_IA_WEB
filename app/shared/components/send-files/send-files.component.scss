@@ -1,0 +1,198 @@
+@import '$settings';
+@import '$tools';
+
+.dropzone-label {
+  i {
+    color: #377AB7;
+    align-self: center;
+    padding-right: 10px;
+  }
+
+  p {
+    @include fontMontserratRegular();
+    font-weight: 700;
+    font-size: 12px;
+    color: #818A93;
+
+    &:last-child {
+      color: #1666AE;
+      text-decoration: underline;
+    }
+  }
+}
+
+.dropzone-hint {
+  margin-top: 5px;
+
+  mat-hint {
+    font-size: 12px;
+    color: #626E78;
+  }
+}
+
+section {
+  padding: 1rem 0;
+}
+
+h3 {
+  font-size: 16px;
+  font-weight: 100;
+}
+
+p {
+  &.desk {
+    font-size: 14px;
+    color: $primary;
+  }
+
+  &.bold {
+    @include fontMontserratBold;
+    color: $gray-900;
+  }
+}
+
+.dropzone {
+  @include border-radius(5px);
+  text-align: center;
+  position: relative;
+  margin: 0 auto;
+  border: 2px dashed #5B94C7;
+  cursor: pointer;
+  max-height: 41px;
+}
+
+.single-file {
+  @include border-radius(0.25rem);
+  padding: 0.5rem;
+  border: solid 2px #ECEEEF;
+  margin-top: 0.5rem;
+  display: grid;
+  grid-template-columns: repeat(2, 4fr) 1fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 5px;
+}
+
+.file-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.name {
+  @include fontMontserratBold;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 350px;
+}
+
+.size {
+  @include fontMontserratBold;
+  @include border-radius(0.25rem);
+  font-size: 12px;
+  font-weight: 500;
+  color: #a4a4a4;
+  margin: 0;
+}
+
+.info {
+  width: 100%
+}
+
+.dropzone span {
+  font-size: 12px;
+}
+
+.dropzone .file-error i {
+  color: $warning-900;
+  vertical-align: sub;
+}
+
+.file-error {
+  @include fontMontserratBold;
+  color: $warning-900;
+  font-size: 12px;
+}
+
+.dropzone>i {
+  font-size: 3rem;
+  margin-left: -23px;
+  color: $primary;
+}
+
+.file-detail-description {
+  font-size: 0.9em;
+
+  .file-title {
+    @include fontMontserratBold;
+  }
+}
+
+
+.files-list .mat-icon {
+  color: $primary;
+  margin-right: 0.3rem;
+}
+
+.file-download {
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  color: $primary;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.file-delete {
+  @include border-radius(1rem);
+  background: #B6BCC0;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.file-delete i {
+  color: $white !important;
+  font-size: 12px;
+  display: inline-flex !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  width: 20px;
+}
+
+.file-loading {
+  @include border-radius(1rem);
+  background: $gray-300;
+  padding-top: 6px;
+  -webkit-animation: fa-spin 2s infinite linear;
+  animation: fa-spin 2s infinite linear;
+}
+
+.file-loading mat-icon {
+  color: $gray-800 !important;
+  font-size: 0.90rem;
+  display: inline-flex !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  height: 20px;
+  width: 26px;
+}
+
+.file-name {
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  margin-right: 1rem;
+}

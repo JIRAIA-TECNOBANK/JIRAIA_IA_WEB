@@ -1,0 +1,254 @@
+<div fxLayout="column">
+  <form [formGroup]="detranForm" (ngSubmit)="onSubmit()" novalidate>
+    <div *ngIf="!isEdition && consultaPrecoUf == null">
+      <!-- Head Title - Adicionar Detran -->
+      <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="space-between">
+        <h6>Detrans</h6>
+        <button mat-flat-button (click)="addDetran()"
+          *ngIf="utility.getPermission([Permissoes.GESTAO_EMPRESA_CADASTRAR])" id="abrir_formulario_detran">
+          <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Add novo Detran
+        </button>
+      </div>
+
+      <!-- Body - Adicionar Detran VAZIO -->
+      <div *ngIf="!hasDetran(); else detranListBlock" fxLayout="column wrap" fxLayoutGap="20px"
+        fxLayoutAlign="space-around center" class="mt-3">
+        <img src="./../../../../../../../../../assets/img/e-contrato/no-contact.svg" alt="" class="mt-3 mb-3" />
+        <h6>Nenhum Detran foi adicionado ainda.</h6>
+      </div>
+      <!-- Body - Lista de Detrans -->
+      <ng-template #detranListBlock>
+        <div class="detranList">
+          <div fxLayout="column" [ngClass]="{ disable: !detran.ativo }" *ngFor="let detran of detrans; let i = index">
+            <div fxLayout="row" fxLayoutAlign="space-between center" class="detran">
+              <div>
+                <span [ngClass]="{ disableLabel: !detran.ativo }">
+                  Detran {{ detran.ufDetran }}</span>
+              </div>
+              <div fxLayout="row" fxLayoutAlign="center">
+                <div>
+                  <button class="btn-menu" mat-button [matMenuTriggerFor]="menu" type="button" id="menu_opcoes_detran">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="selectDetran(detran)" type="button" *ngIf="detran.ativo"
+                      id="editar_detran">
+                      Editar/Consultar
+                    </button>
+                    <button mat-menu-item (click)="consultarPreco(detran.ufDetran)" type="button"
+                      [id]="utility.getElementId(2, 'consultar-preco')"
+                      *ngIf="retornarTipoPreco(detran.ufDetran) === 1 || retornarTipoPreco(detran.ufDetran) === 2">
+                      Preço {{ retornarTipoPreco(detran.ufDetran) === 1 ? 'público' : 'privado' }}
+                    </button>
+                    <button mat-menu-item (click)="ativarInativarDetran(detran)" type="button" *ngIf="
+                        utility.getPermission([
+                          Permissoes.GESTAO_EMPRESA_CADASTRAR
+                        ])
+                      " id="ativar_inativar_detran">
+                      {{ detran.ativo ? "Inativar" : "Ativar" }}
+                    </button>
+                  </mat-menu>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+
+    <ng-container *ngIf="isEdition; then editionBlock"></ng-container>
+    <ng-container *ngIf="consultaPrecoUf != null && consultaTipoPreco === 1; then consultarPrecoPublico"></ng-container>
+    <ng-container *ngIf="consultaPrecoUf != null && consultaTipoPreco === 2; then consultarPrecoPrivado"></ng-container>
+
+    <ng-template #editionBlock>
+      <!-- Head Title - Cancelar Detran -->
+      <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="space-between">
+        <h6 class="headline">Adicionar Detran</h6>
+        <button mat-flat-button class="cancel" type="button" (click)="cancelDetran()" id="cancelar_detran">
+          Cancelar
+        </button>
+      </div>
+      <!-- First Row -->
+      <div class="mt-3" fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="center center">
+        <mat-form-field appearance="outline" fxFlex="15">
+          <mat-label>UF</mat-label>
+          <mat-select formControlName="uf" id="uf_detran" required>
+            <mat-option>UF</mat-option>
+            <mat-option *ngFor="let uf of ufsDetran" [value]="uf.valor">
+              {{ uf.valor }}</mat-option>
+          </mat-select>
+          <mat-hint>Obrigatório</mat-hint>
+          <mat-error *ngIf="detranForm.controls['uf'].hasError('required')">Campo obrigatório
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" fxFlex="40">
+          <mat-label>Código DETRAN </mat-label>
+          <input matInput placeholder="Código Detran" formControlName="codigoDetran" id="codigo_detran" required />
+          <mat-hint>Obrigatório</mat-hint>
+          <mat-error *ngIf="detranForm.controls['codigoDetran'].hasError('required')">Campo obrigatório
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" fxFlex="auto">
+          <mat-label>Código SNG</mat-label>
+          <input matInput placeholder="Código SNG" formControlName="codigoSng" id="codigo_sng_detran" required />
+          <mat-hint>Obrigatório</mat-hint>
+          <mat-error *ngIf="detranForm.controls['codigoSng'].hasError('required')">Campo obrigatório
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <!-- Second Row -->
+      <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="space-between">
+        <p class="bold desk mt-0 text-gray-800">Endereço do Detran</p>
+        <button mat-flat-button type="button" (click)="carregarDadosEnderecos()" id="adicionar_endereco_detran"
+          [disabled]="
+            !utility.getPermission([Permissoes.GESTAO_EMPRESA_CADASTRAR])
+          ">
+          <i class="fa-solid fa-pencil"></i>&nbsp;Alterar endereço
+        </button>
+      </div>
+      <!-- Third Row -->
+      <div class="mt-2" fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="center center">
+        <mat-form-field appearance="outline" fxFlex="25">
+          <mat-label>CEP</mat-label>
+          <input matInput placeholder="00000-000" formControlName="cep" mask="00000-000" required id="cep_detran" />
+          <mat-icon matSuffix>
+            <mat-spinner *ngIf="findingAddress" [diameter]="25"></mat-spinner>
+          </mat-icon>
+          <mat-hint>Obrigatório</mat-hint>
+          <mat-error *ngIf="detranForm.controls['cep'].hasError('required')">Campo obrigatório
+          </mat-error>
+          <mat-hint *ngIf="cepInvalido">CEP não localizado, por favor digite o endereço completo</mat-hint>
+        </mat-form-field>
+        <mat-form-field appearance="outline" fxFlex="60">
+          <mat-label>Endereço </mat-label>
+          <input matInput placeholder="Endereço" formControlName="logradouro" required id="logradouro_detran" />
+          <mat-hint>Obrigatório</mat-hint>
+          <mat-error *ngIf="detranForm.controls['logradouro'].hasError('required')">Campo obrigatório
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" fxFlex="auto">
+          <mat-label>Número </mat-label>
+          <input matInput placeholder="nº" formControlName="numero" required id="numero_detran" />
+          <mat-hint>Obrigatório</mat-hint>
+          <mat-error *ngIf="detranForm.controls['numero'].hasError('required')">Campo obrigatório
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <!-- Third Row -->
+      <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="center center">
+        <mat-form-field appearance="outline" fxFlex="40">
+          <mat-label>Complemento </mat-label>
+          <input matInput placeholder="Complemento" formControlName="complemento" id="complemento_detran" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" fxFlex="35">
+          <mat-label>Bairro </mat-label>
+          <input matInput placeholder="Bairro" formControlName="bairro" required id="bairro_detran" />
+          <mat-hint>Obrigatório</mat-hint>
+          <mat-error *ngIf="detranForm.controls['bairro'].hasError('required')">Campo obrigatório
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" fxFlex="auto">
+          <mat-label>Estado</mat-label>
+          <mat-select formControlName="estado" required id="estado_detran">
+            <mat-option> Estado*</mat-option>
+            <mat-option *ngFor="let uf of ufs" [value]="uf.sigla">{{
+              uf.sigla
+              }}</mat-option>
+          </mat-select>
+          <mat-hint>Obrigatório</mat-hint>
+          <mat-error *ngIf="detranForm.controls['estado'].hasError('required')">Campo obrigatório
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <!-- Fourth Row -->
+      <div fxLayout="row wrap" fxLayoutGap="10px">
+        <mat-form-field appearance="outline" fxFlex="auto">
+          <mat-label>Cidade</mat-label>
+          <input type="text" name="cidade" formControlName="cidade" matInput [matAutocomplete]="municipio"
+            placeholder="Cidade" required id="cidade_detran" />
+          <mat-hint>Obrigatório</mat-hint>
+          <mat-error *ngIf="detranForm.controls['cidade'].hasError('required')">Campo obrigatório
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxLayout="row wrap" fxLayoutGap="10px" *ngIf="detranForm.get('uf').value == 'RJ'">
+        <mat-checkbox class="my-1" formControlName="parametrizarDuda" id="parametrizar_duda_detran">Parametrização feita
+          pela Tecnobank (Gestão de DUDAs)
+        </mat-checkbox>
+      </div>
+      <!-- Fifth Row -->
+      <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="space-between">
+        <p class="bold desk mt-0 text-gray-800">Data de vigência neste Detran</p>
+      </div>
+      <!-- Sixth Row -->
+      <div fxLayout="row wrap" fxLayoutGap="20px">
+        <mat-form-field appearance="outline" fxFlex="25" class="mat-field-small mr-1">
+          <mat-label>Data inicial</mat-label>
+          <input matInput formControlName="dataInicial" placeholder="dd/mm/aaaa" [matDatepicker]="de"
+            (click)="de.open()" [id]="utility.getElementId(6, 'data-inicial', detran)" />
+          <mat-datepicker-toggle matSuffix [for]="de"> </mat-datepicker-toggle>
+          <mat-datepicker #de></mat-datepicker>
+          <mat-hint>Obrigatório</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="25" class="mat-field-small mr-1">
+          <mat-label>Data final</mat-label>
+          <input matInput formControlName="dataFinal" placeholder="dd/mm/aaaa" [matDatepicker]="ate"
+            (click)="ate.open()" [id]="utility.getElementId(6, 'data-final', detran)" />
+          <mat-datepicker-toggle matSuffix [for]="ate"> </mat-datepicker-toggle>
+          <mat-datepicker #ate></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <section *ngIf="!selectedDetran && carregarPrecos">
+        <ng-container *ngIf="ehPrecoPrivado(); then encontrarCesta; else mostrarPrecoPublico"></ng-container>
+      </section>
+
+      <!-- Add address button -->
+      <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="15px" class="mt-3">
+        <button mat-raised-button type="submit" class="btn btn-primary bold add-btn" id="adicionar_detran"
+          [disabled]="!isDetranFormValid() || !companyId"
+          *ngIf="utility.getPermission([Permissoes.GESTAO_EMPRESA_CADASTRAR])">
+          {{ hasDetranId() }}
+        </button>
+      </div>
+    </ng-template>
+
+    <ng-template #consultarPrecoPublico>
+      <app-consultar-preco-detran [uf]="consultaPrecoUf" [taxaDetran]="taxaDetran" (fechar)="fecharConsultaPreco()"
+        [tipoPreco]="consultaTipoPreco" [empresaId]="companyId"></app-consultar-preco-detran>
+    </ng-template>
+
+    <ng-template #consultarPrecoPrivado>
+      <app-consultar-preco-privado [uf]="consultaPrecoUf" [taxaDetran]="taxaDetran" (fechar)="fecharConsultaPreco()"
+        [tipoPreco]="consultaTipoPreco" [empresaId]="companyId" [triggerSalvar]="false"></app-consultar-preco-privado>
+    </ng-template>
+
+    <ng-template #encontrarCesta>
+      <div *ngIf="detranForm.get('uf').value" fxLayout="column" fxLayoutAlign="space-between" class="mt-2">
+        <app-consultar-preco-privado [uf]="detranForm.get('uf').value" [taxaDetran]="taxaDetran"
+          (fechar)="sucessoCesta()" [tipoPreco]="consultaTipoPreco" [empresaId]="companyId" [cadastroEmpresa]="true"
+          [triggerSalvar]="triggerSalvarCesta"
+          (possuiPrecoSelecionado)="possuiPrecoSelecionado = $event"></app-consultar-preco-privado>
+
+        <div class="info-primary mr-2 w-100 mb-2" fxLayout="row" fxLayoutGap="15px"><i
+            class="fa-regular fa-memo-circle-info"></i>
+          <ul class="pl-2">
+            <li>
+              <p>Esse DETRAN atua com preço privado, portanto a atribuição de uma cesta de serviço é obrigatória, clique
+                em + Add cesta.</p>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </ng-template>
+
+    <ng-template #mostrarPrecoPublico>
+      <div *ngIf="detranForm.get('uf').value" fxLayout="column" fxLayoutAlign="space-between" class="mt-2">
+        <app-preco-tbk [uf]="detranForm.get('uf').value" [taxaDetran]="taxaDetran" [consulta]="true" [tipoPreco]="1"
+          [cadastroEmpresa]="true"></app-preco-tbk>
+      </div>
+    </ng-template>
+  </form>
+</div>

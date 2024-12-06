@@ -1,0 +1,23 @@
+<ul class="list-group flex-column d-flex"
+  [ngClass]="[ activeMenuItem ? 'active' : '', menuItemId != null ? 'open' : '', levelNumber > 1 ? 'child' : '', 'menu-level level-' + levelNumber ]">
+  <!-- [ngClass]="{ 'active': activeMenuItem, 'open': menuItemId != null, 'level-' + levelNumber:  levelNumber > 0 }"> -->
+  <li class="list-group-item" *ngFor="let menuItem of menuItems" [id]="menuItem.id"
+    [ngClass]="{ 'active': menuItem.active, 'has-children': menuItem.child?.length > 0, 'third-level': levelNumber > 0 }"
+    (click)="clickLink($event, menuItem)" (mouseenter)="toggleItem(menuItem.id)" (mouseleave)="toggleItem(menuItem.id)">
+    <a>
+      <div class="wrapper">
+        <i [ngClass]="menuItem.icon" aria-hidden="true"> </i>
+      </div>
+
+      <div class="menu-label-item">
+        <span class="ml-1 align-middle">{{ menuItem.label }}</span>
+        <p class="arrow-child" *ngIf="menuItem.child">
+          <i *ngIf="!menuItem.active" class="fa-regular fa-angle-down"></i>
+          <i *ngIf="menuItem.active" class="fa-regular fa-angle-up"></i>
+        </p>
+      </div>
+    </a>
+
+    <app-menu-items [mouseEnter]="menuItemId" [menuItems]="menuItem.child" [levelNumber]="levelNumber+1" [parentId]="parentId"></app-menu-items>
+  </li>
+</ul>

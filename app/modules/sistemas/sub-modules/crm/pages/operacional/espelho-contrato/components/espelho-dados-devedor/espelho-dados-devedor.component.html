@@ -1,0 +1,51 @@
+<mat-card class="espelho-contrato">
+  <div class="panel-title"> Dados do devedor </div>
+
+  <div fxLayout="row wrap" fxLayoutGap="10px grid" class="my-2">
+    <div fxFlex="50" class="item">
+      <div class="item-title">Financiado</div>
+      <div class="item-description">{{ dadosDevedor?.nomeDoFinanciado ?? '-' }}</div>
+    </div>
+    <div fxFlex="50" class="item">
+      <div class="item-title">Tipo - Número</div>
+      <div class="item-description">{{ dadosDevedor?.documento?.tipoDocumento == 1 ? 'CPF' : 'CNPJ' }} - {{
+        devedorDocumento ?? '-' }}</div>
+    </div>
+    <div fxFlex="50" class="item">
+      <div class="item-title">Logradouro</div>
+      <div class="item-description">{{ dadosDevedor?.endereco.logradouro ?? '-' }}</div>
+    </div>
+    <div fxFlex="50" class="item">
+      <div class="item-title">Número</div>
+      <div class="item-description">{{ dadosDevedor?.endereco.numero }}</div>
+    </div>
+    <div fxFlex="50" class="item">
+      <div class="item-title">Complemento</div>
+      <div class="item-description">{{ dadosDevedor?.endereco.complemento ?? '-' }} </div>
+    </div>
+    <div fxFlex="50" class="item">
+      <div class="item-title">Bairro</div>
+      <div class="item-description">{{ dadosDevedor?.endereco.bairro }}</div>
+    </div>
+    <div fxFlex="50" class="item">
+      <div class="item-title">Município - UF</div>
+      <div class="item-description">{{ dadosDevedor?.endereco?.municipio }} - {{ dadosDevedor?.endereco.uf ?? '-' }}
+      </div>
+    </div>
+    <div fxFlex="50" class="item">
+      <div class="item-title">CEP</div>
+      <div class="item-description">{{ devedorCep }}</div>
+    </div>
+    <div fxFlex="50" class="item">
+      <div class="item-title">Telefone</div>
+      <div class="item-description">({{ dadosDevedor?.contato?.ddd ?? '-' }}) {{ dadosDevedor?.contato?.telefone
+        ?? '-' }}</div>
+    </div>
+    <div fxFlex="50" class="item">
+      <div class="item-title">E-mail</div>
+      <div class="item-description">{{ dadosDevedor?.contato?.email ?? '-' }}</div>
+    </div>
+  </div>
+
+  <app-liberar-acessos (liberacaoAcesso)="liberarAcesso($event)"></app-liberar-acessos>
+</mat-card>

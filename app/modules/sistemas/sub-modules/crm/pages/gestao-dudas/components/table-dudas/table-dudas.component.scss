@@ -1,0 +1,8 @@
+
+.column-max-width {
+  text-overflow: ellipsis !important;
+  max-width: 30rem !important;
+  white-space: nowrap;
+  overflow: hidden;
+  padding-right: 10px;
+}

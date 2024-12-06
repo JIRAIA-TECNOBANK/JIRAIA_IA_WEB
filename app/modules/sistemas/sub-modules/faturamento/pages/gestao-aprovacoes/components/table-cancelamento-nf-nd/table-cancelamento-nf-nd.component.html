@@ -1,0 +1,192 @@
+<div>
+    <section class="text-paginator">
+        <div class="row d-flex">
+            <section class="select-options mr-4 d-flex" *ngIf="selection.selected.length > 0">
+                {{ selection.selected.length }} operaç{{ selection.selected.length > 1 ? 'ões' : 'ão' }}
+                selecionada{{
+                selection.selected.length > 1 ? 's' : '' }}
+
+                <div class="btn-wrapper" matTooltip="Aprovar" (click)="onAprovar()"
+                    [id]="utility.getElementId(2, 'aprovar-cancelamento')">
+                    <i class="fa-regular fa-clipboard-check"></i>
+                </div>
+            </section>
+
+            <section class="default-text" *ngIf="paginator">
+                Mostrando
+                {{
+                paginator?.pageSize > totalItens
+                ? totalItens
+                : paginator?.pageSize
+                }}
+                de {{ totalItens }} resultados
+            </section>
+        </div>
+    </section>
+    <mat-paginator [pageSizeOptions]="[25, 50, 75, 100, 1000]" [length]="totalItens" #paginator></mat-paginator>
+
+    <div>
+        <section class="overflow-table">
+            <table mat-table [dataSource]="items$ | async" (matSortChange)="sortData($event)" #table="matSort"
+                aria-describedby="Aprovação de cancelamento de notas" matSort>
+                <ng-container matColumnDef="selecionar">
+                    <th mat-header-cell *matHeaderCellDef class="pr-1">
+                        <mat-checkbox [id]="utility.getElementId(4, 'select-all-op-cancelar-nota')"
+                            (change)="$event ? utility.toggleAllRows(selection, dataSource, 'id') : null"
+                            [checked]="utility.verifyPageSelection(selection, dataSource, 'id') == 1"
+                            [indeterminate]="utility.verifyPageSelection(selection, dataSource, 'id') == 2"
+                            [disabled]="dataSource.data.length == 0">
+                        </mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <mat-checkbox [id]="utility.getElementId(4, 'cancelamento-nota', element.id)"
+                            (click)="$event.stopPropagation()"
+                            (change)="$event ? utility.check(selection, element, 'id') : null"
+                            [checked]="utility.isSelected(selection, element, 'id')"
+                            [disabled]="element.status == 'Aprovada'">
+                        </mat-checkbox>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="empresa">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="column-max-cancelamento">Empresa</th>
+                    <td mat-cell *matCellDef="let element" [matTooltip]="element.empresa" class="column-max-width">{{
+                        element.empresa }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="clienteId">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="column-max-cancelamento">Código do
+                        cliente</th>
+                    <td mat-cell *matCellDef="let element" class="column-max-cancelamento">{{
+                        element.empresaId }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="uf">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="min-width">UF</th>
+                    <td mat-cell *matCellDef="let element" class="min-width">{{
+                        element.uf }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="mesCompetencia">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="column-max-cancelamento">Mês de
+                        competência</th>
+                    <td mat-cell *matCellDef="let element" class="column-max-cancelamento">{{
+                        element.mesCompetencia | date: "MM/yyyy" }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="valorNotaFiscal">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="column-max-cancelamento">Valor da
+                        nota fiscal</th>
+                    <td mat-cell *matCellDef="let element" class="column-max-cancelamento">{{
+                        element.valorNotaFiscal | currency : 'BRL' }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="valorNotaDebito">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="column-max-cancelamento">Valor da
+                        nota de débito</th>
+                    <td mat-cell *matCellDef="let element" class="column-max-cancelamento">{{
+                        element.valorNotaDebito | currency : 'BRL' }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="descontoNF">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="column-max-cancelamento">Desconto NF
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="column-max-cancelamento">{{
+                        element.valorDescontoNf | currency : 'BRL' }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="descontoND">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="column-max-cancelamento">Desconto ND
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="column-max-cancelamento">{{
+                        element.valorDescontoNd | currency : 'BRL' }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="solicitadoPor">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="column-max-cancelamento">Solicitado por
+                    </th>
+                    <td mat-cell *matCellDef="let element" [matTooltip]="element.solicitadoPor"
+                        class="column-max-width">{{
+                        element.solicitadoPor }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="documento">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="column-max-cancelamento">Documento
+                        cancelado</th>
+                    <td mat-cell *matCellDef="let element" [matTooltip]="element.documento"
+                        class="column-max-cancelamento">
+                        {{ element.documentoCancelado }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="aprovadoPor">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="column-max-cancelamento pr-1">Aprovado
+                        por
+                    </th>
+                    <td mat-cell *matCellDef="let element" [matTooltip]="element.aprovadoPor"
+                        class="column-max-width pr-1">{{
+                        element.aprovadoPor }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="status" stickyEnd>
+                    <th mat-header-cell *matHeaderCellDef class="sticky-column">
+                        Status
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="sticky-column">
+                        {{ element.status }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="acoes" stickyEnd>
+                    <th mat-header-cell *matHeaderCellDef class="min-padding">&nbsp;</th>
+                    <td mat-cell *matCellDef="let element" class="min-width">
+                        <div *ngIf="element.status == 'Aguardando aprovação'">
+                            <button mat-button [matMenuTriggerFor]="menu">
+                                <mat-icon>more_vert</mat-icon>
+                            </button>
+                            <mat-menu #menu="matMenu">
+                                <button mat-menu-item [id]="utility.getElementId(2, 'aprovar-cancelamento', element.id)"
+                                    (click)="onAprovar([element.id])">
+                                    Aprovar
+                                </button>
+                                <button mat-menu-item (click)="recusar(element.id)"
+                                    [id]="utility.getElementId(2, 'recusar-cancelamento', element.id)">
+                                    Recusar
+                                </button>
+                            </mat-menu>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="semRegistro">
+                    <th class="text-center feedBack pt-1" mat-cell *matFooterCellDef colspan="14">
+                        <img src="./../../../../../../../../../../assets/img/custom-icons/icon-vazio-artigos.svg"
+                            alt="Não há registros." />
+                        <p class="desk bold text-gray-700"> Não há registros. </p>
+                    </th>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                <tr mat-row *matFooterRowDef="['semRegistro']" [ngClass]="{'d-none': totalItens > 0 }"></tr>
+            </table>
+        </section>
+
+        <section class="text-paginator">
+            <div class="row d-flex">
+                <section class="default-text">
+                    Mostrando
+                    {{
+                    paginator?.pageSize > totalItens
+                    ? totalItens
+                    : paginator?.pageSize
+                    }}
+                    de {{ totalItens }} resultados
+                </section>
+            </div>
+        </section>
+        <mat-paginator (page)="syncPrimaryPaginator($event)" [pageSize]="paginator.pageSize"
+            [pageIndex]="paginator.pageIndex" [length]="paginator.length"
+            [pageSizeOptions]="paginator?.pageSizeOptions">
+        </mat-paginator>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+<mat-card class="espelho-contrato">
+  <div class="panel-title"> Dados do contrato </div>
+
+  <div fxLayout="row wrap" fxLayoutGap="10px grid" class="mt-2">
+    <div fxFlex="50" class="item">
+      <div class="item-title">Nº do contrato</div>
+      <div class="item-description">{{ contrato?.contrato?.numeroContrato ?? '-' }}</div>
+    </div>
+    <div fxFlex="50" class="item">
+      <div class="item-title">UF do licenciamento</div>
+      <div class="item-description">{{ contrato?.contrato?.ufLicenciamento ?? '-' }}</div>
+    </div>
+    <div fxFlex="50" class="item">
+      <div class="item-title">Data do aditivo</div>
+      <div class="item-description">{{ contrato?.contrato?.dataAditivo ?? '-' }}</div>
+    </div>
+    <div fxFlex="50" class="item">
+      <div class="item-title">Nº do aditivo</div>
+      <div class="item-description">{{ contrato?.contrato?.numeroAditivo ?? '-' }} </div>
+    </div>
+    <div fxFlex="50" class="item">
+      <div class="item-title">Tipo de aditivo</div>
+      <div class="item-description">{{ tipoAditivo ?? '-' }}</div>
+    </div>
+    <div fxFlex="50" class="item">
+      &nbsp;
+    </div>
+    <div fxFlex="50" class="item">
+      <div class="item-title">Tipo de restrição</div>
+      <div class="item-description">{{ tipoRestricao ?? '-' }}</div>
+    </div>
+    <div fxFlex="50" class="item">
+      <div class="item-title">Data do contrato</div>
+      <div class="item-description">{{ contrato?.contrato.dataContrato ?? '-' }}</div>
+    </div>
+    <div fxFlex="50" *ngIf="contrato?.contrato.ufLicenciamento === 'RJ'">
+      <div class="item-title">DUDA</div>
+      <div class="item-description">{{ contrato?.contrato?.taxaDetran?.numero ?? '-' }}</div>
+    </div>
+    <div fxFlex="50" class="item" *ngIf="contrato?.contrato.ufLicenciamento !== 'RJ'">
+      &nbsp;
+    </div>
+    <div fxFlex="50" class="item">
+      <div class="item-title">Data do Registro</div>
+      <div class="item-description">{{ contrato?.dataTransacao ?? '-' }}</div>
+    </div>
+  </div>
+</mat-card>

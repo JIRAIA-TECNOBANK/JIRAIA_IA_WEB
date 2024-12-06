@@ -1,0 +1,13 @@
+<h2 class="page-title d-flex">
+  <div
+    class="wrapper"
+    *ngIf="showIcon()"
+    (click)="voltarPagina()"
+    title="Voltar"
+  >
+    <i class="fa-solid fa-arrow-left"></i>
+  </div>
+
+  {{ titulo }}
+</h2>
+<xng-breadcrumb separator=">"></xng-breadcrumb>

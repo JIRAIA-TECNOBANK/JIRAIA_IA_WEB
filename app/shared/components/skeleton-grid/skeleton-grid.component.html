@@ -1,0 +1,63 @@
+<div fxLayout="column" fxLayoutGap="24px">
+    <div id="top-pagination" class="d-flex mt-2" fxLayout="row" fxLayoutAlign="space-between none">
+        <div *skeleton="
+              loading;
+              className: 'mx-2';
+              height: '19px';
+              width: '213px';"></div>
+
+        <div *skeleton="
+              loading;
+              className: 'mx-2';
+              height: '19px';
+              width: '284px';"></div>
+    </div>
+
+    <div id="header" class="d-flex" fxLayout="row">
+        <div *skeleton="
+              loading;
+              className: 'mx-0';
+              height: '56px';
+              width: '100%';"></div>
+    </div>
+
+    <section id="content" class="mx-2">
+        <div class="d-flex mb-2" fxLayout="row" fxLayoutGap="24px">
+            <section fxFlex *ngFor="let coluna of colunas">
+                <div *skeleton="
+                loading;
+                height: '32px';"></div>
+            </section>
+        </div>
+        <div class="d-flex mb-2" fxLayout="row" fxLayoutGap="24px">
+            <section fxFlex *ngFor="let coluna of colunas">
+                <div *skeleton="
+                loading;
+                height: '32px';
+                width: '100%';"></div>
+            </section>
+        </div>
+        <div class="d-flex" fxLayout="row" fxLayoutGap="24px">
+            <section fxFlex *ngFor="let coluna of colunas">
+                <div *skeleton="
+                loading;
+                height: '32px';
+                width: '100%';"></div>
+            </section>
+        </div>
+    </section>
+
+    <div id="pagination-bottom" class="d-flex" fxLayout="row" fxLayoutAlign="space-between none">
+        <div *skeleton="
+              loading;
+              className: 'm-2';
+              height: '19px';
+              width: '213px';"></div>
+
+        <div *skeleton="
+              loading;
+              className: 'm-2';
+              height: '19px';
+              width: '284px';"></div>
+    </div>
+</div>

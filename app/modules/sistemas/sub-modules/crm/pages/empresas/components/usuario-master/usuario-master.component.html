@@ -1,0 +1,75 @@
+<div fxLayout="column">
+  <form [formGroup]="userMasterForm" novalidate>
+    <!-- Head Title - Adicionar endereços -->
+    <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="start">
+      <h6>Dados do usuário master</h6>
+    </div>
+    <!-- Body - Adicionar endereços VAZIO -->
+    <div *ngIf="hasUser(); else userMasterBlock" fxLayout="column wrap" fxLayoutGap="20px"
+      fxLayoutAlign="space-around center" class="mt-3">
+      <img src="./../../../../../../../../../assets/img/e-contrato/no-contact.svg" alt="" class="mt-3" />
+      <h6>Esta empresa ainda não está vinculada a nenhum usuário master</h6>
+    </div>
+    <!-- next step button -->
+    <div *ngIf="hasUser()" fxLayout="row" fxLayoutAlign="end" fxLayoutGap="15px" class="mt-3">
+      <button mat-raised-button type="button" class="btn btn-primary bold mt-3" id="avancar_etapa_usuario_master"
+        (click)="goToCompanies()">
+        Finalizar
+      </button>
+    </div>
+
+    <ng-template #userMasterBlock>
+      <!-- First Row -->
+      <div fxLayout="row wrap" fxLayoutGap="10px" class="mt-3">
+        <mat-form-field appearance="outline" fxFlex="33">
+          <mat-label>Nome</mat-label>
+          <input matInput placeholder="Nome" formControlName="nome" id="nome_usuario_master" required />
+          <mat-hint>Obrigatório</mat-hint>
+          <mat-error *ngIf="userMasterForm.controls['nome'].hasError('required')">Campo obrigatório
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" fxFlex="38">
+          <mat-label>Sobrenome</mat-label>
+          <input matInput placeholder="Sobrenome" formControlName="sobrenome" id="sobrenome_usuario_master" required />
+          <mat-hint>Obrigatório</mat-hint>
+          <mat-error *ngIf="userMasterForm.controls['sobrenome'].hasError('required')">Campo obrigatório
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" fxFlex="auto">
+          <mat-label>CPF </mat-label>
+          <input matInput placeholder="000.000.000-00" formControlName="cpf" id="cpf_usuario_master" />
+          <mat-hint>Obrigatório</mat-hint>
+          <mat-error *ngIf="userMasterForm.controls['cpf'].hasError('required')">Campo obrigatório</mat-error>
+        </mat-form-field>
+      </div>
+      <!-- Second Row -->
+      <div fxLayout="row wrap" fxLayoutGap="10px">
+        <mat-form-field appearance="outline" fxFlex="auto">
+          <mat-label>E-mail</mat-label>
+          <input matInput placeholder="E-mail" type="text" formControlName="email" id="email_usuario_master" required />
+          <mat-hint>Obrigatório</mat-hint>
+          <mat-error *ngIf="userMasterForm.controls['email'].hasError('required')">Campo obrigatório</mat-error>
+          <mat-error *ngIf="userMasterForm.get('email').hasError('pattern')">
+            E-mail inválido
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="27">
+          <mat-label>Telefone corporativo</mat-label>
+          <input matInput placeholder="DDD + telefone" formControlName="telefone"
+            mask="(00) 0000-0000 || (00) 00000-0000" required id="telefone_usuario_master" />
+          <mat-hint>Obrigatório</mat-hint>
+          <mat-error *ngIf="userMasterForm.controls['telefone'].hasError('required')">Campo obrigatório
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <!-- Fourth Row -->
+      <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="15px" class="mt-3">
+        <button mat-raised-button type="button" class="btn btn-primary bold" id="cadastrar_empresa"
+          (click)="goToCompanies()">
+          Finalizar
+        </button>
+      </div>
+    </ng-template>
+  </form>
+</div>

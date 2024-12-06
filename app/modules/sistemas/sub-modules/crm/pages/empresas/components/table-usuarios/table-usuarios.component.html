@@ -1,0 +1,118 @@
+<section class="text-paginator">
+  <div class="row d-flex">
+    <section class="default-text" *ngIf="paginatorUsuarios">
+      Mostrando {{ paginatorUsuarios?.pageSize > totalItemsUsuarios ? totalItemsUsuarios :
+      paginatorUsuarios?.pageSize }} de {{
+      totalItemsUsuarios }} resultados
+    </section>
+  </div>
+</section>
+<mat-paginator [pageSizeOptions]="[25, 50, 75, 100]" [length]="totalItemsUsuarios" #paginatorUsuarios>
+</mat-paginator>
+<div>
+  <table mat-table [dataSource]="items$ | async" #tableUsuarios="matSort" (matSortChange)="sortData($event)" matSort>
+    <!-- Nome Column -->
+    <ng-container matColumnDef="nomeCompleto">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Nome</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.nomeCompleto }}
+        <i *ngIf="element.ehMaster" class="fa-regular fa-crown"></i>
+      </td>
+    </ng-container>
+
+    <!-- E-mail Column -->
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>E-mail</th>
+      <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+    </ng-container>
+
+    <!-- Cadastro Column -->
+    <ng-container matColumnDef="criadoEm">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        Data cadastro
+      </th>
+      <td mat-cell *matCellDef="let element">{{ formatDate(element.criadoEm) }}</td>
+    </ng-container>
+
+    <!-- Atualização Column -->
+    <ng-container matColumnDef="modificadoEm">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        Data atualização
+      </th>
+      <td mat-cell *matCellDef="let element">{{ formatDate(element.modificadoEm) }}</td>
+    </ng-container>
+
+    <!-- Atualização Column -->
+    <ng-container matColumnDef="perfil.nome">
+      <th mat-header-cell *matHeaderCellDef>Perfil</th>
+      <td mat-cell *matCellDef="let element">{{ element.ehMaster ? 'MASTER' : element.perfil.nome }}</td>
+    </ng-container>
+
+    <!-- Status Column -->
+    <ng-container matColumnDef="ativo">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+      <td mat-cell *matCellDef="let element">
+        <div class="status-pill" [ngClass]="
+        element.ativo ? 'status-pill__active' : 'status-pill__inactive'
+        ">
+          {{ element.ativo ? "Ativo" : "Inativo" }}
+        </div>
+      </td>
+    </ng-container>
+
+    <!-- Options Column-->
+    <ng-container matColumnDef="acoes">
+      <th mat-header-cell *matHeaderCellDef class="actions-column"></th>
+      <td mat-cell *matCellDef="let element">
+        <div>
+          <button mat-button [matMenuTriggerFor]="menu"
+            [id]="utility.getElementId(2, 'usuario-acoes', element.usuarioGuid)">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button *ngIf="!element.ehMaster" mat-menu-item (click)="onClickEditar(element.usuarioGuid)"
+              [id]="utility.getElementId(2, 'usuario-editar')">
+              Editar/consultar
+            </button>
+            <button *ngIf="!element.ehMaster" mat-menu-item
+              (click)="inativarOuAtivarUsuario(element.usuarioGuid, element.ativo)"
+              [disabled]="!utility.getPermission([Permissoes.GESTAO_EMPRESA_USUARIO_CRM_CADASTRAR])"
+              [id]="utility.getElementId(2, 'usuario-ativar-inativar')">
+              {{ element.ativo ? "Inativar" : "Ativar" }}
+            </button>
+            <button *ngIf="element.ehMaster" mat-menu-item (click)="enviarEmail(element.email, element.usuarioGuid)"
+              [disabled]="!utility.getPermission([Permissoes.GESTAO_EMPRESA_USUARIO_CRM_CADASTRAR])"
+              [id]="utility.getElementId(2, 'usuario-enviar-email')">
+              Enviar e-mail
+            </button>
+          </mat-menu>
+        </div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="semRegistro">
+      <th class="text-center feedBack pt-1" mat-cell *matFooterCellDef colspan="11">
+        <img src="./../../../../../../../../../assets/img/custom-icons/icon-vazio-artigos.svg" />
+        <p class="desk bold text-gray-700"> Não há registros. </p>
+      </th>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumnsUsuarios"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumnsUsuarios"></tr>
+    <tr mat-row *matFooterRowDef="['semRegistro']" [ngClass]="{'d-none': totalItemsUsuarios > 0 }"></tr>
+  </table>
+
+  <section class="text-paginator">
+    <div class="row d-flex">
+      <section class="default-text">
+        Mostrando {{ paginatorUsuarios?.pageSize > totalItemsUsuarios ? totalItemsUsuarios :
+        paginatorUsuarios?.pageSize }} de {{
+        totalItemsUsuarios }} resultados
+      </section>
+    </div>
+  </section>
+  <mat-paginator (page)="syncPrimaryPaginator($event)" [pageSize]="paginatorUsuarios.pageSize"
+    [pageIndex]="paginatorUsuarios.pageIndex" [length]="paginatorUsuarios.length"
+    [pageSizeOptions]="paginatorUsuarios?.pageSizeOptions">
+  </mat-paginator>
+</div>

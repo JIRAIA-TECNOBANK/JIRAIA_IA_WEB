@@ -1,0 +1,54 @@
+<mat-card>
+    <div class="chat-container">
+        <div class="messages-container" #messagesContainer>
+            <div *ngFor="let message of messages">
+                <div class="user-message" *ngIf="message.sender === 'user'">
+                    <p>{{ message.text }}</p>
+                    <button mat-button *ngIf="message.file != null">
+                        <mat-icon aria-hidden="false" aria-label="Example home icon"
+                            fontIcon="insert_drive_file"></mat-icon>
+                        {{message.files[0].nome}}
+                    </button>
+                </div>
+                <div class="ai-message" *ngIf="message.sender !== 'user'">
+                    <p>{{ message.text }}</p>
+                    <div *ngFor="let file of message.files">
+                        <button mat-button (click)="downloadFile(file.nome, file.base64)">
+                            <mat-icon aria-hidden="false" aria-label="Example home icon"
+                                fontIcon="insert_drive_file"></mat-icon>
+                            {{file.nome}}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <h3 *ngIf="messages.length <= 0">Como posso ajudar?</h3>
+
+        <div class="input-container">
+            <mat-form-field appearance="outline" class="input-field">
+                <mat-label>Envie sua mensagem</mat-label>
+                <input matInput [(ngModel)]="userInput" (keyup.enter)="enviarMensagem()" />
+            </mat-form-field>
+
+            <button mat-icon-button color="primary" (click)="enviarMensagem()">
+                <mat-icon>send</mat-icon>
+            </button>
+        </div>
+
+        <section fxLayout="row" fxLayoutGap="15px" fxLayoutAlign="left center">
+            <button mat-raised-button type="button" class="bold" color="primary" (click)="enviarDocumentoParaResumo()">
+                <i class="fa-sharp fa-solid fa-list"></i>
+                Resumir documento
+            </button>
+
+            <button mat-raised-button type="button" class="bold" color="primary"
+                (click)="procurarDocumentoPorPalavraChave()">
+                <i class="fa-sharp fa-solid fa-magnifying-glass"></i>
+                Encontrar documento por palavra chave
+            </button>
+        </section>
+    </div>
+</mat-card>

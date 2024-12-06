@@ -1,0 +1,6 @@
+@import '$tools';
+
+h2 {
+  @include fontMontserratBold;
+  font-size: 16px;
+}

@@ -1,0 +1,67 @@
+@import '$settings';
+@import '$tools';
+
+.shortcut {
+  height: 132px;
+
+  .shortcut-option {
+    width: 30%;
+
+    mat-card {
+      cursor: pointer;
+    }
+
+    &.side {
+      width: 100%;
+    }
+  }
+
+}
+
+.resumo-conexao {
+  min-height: 476px;
+
+  .mapa-conexao {
+    overflow: inherit;
+  }
+}
+
+.filtro-dashboard {
+  background-color: #EBF5FF;
+  overflow: hidden;
+}
+
+.graficos-complementares {
+  height: 476px;
+}
+
+.grafico-rosquinha {
+  overflow: hidden;
+}
+
+.registros-estado {
+  overflow: inherit;
+}
+
+.expansiveis {
+
+  .registros-inconsistencia,
+  .registros-sucesso {
+    transition: all .5s linear;
+    height: 98px;
+
+    &.expandido {
+      height: 525px;
+    }
+  }
+
+  .top-10 {
+    transition: all .5s linear;
+    height: 55px;
+    overflow: hidden;
+
+    &.expandido {
+      height: 655px;
+    }
+  }
+}

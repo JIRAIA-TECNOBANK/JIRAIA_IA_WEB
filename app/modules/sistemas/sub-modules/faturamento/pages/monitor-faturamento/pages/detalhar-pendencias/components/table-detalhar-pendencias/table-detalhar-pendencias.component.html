@@ -1,0 +1,154 @@
+<div>
+    <section class="text-paginator">
+        <div class="row d-flex">
+            <section class="select-options mr-4 d-flex" *ngIf="selection.selected.length > 0">
+                {{ selection.selected.length }} operaç{{ selection.selected.length > 1 ? 'ões' : 'ão' }} selecionada{{
+                selection.selected.length > 1 ? 's' : '' }}
+                <div class="btn-wrapper" matTooltip="Reenviar" (click)="onReenviar()"
+                    [id]="utility.getElementId(2, 'reenviar-contrato')" *ngIf="habilitarReenvio()">
+                    <i class="fa-solid fa-arrows-turn-right"></i>
+                </div>
+
+                <div class="btn-wrapper" matTooltip="Tratar duplicidade" (click)="onExcluirCobranca()"
+                    [id]="utility.getElementId(2, 'excluir-cobranca')" *ngIf="habilitarExcluirCobranca()">
+                    <i class="fa-regular fa-file-magnifying-glass"></i>
+                </div>
+
+                <div class="btn-wrapper" matTooltip="Reprocessar" (click)="onReprocessar()"
+                    [id]="utility.getElementId(2, 'reprocessar-contrato')" *ngIf="habilitarReprocessamento()">
+                    <i class="fa-solid fa-rotate-right"></i>
+                </div>
+            </section>
+
+            <section class="default-text" *ngIf="paginator">
+                Mostrando
+                {{
+                paginator?.pageSize > totalItens
+                ? totalItens
+                : paginator?.pageSize
+                }}
+                de {{ totalItens }} resultados
+            </section>
+        </div>
+    </section>
+    <mat-paginator [pageSizeOptions]="[25, 50, 75, 100]" [length]="totalItens" #paginator></mat-paginator>
+
+    <div>
+        <table mat-table [dataSource]="items$ | async" (matSortChange)="sortData($event)" #table="matSort"
+            aria-describedby="Conciliação" matSort>
+            <ng-container matColumnDef="selecionar">
+                <th mat-header-cell *matHeaderCellDef class="pr-1">
+                    <mat-checkbox [id]="utility.getElementId(4, 'select-all-op-concilioacao')"
+                        (change)="$event ? utility.toggleAllRows(selection, dataSource, 'id') : null"
+                        [checked]="utility.verifyPageSelection(selection, dataSource, 'id') == 1"
+                        [indeterminate]="utility.verifyPageSelection(selection, dataSource, 'id') == 2"
+                        [disabled]="desabilitarCheckboxSelecionarTodos()">
+                    </mat-checkbox>
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    <mat-checkbox [id]="utility.getElementId(4, element.id)" (click)="$event.stopPropagation()"
+                        (change)="$event ? utility.check(selection, element, 'id') : null"
+                        [checked]="utility.isSelected(selection, element, 'id')"
+                        [disabled]="desabilitarCheckbox(element.motivo, element.id)">
+                    </mat-checkbox>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="dataRegistro">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Data/Hora</th>
+                <td mat-cell *matCellDef="let element" class="column-max-width">{{
+                    element.dataRegistro | date: "dd/MM/yyyy HH:mm" }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="uf">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>UF</th>
+                <td mat-cell *matCellDef="let element" class="column-max-width">{{
+                    uf }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="empresaNome">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Empresa</th>
+                <td mat-cell *matCellDef="let element" class="column-max-width">{{
+                    empresa }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="chassi">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Chassi</th>
+                <td mat-cell *matCellDef="let element" class="column-max-width">{{
+                    element.chassi }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="canal">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Canal</th>
+                <td mat-cell *matCellDef="let element" class="column-max-width">{{
+                    element.canal }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="operacao">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Operação</th>
+                <td mat-cell *matCellDef="let element" class="column-max-width">{{
+                    retornarTipoOperacao(element.operacao) }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="numeroContrato">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>N° contrato</th>
+                <td mat-cell *matCellDef="let element" class="column-max-width">{{
+                    element.numeroContrato }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef> Status </th>
+                <td mat-cell *matCellDef="let element" class="column-max-width">{{
+                    retornarStatus(element.motivo) }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="acoes">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let element" class="min-width">
+                    <div>
+                        <button mat-button [matMenuTriggerFor]="menu">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            <button mat-menu-item
+                                [id]="utility.getElementId(2, 'detalhar-pendencia', element.protocoloId)"
+                                (click)="detalhar(element.dataRegistro, element.chassi, element.operacao)">
+                                Detalhar
+                            </button>
+                        </mat-menu>
+                    </div>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="semRegistro">
+                <th class="text-center feedBack pt-1" mat-cell *matFooterCellDef colspan="11">
+                    <img src="./../../../../../../../../../../assets/img/custom-icons/icon-vazio-artigos.svg"
+                        alt="Não há registros." />
+                    <p class="desk bold text-gray-700"> Não há registros. </p>
+                </th>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            <tr mat-row *matFooterRowDef="['semRegistro']" [ngClass]="{'d-none': totalItens > 0 }"></tr>
+        </table>
+
+        <section class="text-paginator">
+            <div class="row d-flex">
+                <section class="default-text">
+                    Mostrando
+                    {{
+                    paginator?.pageSize > totalItens
+                    ? totalItens
+                    : paginator?.pageSize
+                    }}
+                    de {{ totalItens }} resultados
+                </section>
+            </div>
+        </section>
+        <mat-paginator (page)="syncPrimaryPaginator($event)" [pageSize]="paginator.pageSize"
+            [pageIndex]="paginator.pageIndex" [length]="paginator.length"
+            [pageSizeOptions]="paginator?.pageSizeOptions">
+        </mat-paginator>
+    </div>
+</div>

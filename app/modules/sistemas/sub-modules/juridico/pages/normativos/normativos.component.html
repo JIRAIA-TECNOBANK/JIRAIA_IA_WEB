@@ -1,0 +1,50 @@
+<div [hidden]="childstate">
+    <section class="top-options mb-2">
+        <app-atualizar-pagina (atualizar)="atualizarPagina()"></app-atualizar-pagina>
+
+        <button mat-button color="secondary" [id]="utility.getElementId(2, 'incluir-normativo')"
+            [routerLink]="['/normativos/incluir-normativo']">
+            Incluir Normativo
+        </button>
+    </section>
+
+    <mat-tab-group (selectedTabChange)="onTabChange($event)" [selectedIndex]="activeIndex">
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <div class="tab-label">
+                    <i class="fa-regular fa-file-contract"></i>
+                    <span>Normativos</span>
+                </div>
+            </ng-template>
+            
+            <div class="px-2">
+                <app-filtro-normativos (filtro)="filtroNormativos = $event"></app-filtro-normativos>
+            </div>
+
+            <div class="default-tab px-2 pb-3">
+                <mat-card class="mat-elevation-z8 mt-2 p-0">
+                    <app-table-normativos [refreshGrid]="refreshGrid" [filtro]="filtroNormativos"></app-table-normativos>
+                </mat-card>
+            </div>
+        </mat-tab>
+
+        <!-- <mat-tab>
+            <ng-template mat-tab-label>
+                <div class="tab-label">
+                    <i class="fa-regular fa-box"></i>
+                    <span>Lotes</span>
+                </div>
+            </ng-template>
+
+            <div class="px-2">
+            </div>
+
+            <div class="default-tab px-2 pb-3">
+                <mat-card class="mat-elevation-z8 mt-2 p-0">
+                </mat-card>
+            </div>
+        </mat-tab> -->
+    </mat-tab-group>
+</div>
+
+<router-outlet></router-outlet>

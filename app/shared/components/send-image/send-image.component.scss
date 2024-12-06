@@ -1,0 +1,157 @@
+@import '$settings';
+@import '$tools';
+
+section {
+    padding: 1rem 0;
+}
+
+h3 {
+    font-size: 16px;
+    font-weight: 100;
+}
+
+p {
+    &.desk {
+        font-size: 14px;
+        color: $primary;
+    }
+
+    &.bold {
+        @include fontMontserratBold;
+        color: $gray-900;
+    }
+}
+
+.dropzone {
+    @include border-radius(5px);
+    padding: 2rem;
+    text-align: center;
+    position: relative;
+    margin: 0 auto;
+    background: $gray-200;
+    border: 2px dashed $primary;
+
+    &.disabled {
+      border-color: $gray-300;
+      background: $gray-200;
+      color: $gray-400;
+
+      i {
+        color: $gray-400;
+        --fa-secondary-color: $gray-300;
+      }
+
+      p {
+        color: $gray-400;
+      }
+    }
+}
+
+.single-file {
+    @include border-radius(0.25rem);
+    display: flex;
+    padding: 0.5rem;
+    justify-content: space-between;
+    align-items: center;
+    border: solid 2px $gray-300;
+    margin-top: 0.5rem;
+}
+
+.name {
+    @include fontMontserratBold;
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 350px;
+}
+
+.size {
+    @include fontMontserratBold;
+    @include border-radius(0.25rem);
+    font-size: 12px;
+    font-weight: 500;
+    color: #a4a4a4;
+    margin: 0;
+}
+
+.info {
+    width: 100%
+}
+
+.dropzone span {
+    font-size: 12px;
+}
+
+.dropzone .file-error i {
+    color: $warning-900;
+    vertical-align: sub;
+}
+
+.file-error {
+    @include fontMontserratBold;
+    color: $warning-900;
+    font-size: 12px;
+}
+
+.dropzone>i {
+    font-size: 3rem;
+    margin-left: -23px;
+    color: $primary;
+    --fa-secondary-color: #CEE8FF; 
+}
+
+.files-list .mat-icon {
+    color: $primary;
+    margin-right: 0.3rem;
+}
+
+.file-download {
+    @include border-radius(1rem);
+    background: $primary;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: -16px 0 0 0 !important;
+}
+
+.file-download i {
+    color: $white  !important;
+    font-size: 12px;
+    display: inline-flex !important;
+    justify-content: center !important;
+    margin: 0 !important;
+    width: 20px;
+}
+
+.file-loading {
+    @include border-radius(1rem);
+    background: $gray-300;
+    padding-top: 6px;
+    -webkit-animation: fa-spin 2s infinite linear;
+    animation: fa-spin 2s infinite linear;
+}
+
+.file-loading mat-icon {
+    color: $gray-800  !important;
+    font-size: 0.90rem;
+    display: inline-flex !important;
+    justify-content: center !important;
+    margin: 0 !important;
+    height: 20px;
+    width: 26px;
+}
+
+.file-name {
+    display: inline-flex;
+    width: 100%;
+}
+
+.icon {
+    margin-right: 1rem;
+}

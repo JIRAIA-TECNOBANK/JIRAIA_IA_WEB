@@ -1,0 +1,96 @@
+<div class="d-flex justify-content-between align-items-center mt-1">
+  <div class="fw-bold text-gray-800">Dados do credor</div>
+</div>
+
+<form [formGroup]="formulario" novalidate>
+  <div fxLayout="row" fxLayoutGap="10px" class="mt-2">
+    <mat-form-field fxFlex="50" appearance="outline">
+      <mat-label>Agente financeiro</mat-label>
+      <input [id]="utility.getElementId(0, 'agente-financeiro')" type="text" matInput name="agenteFinanceiro"
+        formControlName="agenteFinanceiro">
+      <mat-hint>Obrigatório</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field fxFlex="30" appearance="outline">
+      <mat-label>CNPJ</mat-label>
+      <input type="text" matInput name="cnpj" formControlName="cnpj" mask="00.000.000/0000-00"
+        [id]="utility.getElementId(0, 'credor-cnpj')">
+      <mat-hint>Obrigatório</mat-hint>
+    </mat-form-field>
+
+    <input type="hidden" name="agenteFinanceiroId" formControlName="agenteFinanceiroId">
+    <mat-form-field fxFlex="20" appearance="outline">
+      <mat-label>CEP</mat-label>
+      <input type="text" matInput name="cep" formControlName="cep" mask="00000-000" [validation]="false"
+        placeholder="Digite o CEP" maxlength="9" [id]="utility.getElementId(0, 'credor-cep')">
+      <mat-hint>Obrigatório</mat-hint>
+    </mat-form-field>
+  </div>
+
+  <div fxLayout="row" fxLayoutGap="10px">
+
+    <mat-form-field fxFlex="50" appearance="outline">
+      <mat-label>Logradouro</mat-label>
+      <input type="text" matInput #logradouroCredor name="logradouro" formControlName="logradouro"
+        placeholder="Digite o logradouro" [id]="utility.getElementId(0, 'credor-logradouro')">
+      <mat-hint>Obrigatório</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field fxFlex="20" appearance="outline">
+      <mat-label>Número</mat-label>
+      <input type="text" matInput alphanumerics-only name="numero" formControlName="numero"
+        placeholder="Digite o número" maxlength="5" [id]="utility.getElementId(0, 'credor-numero')">
+      <mat-hint>Obrigatório</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field fxFlex="30" appearance="outline">
+      <mat-label>Complemento</mat-label>
+      <input type="text" matInput name="complemento" formControlName="complemento" placeholder="Digite o complemento"
+        maxlength="20" [id]="utility.getElementId(0, 'credor-complemento')">
+      <mat-hint>Obrigatório</mat-hint>
+    </mat-form-field>
+  </div>
+
+  <div fxLayout="row" fxLayoutGap="10px">
+
+    <mat-form-field fxFlex="50" appearance="outline">
+      <mat-label>Bairro</mat-label>
+      <input type="text" matInput name="bairro" formControlName="bairro" placeholder="Digite o bairro" maxlength="20"
+        [alphanumerics-only]="['acento', 'espaco']" [id]="utility.getElementId(0, 'credor-bairro')">
+      <mat-hint>Obrigatório</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field fxFlex="20" appearance="outline">
+      <mat-label>UF</mat-label>
+      <mat-select [id]="utility.getElementId(5, 'credor-uf')" name="uf" formControlName="uf">
+        <mat-option>Selecione</mat-option>
+        <mat-option *ngFor="let uf of ufsLicenciamento" [value]="uf">{{ uf }}</mat-option>
+      </mat-select>
+      <mat-hint>Obrigatório</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field fxFlex="30" appearance="outline">
+      <mat-label>Município</mat-label>
+      <input type="text" matInput name="municipio" formControlName="municipio"
+        placeholder="Digite o município" maxlength="30" [id]="utility.getElementId(0, 'credor-municipio')">
+      <mat-hint>Obrigatório</mat-hint>
+    </mat-form-field>
+  </div>
+
+  <div fxLayout="row" fxLayoutGap="10px">
+    <mat-form-field fxFlex="30" appearance="outline">
+      <mat-label>Telefone</mat-label>
+      <input type="text" matInput name="telefone" formControlName="telefone" mask="(00) 0000-0000 || (00) 0 0000-0000"
+        [showMaskTyped]="false" [validation]="false" placeholder="Digite o telefone"
+        [id]="utility.getElementId(0, 'credor-telefone')">
+      <mat-hint>Obrigatório</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field fxFlex="70" appearance="outline">
+      <mat-label>E-mail</mat-label>
+      <input type="email" matInput name="email" formControlName="email" placeholder="Digite o e-mail"
+        [maxlength]="contratoResponse.contrato.ufLicenciamento === 'PR' ? 40 : 255" email [id]="utility.getElementId(0, 'credor-email')">
+      <mat-hint>Obrigatório</mat-hint>
+    </mat-form-field>
+  </div>
+</form>

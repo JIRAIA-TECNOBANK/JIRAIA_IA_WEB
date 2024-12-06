@@ -1,0 +1,61 @@
+@import '$settings';
+@import '$tools';
+
+.bold {
+  @include fontMontserratBold;
+}
+
+.info {
+  color: $primary;
+  margin-left: 5px;
+}
+
+.tooltip-relatorio {
+  white-space: pre-line;
+}
+
+.tooltip-label {
+  font-size: 14px;
+}
+
+.relatorio-buttons {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 5px;
+
+  .mat-button-toggle {
+    flex-grow: 1;
+  }
+
+  .mat-button-toggle-appearance-standard {
+    color: $blue-900 !important;
+  }
+
+  .mat-button-toggle-checked {
+    background-color: $blue-700 !important;
+    color: white !important;
+  }
+
+  .mat-button-toggle:hover {
+    background-color: $blue-700 !important;
+    color: white !important;
+  }
+
+  span {
+    padding-left: 10px !important;
+  }
+
+  .selectCompanies {
+    position: relative !important;
+  }
+}
+
+.redefinir {
+  justify-content: flex-end !important; 
+  align-items: center !important;
+}
+
+.b-divider {
+  border-bottom: 1px solid $gray-400;
+}

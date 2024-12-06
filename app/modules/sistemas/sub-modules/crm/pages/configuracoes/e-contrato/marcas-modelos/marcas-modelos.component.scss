@@ -1,0 +1,10 @@
+@import "$settings";
+@import "$tools";
+
+.box__btn {
+  display: flex;
+  justify-content: right;
+  position: relative;
+  gap: 10px;
+  margin-top: -68px;
+}

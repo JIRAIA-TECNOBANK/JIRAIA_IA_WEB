@@ -1,0 +1,265 @@
+<div fxLayout="column">
+  <form [formGroup]="addressForm" (ngSubmit)="onSubmit()" novalidate>
+    <div *ngIf="!isEdition; else editionBlock">
+      <!-- Head Title - Adicionar endereços -->
+      <div fxLayout="row wrap" fxLayoutGap="20px" fxLayoutAlign="space-between">
+        <h6>Endereços adicionais</h6>
+        <button
+          mat-flat-button
+          (click)="addAddress()"
+          *ngIf="utility.getPermission([Permissoes.GESTAO_EMPRESA_CADASTRAR])"
+          id="abrir_formulario_endereco"
+        >
+          <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Add novo endereço
+        </button>
+      </div>
+      <div
+        class="edition-block"
+        fxLayout="column"
+        fxLayoutAlign="space-between"
+      >
+        <!-- Body - Adicionar endereços VAZIO -->
+        <div
+          *ngIf="!hasAddress(); else addressListBlock"
+          fxLayout="column wrap"
+          fxLayoutGap="20px"
+          fxLayoutAlign="space-around center"
+          class="mt-3"
+        >
+          <img
+            src="./../../../../../../../../../assets/img/e-contrato/no-contact.svg"
+            alt=""
+            class="mt-3"
+          />
+          <h6>Nenhum endereço foi adicionado ainda.</h6>
+        </div>
+        <!-- Body - Lista de endereços -->
+        <ng-template #addressListBlock>
+          <div class="addressList">
+            <div
+              fxLayout="column"
+              *ngFor="let address of addresses; let i = index"
+            >
+              <div
+                fxLayout="row"
+                fxLayoutAlign="space-between center"
+                class="address"
+              >
+                <div>
+                  <span
+                    >{{ address.endereco.bairro }} -
+                    {{ address.endereco.municipio }}</span
+                  >
+                </div>
+                <div fxLayout="row" fxLayoutAlign="center">
+                  <span *ngIf="address.enderecoPrincipal"
+                    >Endereço principal</span
+                  >
+                  <button
+                    mat-flat-button
+                    id="editar_endereco_botao_{{ i }}"
+                    (click)="editAddress(address)"
+                  >
+                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                  </button>
+                  <button
+                    *ngIf="
+                      !address.enderecoPrincipal &&
+                      utility.getPermission([
+                        Permissoes.GESTAO_EMPRESA_CADASTRAR
+                      ])
+                    "
+                    mat-flat-button
+                    class="deleteButton"
+                    id="deletar_contato_botao_{{ i }}"
+                    (click)="openDialog(address.id)"
+                  >
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+        <!-- next step button -->
+        <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="15px" class="mt-3">
+          <button
+            mat-raised-button
+            type="button"
+            class="btn btn-primary bold"
+            (click)="goToNextStep(3)"
+            id="avancar_etapa_endereco"
+            *ngIf="utility.getPermission([Permissoes.GESTAO_EMPRESA_CADASTRAR])"
+          >
+            Salvar e continuar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #editionBlock>
+      <div
+        class="edition-block"
+        fxLayout="column"
+        fxLayoutAlign="space-between"
+      >
+        <div>
+          <!-- Head Title - Cancelar endereço -->
+          <div
+            fxLayout="row wrap"
+            fxLayoutGap="20px"
+            fxLayoutAlign="space-between"
+          >
+            <h6 class="headline">Adicionar endereço</h6>
+            <button
+              mat-flat-button
+              class="cancel"
+              (click)="cancelAddress()"
+              id="cancelar_endereco"
+            >
+              Cancelar
+            </button>
+          </div>
+          <!-- First Row -->
+          <div class="mt-3" fxLayout="row wrap" fxLayoutGap="10px">
+            <mat-form-field appearance="outline" fxFlex="30">
+              <mat-label>CEP</mat-label>
+              <input
+                matInput
+                placeholder="00000-000"
+                formControlName="cep"
+                mask="00000-000"
+                required
+                id="cep_endereco"
+              />
+              <mat-icon matSuffix>
+                <mat-spinner
+                  *ngIf="findingAddress"
+                  [diameter]="25"
+                ></mat-spinner>
+              </mat-icon>
+              <mat-hint>Obrigatório</mat-hint>
+              <mat-error
+                *ngIf="addressForm.controls['cep'].hasError('required')"
+                >Campo obrigatório
+              </mat-error>
+              <mat-hint *ngIf="isInvalidCep"
+                >CEP não localizado, por favor digite o endereço
+                completo</mat-hint
+              >
+            </mat-form-field>
+            <mat-form-field appearance="outline" fxFlex="45">
+              <mat-label>Endereço</mat-label>
+              <input
+                matInput
+                placeholder="Endereço"
+                formControlName="logradouro"
+                required
+                id="logradouro_endereco"
+              />
+              <mat-hint>Obrigatório</mat-hint>
+              <mat-error
+                *ngIf="addressForm.controls['logradouro'].hasError('required')"
+                >Campo obrigatório
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" fxFlex="20">
+              <mat-label>Número</mat-label>
+              <input
+                matInput
+                placeholder="Número"
+                formControlName="numero"
+                required
+                id="numero_endereco"
+              />
+              <mat-hint>Obrigatório</mat-hint>
+              <mat-error
+                *ngIf="addressForm.controls['numero'].hasError('required')"
+                >Campo obrigatório</mat-error
+              >
+            </mat-form-field>
+          </div>
+          <!-- Second Row -->
+          <div fxLayout="row wrap" fxLayoutGap="10px">
+            <mat-form-field appearance="outline" fxFlex="45">
+              <mat-label>Complemento</mat-label>
+              <input
+                matInput
+                placeholder="Complemento"
+                formControlName="complemento"
+                id="complemento_endereco"
+              />
+            </mat-form-field>
+            <mat-form-field appearance="outline" fxFlex="30">
+              <mat-label>Bairro</mat-label>
+              <input
+                matInput
+                placeholder="Bairro"
+                formControlName="bairro"
+                required
+                id="bairro_endereco"
+              />
+              <mat-hint>Obrigatório</mat-hint>
+              <mat-error
+                *ngIf="addressForm.controls['bairro'].hasError('required')"
+                >Campo obrigatório
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" fxFlex="20">
+              <mat-label>Estados</mat-label>
+              <mat-select formControlName="uf" required id="estado_endereco">
+                <mat-option>Estados</mat-option>
+                <mat-option
+                  *ngFor="let estado of estados"
+                  [value]="estado.sigla"
+                  >{{ estado.sigla }}
+                </mat-option>
+              </mat-select>
+              <mat-hint>Obrigatório</mat-hint>
+              <mat-error *ngIf="addressForm.controls['uf'].hasError('required')"
+                >Campo obrigatório
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <!-- Third Row -->
+          <div fxLayout="row wrap" fxLayoutGap="11px">
+            <mat-form-field appearance="outline" fxFlex="97">
+              <mat-label>Cidade</mat-label>
+              <input
+                matInput
+                placeholder="Cidade"
+                formControlName="municipio"
+                required
+                id="cidade_endereco"
+              />
+              <mat-hint>Obrigatório</mat-hint>
+              <mat-error
+                *ngIf="addressForm.controls['municipio'].hasError('required')"
+                >Campo obrigatório
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <!-- Fourth Rown -->
+          <div fxLayout="row wrap" fxLayoutGap="10px">
+            <div class="d-flex align-items-center" fxFlex="auto">
+              <mat-checkbox formControlName="principal" id="principal_endereco"
+                >Endereço principal?</mat-checkbox
+              >
+            </div>
+          </div>
+        </div>
+        <!-- Add address button -->
+        <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="15px" class="mt-3">
+          <button
+            mat-raised-button
+            class="btn btn-primary bold"
+            [disabled]="!isAddressFormValid()"
+            id="adicionar_endereco"
+          >
+            {{ hasAddressId() }}
+          </button>
+        </div>
+      </div>
+    </ng-template>
+  </form>
+</div>

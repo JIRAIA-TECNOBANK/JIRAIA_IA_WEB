@@ -1,0 +1,95 @@
+<mat-accordion class="gestao-detran">
+    <mat-expansion-panel class="wrap-taxa mt-2" *ngFor="let taxa of listaTaxaDetran" (opened)="panelOpenState = true"
+        (closed)="panelOpenState = false">
+        <mat-expansion-panel-header class="p-0">
+            <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100 mr-1">
+                <section fxFlex="60" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+                    <span class="bold desk">{{ taxa.dataInicioVigencia | date:"dd/MM/yyyy" }}</span>
+                    <i class="fa-solid fa-arrow-right gray-600"></i>
+                    <span class="bold desk">{{ taxa.dataTerminoVigencia | date:"dd/MM/yyyy" }}</span>
+                </section>
+                <section fxLayoutAlign="center center" fxLayoutGap="10px">
+                    <span class="bold gray-600"><i class="fa-regular fa-clock mr-1"
+                            *ngIf="taxa.status === 'AGENDADO'"></i>{{
+                        taxa.status }}</span>
+                </section>
+                <section fxFlex="20" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px">
+                    <div class="icone edicao" fxLayoutAlign="center center"
+                        *ngIf="utility.getPermission([Permissoes.GESTAO_FINANCEIRO_PRECO_CADASTRAR, Permissoes.GESTAO_FINANCEIRO_APROVACAO_PRECO_TECNOBANK])"
+                        [id]="utility.getElementId(2, 'editar-taxa', taxa.id)" (click)="editarTaxa(taxa)">
+                        <i class="fa-regular fa-pen"></i>
+                    </div>
+                    <div class="icone exclusao" fxLayoutAlign="center center"
+                        *ngIf="taxa.status === 'AGENDADO' && utility.getPermission([Permissoes.GESTAO_FINANCEIRO_PRECO_CADASTRAR, Permissoes.GESTAO_FINANCEIRO_APROVACAO_PRECO_TECNOBANK])"
+                        [id]="utility.getElementId(2, 'excluir-taxa', taxa.id)"
+                        (click)="$event.stopPropagation(); excluirTaxa(taxa.id)">
+                        <i class="fa-regular fa-trash"></i>
+                    </div>
+                </section>
+            </div>
+        </mat-expansion-panel-header>
+        <div class="detalhes-taxa" fxLayout="column" fxLayoutGap="10px">
+            <div fxLayout="row" fxLayoutAlign="space-between" class="operacoes"
+                *ngIf="retornarOperacaoAtivo(taxa, 1) || retornarOperacaoAtivo(taxa, 2)">
+                <section class="operacao" fxLayout="row" fxLayoutAlign="space-between center" fxFlex="50"
+                    *ngIf="retornarOperacaoAtivo(taxa, 1)">
+                    <span class="bold gray-600" fxFlex="60"><i class="fa-solid fa-circle-check"></i> Registro de
+                        contrato </span>
+                    <div class="w-100" fxLayoutAlign="end">
+                        <span class="valor bold" fxFlex="40" fxLayoutAlign="center"> {{
+                            retornarValorOperacao(taxa, 1) | currency : 'BRL' }}
+                        </span>
+                    </div>
+                </section>
+
+                <section class="operacao" fxLayout="row" fxLayoutAlign="space-between center" fxFlex="50"
+                    [ngClass]="{ 'ml-2': retornarOperacaoAtivo(taxa, 1) }" *ngIf="retornarOperacaoAtivo(taxa, 2)">
+                    <span class="bold gray-600" fxFlex="60"><i class="fa-solid fa-circle-check"></i> Alteração de
+                        contrato </span>
+                    <div class="w-100" fxLayoutAlign="end">
+                        <span class="valor bold" fxFlex="40" fxLayoutAlign="center"> {{
+                            retornarValorOperacao(taxa, 2) | currency : 'BRL' }}
+                        </span>
+                    </div>
+                </section>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="space-between" class="operacoes"
+                *ngIf="retornarOperacaoAtivo(taxa, 3) || retornarOperacaoAtivo(taxa, 4)">
+                <section class="operacao" fxLayout="row" fxLayoutAlign="space-between center" fxFlex="50"
+                    *ngIf="retornarOperacaoAtivo(taxa, 3)">
+                    <span class="bold gray-600" fxFlex="60"><i class="fa-solid fa-circle-check"></i> Registro de aditivo
+                    </span>
+                    <div class="w-100" fxLayoutAlign="end">
+                        <span class="valor bold" fxFlex="40" fxLayoutAlign="center"> {{
+                            retornarValorOperacao(taxa, 3) | currency : 'BRL' }}
+                        </span>
+                    </div>
+                </section>
+
+                <section class="operacao ml-2" fxLayout="row" fxLayoutAlign="space-between center" fxFlex="50"
+                    [ngClass]="{ 'ml-2': retornarOperacaoAtivo(taxa, 3)}" *ngIf="retornarOperacaoAtivo(taxa, 4)">
+                    <span class="bold gray-600" fxFlex="60"><i class="fa-solid fa-circle-check"></i> Alteração de
+                        aditivo </span>
+                    <div class="w-100" fxLayoutAlign="end">
+                        <span class="valor bold" fxFlex="40" fxLayoutAlign="center"> {{
+                            retornarValorOperacao(taxa, 4) | currency : 'BRL' }}
+                        </span>
+                    </div>
+                </section>
+            </div>
+
+            <div fxLayout="row" fxLayoutGap="20px" class="mt-1">
+                <section fxLayout="row">
+                    <span class="bold gray-600">Criado por: </span>&nbsp;
+                    <span class="bold desk">{{ taxa.criadoPor }}</span>
+                </section>
+
+                <section fxLayout="row">
+                    <span class="bold gray-600">Data/horário: </span>&nbsp;
+                    <span class="bold desk">{{ taxa.criadoEm | date:"dd/MM/yyyy HH:mm" }}</span>
+                </section>
+            </div>
+        </div>
+    </mat-expansion-panel>
+</mat-accordion>

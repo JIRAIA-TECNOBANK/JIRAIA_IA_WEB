@@ -1,0 +1,93 @@
+<mat-card class="mb-4 mx-2">
+    <div fxLayout="column">
+        <form [formGroup]="registroForm" (ngSubmit)="onSubmit()" novalidate>
+            <div>
+                <!-- Head Title -->
+                <div fxLayout="row wrap" fxLayoutGap="20px">
+                    <h6 class="headline">Dados do registro de contrato</h6>
+                </div>
+                <!-- First Row -->
+                <div fxLayout="row wrap" fxLayoutGap="10px">
+                    <mat-form-field appearance="outline" fxFlex="auto">
+                        <mat-label>Estado</mat-label>
+                        <mat-select formControlName="uf">
+                            <mat-option value="AC">Acre</mat-option>
+                            <mat-option value="AL">Alagoas</mat-option>
+                            <mat-option value="AP">Amapá</mat-option>
+                            <mat-option value="AM">Amazonas</mat-option>
+                            <mat-option value="BA">Bahia</mat-option>
+                            <mat-option value="CE">Ceará</mat-option>
+                            <mat-option value="DF">Distrito Federal</mat-option>
+                            <mat-option value="ES">Espírito Santo</mat-option>
+                            <mat-option value="GO">Goiás</mat-option>
+                            <mat-option value="MA">Maranhão</mat-option>
+                            <mat-option value="MT">Mato Grosso</mat-option>
+                            <mat-option value="MS">Mato Grosso do Sul</mat-option>
+                            <mat-option value="MG">Minas Gerais</mat-option>
+                            <mat-option value="PA">Pará</mat-option>
+                            <mat-option value="PB">Paraíba</mat-option>
+                            <mat-option value="PR">Paraná</mat-option>
+                            <mat-option value="PE">Pernambuco</mat-option>
+                            <mat-option value="PI">Piauí</mat-option>
+                            <mat-option value="RJ">Rio de Janeiro</mat-option>
+                            <mat-option value="RN">Rio Grande do Norte</mat-option>
+                            <mat-option value="RS">Rio Grande do Sul</mat-option>
+                            <mat-option value="RO">Rondônia</mat-option>
+                            <mat-option value="RR">Roraima</mat-option>
+                            <mat-option value="SC">Santa Catarina</mat-option>
+                            <mat-option value="SP">São Paulo</mat-option>
+                            <mat-option value="SE">Sergipe</mat-option>
+                            <mat-option value="TO">Tocantins</mat-option>
+                        </mat-select>
+                        <mat-hint>Obrigatório</mat-hint>
+                        <mat-error *ngIf="registroForm.controls['uf'].hasError('required')">Obrigatório
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" fxFlex="auto">
+                        <mat-label>Tipo de registro</mat-label>
+                        <input
+                            matInput
+                            placeholder="Tipo de registro"
+                            formControlName="tipoRegistro"
+                        />
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" fxFlex="auto">
+                        <mat-label>Taxa Detran</mat-label>
+                        <input
+                          matInput
+                          placeholder="Taxa Detran"
+                          formControlName="valorPublico"
+                        />
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" fxFlex="auto">
+                        <mat-label>Valor registradora</mat-label>
+                        <input
+                          matInput
+                          placeholder="Valor registradora"
+                          formControlName="valorPrivado"
+                        />
+                    </mat-form-field>
+                </div>
+                <!-- Second Row -->
+                <div fxLayout="row wrap" fxLayoutGap="10px">
+                    <mat-form-field appearance="outline" fxFlex="auto">
+                        <mat-label>Valor total</mat-label>
+                        <input
+                          matInput
+                          placeholder="Valor Total"
+                          formControlName="valorTotal"
+                        />
+                    </mat-form-field>
+                    <mat-form-field class="input-width-8" fxFlex="auto" appearance="outline">
+                        <mat-label>Observação</mat-label>
+                        <textarea [id]="utility.getElementId(0, 'observacao')" matInput rows="1" name="observacao" formControlName="observacao" maxlength="1000"></textarea>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div align="end" fxLayoutGap="10px">
+                <button mat-flat-button color="secondary" type="submit" [disabled]="registroForm.invalid">Salvar</button>
+            </div>
+        </form>
+    </div>    
+</mat-card>

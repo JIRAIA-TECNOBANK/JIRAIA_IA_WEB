@@ -1,0 +1,43 @@
+<div *ngIf="notificacaoConexaoDetran$ | async as notificacaoConexaoDetran"></div>
+<section class="px-2 pb-3 d-flex">
+  <mat-card class="mb-4 mat-elevation-z8 card__map" style="position: relative">
+    
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="fw-bold">Conexão atual</div>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="space-between">
+      <div class="wrap-connection" fxLayout="row" fxLayoutAlign="space-between" fxFlex="30">
+        <div class="wrap-spinner">
+          <mat-spinner mode="determinate" diameter="114" strokeWidth="10" value="100" class="spinner-bg">
+          </mat-spinner>
+          <mat-spinner mode="determinate" diameter="114" strokeWidth="10" [value]="conexoes?.percentualConectado"
+            class="percentual-preenchimento-spinner-high track">
+          </mat-spinner>
+          <span class="percentual-preenchimento-texto">{{ conexoes?.percentualConectado }}%</span>
+        </div>
+        <div class="info-detrans">
+          <p> dos DETRANs funcionando </p>
+        </div>
+      </div>
+
+      <div fxFlex="55">
+        <app-mapa-conexao [conexoesDetrans]="conexoes"></app-mapa-conexao>
+      </div>
+    </div>
+
+    <div class="wrap-subtitle">
+      <p><i class="fa-solid fa-circle-check"></i> Conectado</p>
+      <p><i class="fa-solid fa-circle-xmark"></i> Não identificado</p>
+      <div class="wrap-obs">
+        <span>Detrans com status não identificado possuem um tempo de cadastro de registro maior que o tempo médio
+          estabelecido pela Tecnobank. </span>
+      </div>
+    </div>
+
+  </mat-card>
+
+  <aside class="card__activity" fxLayout.xs="column">
+    <app-atividades-recentes [detrans]="conexoes" [isLoading]="loading"></app-atividades-recentes>
+  </aside>
+</section>

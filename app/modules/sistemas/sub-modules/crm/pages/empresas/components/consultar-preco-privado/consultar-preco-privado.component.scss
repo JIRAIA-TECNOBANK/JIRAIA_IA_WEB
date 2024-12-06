@@ -1,0 +1,39 @@
+@import '$settings';
+@import '$tools';
+
+.cesta {
+    &.min-heigth {
+        min-height: 350px;
+    }
+
+    .btn-add {
+        background-color: #E0EFFF;
+        color: #70B2E7;
+    }
+
+    .btn-cancelar {
+        background-color: #FFE2EB;
+        color: $error-600;
+    }
+}
+
+.nome {
+    color: $gray-800;
+    font-size: 14px;
+}
+
+.cesta-empresa {
+    min-height: calc(350px - 56px);
+}
+
+.conteudo {
+    min-height: calc(350px - 56px);
+}
+
+.vigencia {
+    @include border-radius(5px);
+    background: $gray-200;
+    display: inline-flex !important;
+    align-items: center;
+    padding: .5rem;
+}

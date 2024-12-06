@@ -1,0 +1,15 @@
+<div>
+  <div
+    fxLayout="row"
+    [ngClass]="{ active: checkIndex(button.id) }"
+    id="button__passo_{{ button.id }}"
+    (click)="onClick(button)"
+    *ngFor="let button of buttons"
+  >
+    <div fxLayout="row" fxLayoutAlign="center">
+      <p>{{ button.buttonName }}</p>
+      &nbsp;
+      <p *ngIf="button.isRequired">(obrigatório)</p>
+    </div>
+  </div>
+</div>

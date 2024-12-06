@@ -1,0 +1,30 @@
+<div class="px-2">
+  <mat-card class="mb-4 mat-elevation-z8">
+    <div class="fw-bold">{{ detranId ? 'Editar Detran' : 'Cadastro de Detran' }}</div>
+    <form [formGroup]="createDetranForm" class="mt-2" (ngSubmit)="submitDetran()">
+      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+        <mat-form-field appearance="outline" fxFlex="30">
+          <mat-label>UF</mat-label>
+          <mat-select formControlName="uf" required>
+            <mat-option *ngFor="let uf of estados" [value]="uf">{{ uf }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="createDetranForm.controls['uf'].hasError('required')">Campo obrigatório</mat-error>
+        </mat-form-field>
+
+        <div fxFlex="20" style="display: flex; align-items: center;">
+          <mat-slide-toggle formControlName="ativo">Ativo?</mat-slide-toggle>
+        </div>
+
+        <div fxFlex="20" style="display: flex; align-items: center;">
+          <mat-slide-toggle formControlName="transacaoSimulada">Transação Simulada?</mat-slide-toggle>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end">
+        <button mat-flat-button color="primary" type="submit" [disabled]="createDetranForm.invalid">
+          {{ detranId ? 'Atualizar' : 'Confirmar' }}
+        </button>
+      </div>
+    </form>
+  </mat-card>
+</div>

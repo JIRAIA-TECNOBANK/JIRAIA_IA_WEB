@@ -1,0 +1,100 @@
+<section class="text-paginator">
+    <div class="row d-flex">
+        <section class="default-text" *ngIf="paginatorUsuariosSrd">
+            Mostrando {{ paginatorUsuariosSrd?.pageSize > totalItemsUsuarios ? totalItemsUsuarios :
+            paginatorUsuariosSrd?.pageSize }} de {{
+            totalItemsUsuarios }} resultados
+        </section>
+    </div>
+</section>
+<mat-paginator [pageSizeOptions]="[25, 50, 75, 100]" [length]="totalItemsUsuarios" #paginatorUsuariosSrd>
+</mat-paginator>
+<div>
+
+    <table mat-table [dataSource]="items$ | async">
+        <ng-container matColumnDef="usuario">
+            <th mat-header-cell *matHeaderCellDef class="space-column">Usuário</th>
+            <td mat-cell *matCellDef="let element">{{ element.username }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="senha">
+            <th mat-header-cell *matHeaderCellDef>Senha</th>
+            <td mat-cell *matCellDef="let element">
+                {{ element.password }}
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="ultimaTransacao">
+            <th mat-header-cell *matHeaderCellDef>Data da última <br> transação</th>
+            <td mat-cell *matCellDef="let element">
+                {{ element.modificadoEm ? formatData(element.modificadoEm) : formatData(element.criadoEm) }}
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="emails">
+            <th mat-header-cell *matHeaderCellDef>E-mails que receberam <br> credenciais</th>
+            <td mat-cell *matCellDef="let element" class="column-max-width"
+                [title]="formatarEmails(element.emailsRecebemNotificacao)">
+                {{ formatarEmails(element.emailsRecebemNotificacao) }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="ativo">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let element">
+                <div class="status-pill" [ngClass]="element.ativo ? 'status-pill__active' : 'status-pill__inactive'">
+                    {{ element.ativo ? "Ativo" : "Inativo" }}
+                </div>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="acoes">
+            <th mat-header-cell *matHeaderCellDef class="column-min-width"></th>
+            <td mat-cell *matCellDef="let element">
+                <div>
+                    <button mat-button [matMenuTriggerFor]="menu">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item (click)="inativarOuAtivarUsuarioApi(element.id, element.ativo)"
+                            [disabled]="!utility.getPermission([Permissoes.GESTAO_EMPRESA_USUARIO_API_INATIVAR_ATIVAR])">
+                            {{ element.ativo ? "Inativar" : "Ativar" }}
+                        </button>
+                        <!-- <button mat-menu-item (click)="redefinirSenha(element.id)"
+                            [disabled]="!utility.getPermission([Permissoes.GESTAO_EMPRESA_USUARIO_API_REDEFINIR_SENHA]) || !element.ativo || (element.emailsRecebemNotificacao == null || element.emailsRecebemNotificacao?.length == 0)">
+                            Redefinir senha
+                        </button>
+                        <button mat-menu-item (click)="enviarCredenciais(element.id)"
+                            [disabled]="!utility.getPermission([Permissoes.GESTAO_EMPRESA_USUARIO_API_ENVIAR_CREDENCIAIS]) || !element.ativo">
+                            Enviar credenciais
+                        </button> -->
+                    </mat-menu>
+                </div>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="semRegistro">
+            <th class="text-center feedBack pt-1" mat-cell *matFooterCellDef colspan="11">
+                <img src="./../../../../../../../../../assets/img/custom-icons/icon-vazio-artigos.svg" />
+                <p class="desk bold text-gray-700"> Não há registros. </p>
+            </th>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr mat-row *matFooterRowDef="['semRegistro']" [ngClass]="{'d-none': totalItemsUsuarios > 0 }"></tr>
+    </table>
+
+    <section class="text-paginator">
+        <div class="row d-flex">
+            <section class="default-text">
+                Mostrando {{ paginatorUsuariosSrd?.pageSize > totalItemsUsuarios ? totalItemsUsuarios :
+                paginatorUsuariosSrd?.pageSize }} de {{
+                totalItemsUsuarios }} resultados
+            </section>
+        </div>
+    </section>
+    <mat-paginator (page)="syncPrimaryPaginator($event)" [pageSize]="paginatorUsuariosSrd.pageSize"
+        [pageIndex]="paginatorUsuariosSrd.pageIndex" [length]="paginatorUsuariosSrd.length"
+        [pageSizeOptions]="paginatorUsuariosSrd?.pageSizeOptions">
+    </mat-paginator>
+</div>

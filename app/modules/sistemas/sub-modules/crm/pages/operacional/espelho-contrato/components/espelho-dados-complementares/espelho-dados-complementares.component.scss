@@ -1,0 +1,26 @@
+@import '$tools';
+@import '$settings';
+
+.comentarios {
+  margin-top: 5px;
+  padding: 10px;
+  border: solid 1px #99A1A7;
+  border-radius: 10px;
+  width: 100%;
+}
+
+@media print {
+  * {
+    visibility: visible !important;
+    font-family: Helvetica, sans-serif;
+    font-size: 14px !important;
+  }
+
+  .item-title {
+    font-size: 8pt !important;
+  }
+
+  mat-card {
+    box-shadow: none !important;
+  }
+}

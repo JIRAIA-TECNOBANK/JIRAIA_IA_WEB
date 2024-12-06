@@ -1,0 +1,82 @@
+@import '$settings';
+@import '$tools';
+
+section {
+  padding: 1rem 0;
+}
+
+h3 {
+  font-size: 14px;
+  font-weight: 100;
+}
+
+.dropzone {
+  @include border-radius(0.25rem);
+  padding: 2rem;
+  text-align: center;
+  border: dashed 1px #CACCCF;
+  position: relative;
+  margin: 0 auto;
+
+  &.file-error .mat-icon {
+    color: $warning-900;
+    vertical-align: sub;
+  }
+
+  span {
+    font-size: 12px;
+  }
+}
+
+.single-file {
+  @include border-radius(0.25rem);
+  display: flex;
+  padding: 0.5rem;
+  justify-content: space-between;
+  align-items: center;
+  border: dashed 1px #CACCCF;
+  margin-bottom: 1rem;
+}
+
+.name {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 350px;
+}
+
+.size {
+  font-size: 12px;
+  font-weight: 500;
+  color: #a4a4a4;
+  margin: 0;
+  margin-bottom: 0.25rem;
+}
+
+.info {
+  width: 100%
+}
+
+.dropzone>.mat-icon,
+.dropzone>.fa-cloud-arrow-up {
+  font-size: 3rem;
+  margin-left: -23px;
+  color: $primary;
+}
+
+.files-list .mat-icon {
+  color: $primary;
+  margin-right: 0.3rem;
+}
+
+
+.dropzone.dropzone-disabled>.fa-cloud-arrow-up {
+  color: #AAAAAA
+}
+
+.dropzone.dropzone-disabled h3 {
+  color: #AAAAAA;
+}

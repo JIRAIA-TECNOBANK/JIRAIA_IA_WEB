@@ -1,0 +1,308 @@
+<div [hidden]="childstate">
+  <mat-card class="mb-4 mat-elevation-z8">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="fw-bold" *ngIf="produtoSelecionado == null">
+        Selecione o produto
+      </div>
+      <img
+        *ngIf="produtoSelecionado !== null && step != 1"
+        [src]="produtoSelecionado.logotipo"
+        [alt]="produtoSelecionado.nome"
+      />
+      <button
+        *ngIf="step != 1"
+        mat-button
+        color="warn"
+        type="button"
+        class="fw-bold"
+        (click)="goToStep(1)"
+      >
+        Trocar produto
+      </button>
+    </div>
+    <div class="options" [hidden]="step != 1">
+      <div class="produtos">
+        <form [formGroup]="produtosForm" class="mt-2">
+          <label class="produto-item mr-3" *ngFor="let produto of produtos">
+            <div class="produto-item__content">
+              <input
+                type="checkbox"
+                checked
+                [formControlName]="'produto_' + produto.id"
+              />
+              <img [src]="produto.logotipo" [alt]="produto.nome" />
+            </div>
+          </label>
+        </form>
+      </div>
+      <div class="d-flex justify-content-end">
+        <button
+          mat-flat-button
+          color="primary"
+          type="button"
+          (click)="associarProdutoEmpresa()"
+        >
+          Confirmar
+        </button>
+      </div>
+    </div>
+  </mat-card>
+
+  <section [hidden]="step != 2">
+    <mat-card class="mb-4 mat-elevation-z8">
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="fw-bold">
+          Dados gerais &nbsp;<i
+            *ngIf="!dadosLotesOpen"
+            class="fas fa-check text-success"
+          ></i>
+        </div>
+        <button
+          *ngIf="!dadosLotesOpen"
+          mat-button
+          color="warn"
+          type="button"
+          class="fw-bold"
+          (click)="openLotesDados()"
+        >
+          Editar dados
+        </button>
+      </div>
+      <form [formGroup]="configLotesForm" class="mt-2" *ngIf="dadosLotesOpen">
+        <mat-form-field appearance="outline" fxFlex="30">
+          <mat-label>Lotes disponíveis para a empresa </mat-label>
+          <mat-select formControlName="tipoLote" name="tipoLote" [id]="getElementId(5, 'tipo-lote')" multiple
+            [disabled]="utility.getPermission([Permissoes.GESTAO_EMPRESA_CONSULTAR])">
+            <mat-option value="todos" #allSelectedOptions (click)="toggleAllSelection()">
+              Todos
+            </mat-option>
+            <mat-option
+              *ngFor="let versao of versoesLote"
+              [value]="versao.id"
+              (click)="togglePerOne()"
+            >
+              {{ versao.valor }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="d-flex justify-content-end align-items-center" fxFlex="100">
+          <button mat-flat-button color="primary" type="button" (click)="confirmarLotes()"
+            *ngIf="utility.getPermission([Permissoes.GESTAO_EMPRESA_CADASTRAR])" [disabled]="configLotesForm.invalid">
+            Confirmar
+          </button>
+        </div>
+      </form>
+    </mat-card>
+  </section>
+
+  <div class="detran" [hidden]="step != 2">
+    <div class="fw-bold">Adicionar um DETRAN</div>
+    <div class="detran-list">
+      <button class="detran-button" *ngFor="let detran of detrans"
+        [disabled]="!detran.ativo"
+        (click)="selectDetran(detran)" [ngClass]="selectedDetran == detran.id ? 'selected' : ''">
+        <span class="fw-bold">{{ detran.ufDetran }}</span>
+        <span
+          class="detran-opcoes"
+          [matMenuTriggerFor]="menuStatus"
+          (click)="$event.stopPropagation()"
+        >
+          <i class="far fa-ellipsis-v"></i>
+        </span>
+        <mat-menu #menuStatus="matMenu">
+          <button mat-menu-item (click)="ativarInativarDetran(detran)" *ngIf="utility.getPermission([Permissoes.GESTAO_EMPRESA_CADASTRAR])">{{detran.ativo ? "Inativar" : "Ativar"}}</button>
+        </mat-menu>
+      </button>
+      <button class="detran-button create" type="button" (click)="addDetran()" *ngIf="utility.getPermission([Permissoes.GESTAO_EMPRESA_CADASTRAR])">
+        <i class="fal fa-plus"></i>
+      </button>
+    </div>
+    <mat-card class="mat-elevation-z8 mt-3">
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="fw-bold">
+          Dados do DETRAN &nbsp;<i
+            *ngIf="detrans.length > 0 && !viewDetran"
+            class="fas fa-check text-success"
+          ></i>
+        </div>
+      </div>
+      <form
+        [formGroup]="dadosUfForm"
+        class="mt-2"
+        [hidden]="!viewDetran"
+        (ngSubmit)="submitUfDetran()"
+      >
+        <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="center center">
+          <mat-form-field appearance="outline" [style.width.px]="125">
+            <mat-label>DETRAN</mat-label>
+            <mat-select formControlName="uf" required>
+              <mat-option> DETRAN*</mat-option>
+              <mat-option *ngFor="let uf of ufsDetran" [value]="uf.valor">
+                {{ uf.valor }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline" fxFlex="auto">
+            <mat-label>Código DETRAN </mat-label>
+            <input
+              matInput
+              placeholder="Código Detran"
+              formControlName="codigoDetran"
+              required
+            />
+          </mat-form-field>
+          <mat-form-field appearance="outline" fxFlex="auto">
+            <mat-label>Código SNG </mat-label>
+            <input
+              matInput
+              placeholder="Código SNG"
+              formControlName="codigoSng"
+            />
+          </mat-form-field>
+          <button mat-flat-button color="primary" type="button" fxFlex="auto" (click)="carregarDadosEnderecos()" [disabled]="!utility.getPermission([Permissoes.GESTAO_EMPRESA_CADASTRAR])">
+            Alterar endereço
+          </button>
+        </div>
+
+        <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="center center">
+          <mat-form-field appearance="outline" fxFlex="auto">
+            <mat-label>CEP </mat-label>
+            <input
+              matInput
+              placeholder="00000-000"
+              formControlName="cep"
+              mask="00000-000"
+              required
+            />
+            <mat-icon matSuffix>
+              <mat-spinner *ngIf="loading" [diameter]="25"></mat-spinner>
+            </mat-icon>
+            <mat-error *ngIf="dadosUfForm.get('cep').hasError('required')"
+              >Cep é obrigatório</mat-error
+            >
+            <mat-hint *ngIf="cepInvalido"
+              >CEP não localizado, por favor digite o endereço
+              completo</mat-hint
+            >
+          </mat-form-field>
+          <mat-form-field appearance="outline" fxFlex="auto">
+            <mat-label>Endereço </mat-label>
+            <input
+              matInput
+              placeholder="Endereço"
+              formControlName="logradouro"
+              required
+            />
+          </mat-form-field>
+          <mat-form-field appearance="outline" [style.width.px]="80">
+            <mat-label>Número </mat-label>
+            <input
+              matInput
+              placeholder="nº"
+              formControlName="numero"
+              required
+            />
+          </mat-form-field>
+          <mat-form-field appearance="outline" fxFlex="auto">
+            <mat-label>Bairro </mat-label>
+            <input
+              matInput
+              placeholder="Bairro"
+              formControlName="bairro"
+              required
+            />
+          </mat-form-field>
+        </div>
+
+        <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="center center">
+          <mat-form-field appearance="outline" fxFlex="auto">
+            <mat-label>Complemento </mat-label>
+            <input
+              matInput
+              placeholder="Complemento"
+              formControlName="complemento"
+            />
+          </mat-form-field>
+          <mat-form-field appearance="outline" [style.width.px]="100">
+            <mat-label>Estado</mat-label>
+            <mat-select formControlName="estado" required>
+              <mat-option> Estado*</mat-option>
+              <mat-option *ngFor="let uf of ufs" [value]="uf.sigla">{{
+                uf.sigla
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline" fxFlex="auto">
+            <mat-label>Cidade </mat-label>
+            <input
+              type="text"
+              name="cidade"
+              formControlName="cidade"
+              matInput
+              [matAutocomplete]="municipio"
+              placeholder="Cidade"
+              required
+            />
+            <mat-autocomplete #municipio="matAutocomplete">
+              <mat-option
+                *ngFor="let municipio of municipiosFiltrados"
+                [value]="municipio.nome"
+                >{{ municipio.nome }}</mat-option
+              >
+            </mat-autocomplete>
+            <mat-error *ngIf="dadosUfForm.get('cidade').hasError('required')"
+              >Cidade é obrigatória</mat-error
+            >
+            <mat-error
+              *ngIf="
+                !dadosUfForm.get('cidade').hasError('required') &&
+                dadosUfForm.get('cidade').getError('invalidIdentifier') ==
+                  'cidadeInvalida'
+              "
+            >
+              Cidade inválida
+            </mat-error>
+          </mat-form-field>
+          <div
+            class="d-flex align-items-center"
+            fxFlex="auto"
+            *ngIf="dadosUfForm.get('uf').value == 'RJ'"
+          >
+            <mat-checkbox formControlName="parametrizarDuda"
+              >Parametrização feita pela Tecnobank (Gestão de DUDAs)
+            </mat-checkbox>
+          </div>
+        </div>
+        <div class="d-flex justify-content-end">
+          <button mat-flat-button color="primary" type="submit" [disabled]="!dadosUfForm.valid" *ngIf="utility.getPermission([Permissoes.GESTAO_EMPRESA_CADASTRAR])">
+            Confirmar
+          </button>
+        </div>
+      </form>
+    </mat-card>
+  </div>
+
+  <div class="d-flex justify-content-between my-4">
+    <button
+      mat-stroked-button
+      class="btn-outline-primary"
+      color="primary"
+      type="button"
+      (click)="voltar()"
+    >
+      Voltar
+    </button>
+    <button
+      mat-flat-button
+      color="primary"
+      type="button"
+      (click)="concluir()"
+      [disabled]="detrans.length == 0"
+    >
+      Continuar
+    </button>
+  </div>
+</div>
+
+<router-outlet></router-outlet>

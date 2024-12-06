@@ -1,0 +1,16 @@
+@import "$settings";
+@import "$tools";
+
+.bloco-vazio {
+  min-height: 400px;
+  div {
+    min-height: 400px;
+    p {
+      @include fontMontserratBold;
+      color: $gray-700;
+      font-size: 12px;
+      letter-spacing: 0.25px;
+      margin-top: 20px;
+    }
+  }
+}

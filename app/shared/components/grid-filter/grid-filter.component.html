@@ -1,0 +1,55 @@
+<mat-card class="mat-elevation-z8 pt-0 overflow-visible" [ngClass]="{ 'brt-0': !radiusTop }">
+  <form [formGroup]="formulario" (ngSubmit)="onClickPesquisar()">
+    <div class="filter-content">
+      <div class="filter-item">
+        <div class="row d-flex" fxLayout.sm="column" fxLayout="row" fxLayoutGap="10">
+          <section *ngIf="!filter.customFields" class="d-flex" fxLayout.sm="column" fxLayout="row" fxLayoutGap="10">
+            <app-filter-field *ngFor="let field of firstRow" [field]="field" [control]="getFormControl(field.id)"
+              (selectAll)="selectAll($event)" [searchControl]="getFormControl(field.id + '_search')"
+              (searchInput)="onSearchInput($event)" [redefinirField]="redefinirField"
+              (triggerSearch)="onClickPesquisar()" [customControls]="customFormControls" [customFields]="filter.customFields" [dataMaxima]="dataMaxima">
+            </app-filter-field>
+          </section>
+
+          <section *ngIf="filter.customFields" class="d-flex">
+            <ng-content [select]="section.first - row"></ng-content>
+          </section>
+
+          <button [id]="getElementId(2, 'show-more', filter.id)" *ngIf="filter?.fields.length > maxNumberFields"
+            mat-stroked-button class="btn-show-more filter-button mt-2" [ngClass]="{ 'btn-outline-primary': showMore }"
+            (click)="showMore = !showMore" type="button">
+            <i class="fa-solid fa-angles-down" [ngClass]="{ 'fa-angles-up text-primary ': showMore }"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between">
+        <button [id]="getElementId(2, 'reset', filter.id)" *ngIf="showRedefinirButton()" mat-button color="primary"
+          class="mt-2 btn-redefinir mr-1" (click)="redefinir()" type="button">
+          Redefinir
+        </button>
+        <button [id]="getElementId(2, 'search', filter.id)" mat-flat-button color="primary" class="mt-2" type="submit">
+          <span [id]="getElementId(13, 'search', filter.id)">Pesquisar</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="filter-content" *ngIf="secondRow?.length > 0 && showMore">
+      <div class="filter-item">
+        <div class="row d-flex" fxLayout.sm="column">
+          <section *ngIf="!filter.customFields" class="d-flex">
+            <app-filter-field *ngFor="let field of secondRow" [field]="field" [control]="getFormControl(field.id)"
+              (selectAll)="selectAll($event)" [searchControl]="getFormControl(field.id + '_search')"
+              (searchInput)="onSearchInput($event)" [redefinirField]="redefinirField"
+              (triggerSearch)="onClickPesquisar()" [customControls]="customFormControls" [dataMaxima]="dataMaxima">
+            </app-filter-field>
+          </section>
+
+          <section *ngIf="filter.customFields" class="d-flex">
+            <ng-content select="section.second-row"></ng-content>
+          </section>
+        </div>
+      </div>
+    </div>
+  </form>
+</mat-card>

@@ -1,0 +1,23 @@
+@import "$settings";
+@import "$tools";
+
+.periodo {
+    background-color: #DFEEFC;
+    color: $blue-700;
+    font-size: 12px;
+    margin-left: 1rem;
+  
+    &:first-child {
+      margin-left: 0;
+    }
+  
+    &:hover {
+      color: $white;
+      background-color: $blue-600;
+    }
+  
+    &.selected {
+      color: $white;
+      background-color: $primary;
+    }
+  }

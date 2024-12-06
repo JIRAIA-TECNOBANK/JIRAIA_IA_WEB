@@ -1,0 +1,73 @@
+<mat-accordion class="gestao-detran">
+    <mat-expansion-panel class="wrap-taxa mt-2" *ngFor="let preco of listaPrecoTbk" (opened)="panelOpenState = true"
+        (closed)="panelOpenState = false">
+        <mat-expansion-panel-header class="p-0">
+            <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100 mr-1">
+                <section fxFlex="60" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px">
+                    <section fxFlex="50" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px"
+                        *ngIf="preco.tipoPreco == 1">
+                        <span class="bold desk">{{ preco.dataInicioVigencia | date:"dd/MM/yyyy" }}</span>
+                        <i class="fa-solid fa-arrow-right gray-600"></i>
+                        <span class="bold desk">{{ preco.dataTerminoVigencia | date:"dd/MM/yyyy" }}</span>
+                    </section>
+
+                    <section fxFlex="auto" [fxLayoutAlign]="preco.tipoPreco == 1 ? 'center center' : 'start center'"
+                        fxLayoutGap="10px">
+                        <span class="bold desk nome" [ngClass]="{ 'privado': preco.tipoPreco == 2 }"
+                            [matTooltip]="preco.tipoPreco == 1 ? '' : preco.nome">{{
+                            preco.tipoPreco == 1 ? 'Preço público'
+                            : preco.nome }}</span>
+                    </section>
+                </section>
+
+                <section fxLayoutAlign="center center" fxLayoutGap="10px"
+                    *ngIf="preco.tipoPreco == 1 || preco.status === 'PREAGENDADO'">
+                    <span class="bold gray-600"><i class="fa-regular fa-clock mr-1"
+                            *ngIf="preco.status !== 'VIGENTE'"></i>{{ preco.status === 'PREAGENDADO' ? 'PRÉ-AGENDADO' :
+                        preco.status }}</span>
+                </section>
+
+                <section fxFlex="20" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px">
+                    <div *ngIf="!consulta && utility.getPermission([permissoes.GESTAO_FINANCEIRO_PRECO_CADASTRAR])"
+                        fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px">
+                        <div class="icone edicao" fxLayoutAlign="center center"
+                            *ngIf="mostrarIconesEdicaoExclusao(preco)"
+                            [matTooltip]="preco.tipoPreco == 1 ? 'Editar preço' : 'Editar cesta'"
+                            [id]="utility.getElementId(2, 'editar-taxa', preco.id)" (click)="editarPreco(preco)">
+                            <i class="fa-regular fa-pen"></i>
+                        </div>
+                        <div class="icone exclusao" fxLayoutAlign="center center" *ngIf="mostrarIconeExclusao(preco)"
+                            [id]="utility.getElementId(2, 'excluir-taxa', preco.id)"
+                            (click)="excluirPreco(preco.id, preco.tipoPreco)">
+                            <i class="fa-regular fa-trash"></i>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </mat-expansion-panel-header>
+        <div class="detalhes-taxa" fxLayout="column" fxLayoutGap="10px">
+            <app-tabela-listagem-precos [taxaDetran]="taxaDetran" [preco]="preco"></app-tabela-listagem-precos>
+            <div class="info-primary mt-2 w-100" fxLayout="row" fxLayoutGap="15px" *ngIf="preco.tipoPreco > 1"><i
+                    class="fa-regular fa-memo-circle-info"></i>
+                <ul class="pl-2">
+                    <li>
+                        <p>O valor do preço privado também poderá ser consultado por cliente no cadastro da empresa.
+                        </p>
+                    </li>
+                </ul>
+            </div>
+
+            <div fxLayout="row" fxLayoutGap="20px" class="mt-1">
+                <section fxLayout="row">
+                    <span class="bold gray-600 fnt-12">Criado por: </span>&nbsp;
+                    <span class="bold desk fnt-12">{{ preco.criadoPor }}</span>
+                </section>
+
+                <section fxLayout="row">
+                    <span class="bold gray-600 fnt-12">Data/horário: </span>&nbsp;
+                    <span class="bold desk fnt-12">{{ preco.criadoEm | date:"dd/MM/yyyy HH:mm" }}</span>
+                </section>
+            </div>
+        </div>
+    </mat-expansion-panel>
+</mat-accordion>

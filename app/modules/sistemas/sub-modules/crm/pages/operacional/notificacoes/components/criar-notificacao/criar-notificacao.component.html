@@ -1,0 +1,302 @@
+<div fxLayout="row" fxLayoutGap="15px" fxLayoutAlign="space-between">
+  <mat-card fxFlex="75">
+    <form [formGroup]="formulario">
+
+      <div fxLayout="row" fxLayoutGap="10px">
+        <div class="toggle-default" fxFlex="100">
+          <p class="bold desk mt-0 text-gray-800">Tipo de notificação</p>
+          <div fxLayout="row" class="align-items-start" fxLayoutGap="10px">
+            <mat-button-toggle-group name="tipoNotificacao" [id]="utility.getElementId(7, 'notificacao-tipo')"
+              formControlName="tipoNotificacao" aria-label="tipoNotificacao">
+              <mat-button-toggle [id]="utility.getElementId(2, 'notificacao-tipo-portal')" [value]="1"
+                class="btn-toggle">Portal</mat-button-toggle>
+              <mat-button-toggle [id]="utility.getElementId(2, 'notificacao-tipo-email')" [value]="2"
+                class="btn-toggle">E-mail</mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+        </div>
+      </div>
+
+      <div fxLayout="row" fxLayoutGap="10px" class="mt-1">
+        <div class="pt-1 toggle-default" fxFlex="100">
+          <p class="bold desk mt-0 text-gray-800">Dados da mensagem</p>
+
+          <input type="file" hidden #fileDropRef id="fileDropRef" (change)="fileBrowseHandler($event.target.files)"
+            [accept]="acceptedTypes">
+
+          <div class="dropzone" appDragAndDrop (fileDropped)="onFileDropped($event)" (click)="onClickFile(fileDropRef)"
+            [id]="utility.getElementId(2, 'notificacao-carregar-imagem')"
+            [ngClass]="{ 'disabled': !utility.getPermission([Permissoes.GESTAO_COMUNICADOS_CADASTRAR]) }">
+            <p class="desk bold"><i class="fa-solid fa-folder-open text-primary"></i> Arraste a imagem aqui, ou <u
+                class="text-primary">procure no seu dispositivo</u> </p>
+          </div>
+
+          <div fxLayout="row" fxLayoutGap="15px" fxLayoutAlign="space-between" class="mt-1 mb-2">
+            <span class="legenda">Formatos PNG, JPG ou GIF.</span>
+            <span class="legenda">Tamanho máximo 10MB </span>
+          </div>
+        </div>
+      </div>
+
+      <div fxLayout="row" fxLayoutGap="10px">
+        <mat-form-field appearance="outline" fxFlex="auto">
+          <mat-label>Categoria </mat-label>
+          <mat-select formControlName="categoriaID" [id]="utility.getElementId(5, 'notificacao-categoria')">
+            <mat-option> Escolha a categoria</mat-option>
+            <mat-option *ngFor="let categoria of categorias" [value]="categoria.id"> {{ categoria.valor }} </mat-option>
+          </mat-select>
+          <mat-hint>Obrigatório</mat-hint>
+          <mat-error *ngIf="formulario.controls['categoriaID'].hasError('required')">Obrigatório
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div fxLayout="row" fxLayoutGap="10px" class="mt-1">
+        <mat-form-field appearance="outline" fxFlex="auto">
+          <mat-label>Título</mat-label>
+          <input matInput placeholder="Título" formControlName="titulo"
+            [id]="utility.getElementId(0, 'notificacao-titulo')" #titulo />
+          <mat-hint>Obrigatório</mat-hint>
+          <mat-hint align="end">{{ titulo.value?.length || 0 }}/150</mat-hint>
+          <mat-error *ngIf="formulario.controls['titulo'].hasError('required')">Obrigatório</mat-error>
+          <mat-error *ngIf="formulario.controls['titulo'].hasError('maxlength')" align="end">{{ titulo.value?.length ||
+            0 }}/150</mat-error>
+        </mat-form-field>
+      </div>
+
+      <angular-editor [(ngModel)]="htmlContent" [config]="config" formControlName="mensagem" class="mt-2"
+        [disabled]="!utility.getPermission([Permissoes.GESTAO_COMUNICADOS_CADASTRAR])"></angular-editor>
+
+      <section *ngIf="formulario.get('tipoNotificacao').value == 1">
+        <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="space-between" class="mt-2">
+          <mat-form-field appearance="outline" fxFlex="auto">
+            <mat-label>Link de direcionamento da notificação</mat-label>
+            <input matInput placeholder="Link de direcionamento da notificação" formControlName="urlBotao"
+              [id]="utility.getElementId(0, 'notificacao-url-botao')" />
+          </mat-form-field>
+        </div>
+
+        <div fxLayout="row" fxLayoutGap="10px">
+          <div class="pt-1 toggle-default" fxFlex="100">
+            <p class="bold desk mt-0 text-gray-800">Frequência</p>
+
+            <mat-radio-group [formControl]="formulario.get('tipoFrequencia')" class="justify-content-center text-center"
+              [id]="utility.getElementId(3, 'notificacao-frequencia')">
+              <mat-radio-button [value]="2" class="mb-2">Mostrar sempre que o cliente logar na
+                plataforma.</mat-radio-button>
+
+              <div fxLayout="row" fxLayoutGap="10px" *ngIf="formulario.get('tipoFrequencia').value == 2">
+                <mat-form-field fxFlex="25" appearance="outline">
+                  <mat-label>Data início</mat-label>
+                  <input [id]="utility.getElementId(0, 'data-inicio')" matInput name="dataInicio"
+                    formControlName="dataInicio" placeholder="Digite a data do envio" [min]="minDate"
+                    [matDatepicker]="dataInicio" maxlength="10">
+                  <mat-datepicker-toggle matSuffix [for]="dataInicio"></mat-datepicker-toggle>
+                  <mat-datepicker #dataInicio></mat-datepicker>
+                  <mat-hint>Obrigatório</mat-hint>
+                  <mat-error *ngIf="formulario.get('dataInicio').hasError('required')">Obrigatório
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field fxFlex="25" appearance="outline">
+                  <mat-label>Data final</mat-label>
+                  <input [id]="utility.getElementId(0, 'data-final')" matInput name="dataFim" formControlName="dataFim"
+                    placeholder="Digite a data do envio" [min]="formulario.get('dataInicio').value"
+                    [matDatepicker]="dataFim" maxlength="10">
+                  <mat-datepicker-toggle matSuffix [for]="dataFim"></mat-datepicker-toggle>
+                  <mat-datepicker #dataFim></mat-datepicker>
+                  <mat-hint>Obrigatório</mat-hint>
+                  <mat-error *ngIf="formulario.get('dataFim').hasError('required')">Obrigatório
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <br>
+              <mat-radio-button [value]="1" class="mb-2">Mostrar apenas um vez.</mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div>
+
+        <div class="info-primary mr-2 w-100" fxLayout="row" fxLayoutGap="15px"><i
+            class="fa-regular fa-memo-circle-info"></i>
+          <ul class="pl-2">
+            <li>
+              <p>Atente-se às notificações que podem ou não permanecer no histórico do cliente, caso não seja viável,
+                elas
+                deverão ser inativadas manualmente pela equipe de operações.</p>
+            </li>
+            <li>
+              <p>As notificações recentes tem prioridade sobre as antigas.</p>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section *ngIf="formulario.get('tipoNotificacao').value == 2">
+        <mat-checkbox class="my-2" formControlName="direcionamentoBotao"
+          [id]="utility.getElementId(4, 'notificacao-btn-direcionamento')">Adicionar botão de direcionamento
+        </mat-checkbox>
+
+        <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="space-between"
+          *ngIf="formulario.get('direcionamentoBotao').value">
+          <mat-form-field appearance="outline" fxFlex="45">
+            <mat-label>Texto do botão</mat-label>
+            <input matInput placeholder="Texto do botão" formControlName="descricaoBotao"
+              [id]="utility.getElementId(0, 'notificacao-descricao-botao')" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" fxFlex="auto">
+            <mat-label>Link de direcionamento do botão</mat-label>
+            <input matInput placeholder="Link de direcionamento do botão" formControlName="urlBotao"
+              [id]="utility.getElementId(0, 'notificacao-url-botao')" />
+          </mat-form-field>
+        </div>
+
+        <div fxLayout="row" fxLayoutGap="10px">
+          <div class="pt-1 toggle-default" fxFlex="100">
+            <p class="bold desk mt-0 text-gray-800">Enviar para</p>
+
+            <mat-radio-group [formControl]="formulario.get('ehNotificaTodosClientes')"
+              class="justify-content-center text-center" [id]="utility.getElementId(3, 'notificacao-enviar-para')">
+              <mat-radio-button [value]="true" class="mb-2">Enviar para todos os clientes</mat-radio-button>
+              <br>
+              <mat-radio-button [value]="false" class="mb-2">Enviar para um cliente específico </mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayoutGap="10px" *ngIf="!formulario.get('ehNotificaTodosClientes').value">
+          <mat-form-field appearance="outline" fxFlex="100">
+            <mat-label>Procure pelo CNPJ ou nome da empresa </mat-label>
+            <input type="text" matInput [id]="utility.getElementId(5, 'empresa')" name="empresaNome"
+              formControlName="empresaNome" placeholder="Digite a empresa" (blur)="selecionaEmpresaId()"
+              (input)="carregarEmpresas($event.target.value)" [matAutocomplete]="empresasselect">
+            <mat-autocomplete #empresasselect="matAutocomplete">
+              <mat-option *ngFor="let empresa of empresasFiltradas"
+                [value]="empresa.nomeFantasia + ' - ' + empresa.cnpj" class="usuario-email">{{
+                empresa.nomeFantasia }} - {{ empresa.cnpj }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-hint>Obrigatório</mat-hint>
+            <mat-error *ngIf="formulario.controls['empresaId'].hasError('required')">Campo obrigatório
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div fxLayout="row" fxLayoutGap="10px" *ngIf="!formulario.get('ehNotificaTodosClientes').value">
+          <mat-form-field class="default-chip-list py-0" appearance="outline">
+            <mat-label>Selecione os usuários da empresa</mat-label>
+            <mat-chip-list #chipList aria-label="Seleção de usuários" required
+              [disabled]="!formulario.get('empresaId').value">
+              <mat-chip *ngFor="let usuario of usuarios" (removed)="remove(usuario)">
+                {{usuario.nome}}
+                <button matChipRemove>
+                  <i class="fa-solid fa-xmark text-primary"></i>
+                </button>
+              </mat-chip>
+              <input [id]="utility.getElementId(0, 'empresa-usuarios')" #usuarioInput [formControl]="usuariosControl"
+                [matAutocomplete]="auto" [matChipInputFor]="chipList"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="add($event)">
+            </mat-chip-list>
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+              <mat-option *ngFor="let usuario of filteredUsuarios | async" [value]="usuario.nome" class="email-chip">
+                {{usuario.nome}}
+                <span class="usuario-adicionado" *ngIf="verifyUsuarioAdicionado(usuario)">Adicionado</span>
+                <span>{{ usuario.email }}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <mat-hint class="mat-hint-custom"
+          *ngIf="!formulario.get('ehNotificaTodosClientes').value">Obrigatório</mat-hint>
+        <mat-error class="mat-hint-custom" *ngIf="usuariosControl.hasError('required')">Campo obrigatório
+        </mat-error>
+
+        <div fxLayout="row" fxLayoutGap="10px">
+          <div class="pt-1 toggle-default" fxFlex="100">
+            <p class="bold desk mt-0 text-gray-800">Enviar quando</p>
+
+            <mat-radio-group [formControl]="formulario.get('agendar')" class="justify-content-center text-center"
+              [id]="utility.getElementId(3, 'notificacao-enviar-para')">
+              <mat-radio-button [value]="false" class="mb-2">Enviar imediamente</mat-radio-button>
+              <br>
+              <mat-radio-button [value]="true" class="mb-2">Enviar numa data específica</mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayoutGap="10px" *ngIf="formulario.get('agendar').value">
+          <mat-form-field fxFlex="25" appearance="outline">
+            <mat-label>Data de envio</mat-label>
+            <input [id]="utility.getElementId(0, 'data-envio')" matInput name="dataAgendamento"
+              formControlName="dataAgendamento" placeholder="Digite a data do envio" [min]="minDate"
+              [matDatepicker]="dataAgendamento" maxlength="10">
+            <mat-datepicker-toggle matSuffix [for]="dataAgendamento"></mat-datepicker-toggle>
+            <mat-datepicker #dataAgendamento></mat-datepicker>
+            <mat-hint>Obrigatório</mat-hint>
+            <mat-error *ngIf="formulario.get('dataAgendamento').hasError('required')">Obrigatório
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+      </section>
+
+      <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="end center" class="mt-1">
+        <button mat-flat-button color="secondary" type="button" (click)="onClickConfirmar()"
+          [id]="utility.getElementId(2, 'confirmar')" [disabled]="!formulario.valid"
+          *ngIf="utility.getPermission([Permissoes.GESTAO_COMUNICADOS_CADASTRAR])">Confirmar</button>
+      </div>
+
+    </form>
+  </mat-card>
+
+  <div fxFlex="auto" class="pre-visualizacao">
+    <p class="mt-0">Pré-visualização</p>
+    <mat-card id="pre-visualizacao" *ngIf="formulario.get('tipoNotificacao').value == 1">
+      <img id="cabecalho" [src]="getImage()" alt="Cabeçalho"/>
+
+      <p id="titulo">{{ formulario?.get('titulo').value }} <i *ngIf="formulario?.get('urlBotao').value"
+          class="fa-solid text-primary fa-arrow-up-right-from-square"></i></p>
+
+      <div id="conteudo" [innerHTML]="htmlContent" class="mb-1"> </div>
+    </mat-card>
+
+    <section *ngIf="formulario.get('tipoNotificacao').value == 2" class="email">
+      <mat-card id="pre-visualizacao">
+        <img id="cabecalho" [src]="getImage()" alt="Cabeçalho" />
+
+        <p id="titulo" class="text-center">{{ formulario?.get('titulo').value }}</p>
+
+        <div id="conteudo" [innerHTML]="htmlContent" class="mb-1 email-content"> </div>
+
+        <div id="botao" *ngIf="formulario.get('direcionamentoBotao').value">
+          <button mat-flat-button color="secondary" type="button">{{ getTextoBotao() }}</button>
+        </div>
+      </mat-card>
+
+      <section class="social-media">
+        <div class="wrapper">
+          <i class="fa-brands fa-linkedin"></i>
+        </div>
+
+        <div class="wrapper">
+          <i class="fa-brands fa-instagram"></i>
+        </div>
+
+        <div class="wrapper">
+          <i class="fa-brands fa-facebook"></i>
+        </div>
+
+        <div class="wrapper">
+          <i class="fa-brands fa-youtube"></i>
+        </div>
+
+        <div class="wrapper">
+          <i class="fa-brands fa-twitter"></i>
+        </div>
+      </section>
+
+      <p class="rodape">Sobre nós | Políticas de privacidade | Ajuda</p>
+    </section>
+  </div>
+</div>

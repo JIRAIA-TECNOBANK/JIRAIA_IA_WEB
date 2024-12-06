@@ -1,0 +1,40 @@
+@import '$settings';
+@import '$tools';
+
+.wrapper {
+    @include border-radius(100%);
+    background: $blue-600;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $white;
+    font-size: 10px;
+}
+
+.mapa-legenda {
+    @include fontMontserratRegular;
+    font-size: 12px;
+    align-items: center;
+    margin-top: 0.5rem;
+
+    .legenda {
+        @include border-radius(2px);
+        width: 21px;
+        height: 6px;
+        margin-right: 4px;
+    }
+
+    .conectado {
+        background-color: $primary;
+    }
+
+    .nao-identificado {
+        background-color: $warning-900;
+    }
+}
+
+.fw-bold {
+    font-size: 12px;
+}

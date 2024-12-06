@@ -1,0 +1,67 @@
+<section class="pb-0 px-2">
+    <input  type="file" hidden #fileDropRef id="fileDropRef" (change)="fileBrowseHandler($event.target.files)"
+        [accept]="acceptedTypes">
+
+    <div class="dropzone" appDragAndDrop (fileDropped)="onFileDropped($event)" (click)="onClickFile(fileDropRef)">
+        <i class="fa-duotone fa-cloud-arrow-up" style="--fa-secondary-opacity: 0.40"></i>
+        <p class="desk bold mb-0">Arraste para fazer o upload da imagem</p>
+        <p class="desk mt-0">Ou procure no seu dispositivo</p>
+
+        <span>
+            Formatos permitidos: PDF, JPEG, JPG, PNG e TIFF. <br>
+            Tamanho máximo permitido: 10MB.
+        </span>
+        <br>
+    </div>
+    <br>
+    <div class="row" *ngIf="showImage()">
+        <p class="desk bold mb-0">Arquivos enviados</p>
+    </div>
+    <div class="files-list single-file" *ngIf="showImage()">
+        <div class="file-name">
+            <div [ngSwitch]="fileExtension">
+                <div class="icon" *ngSwitchCase="'pdf'">
+                    <img src="./../../../../assets/img/custom-icons/icon-file-pdf.svg">
+                </div>
+                <div class="icon" *ngSwitchCase="'png'">
+                    <img src="./../../../../assets/img/custom-icons/icon-file-png.svg">
+                </div>
+                <div class="icon" *ngSwitchCase="'jpg'">
+                    <img src="./../../../../assets/img/custom-icons/icon-file-jpg.svg">
+                </div>
+                <div class="icon" *ngSwitchCase="'jpeg'">
+                    <img src="./../../../../assets/img/custom-icons/icon-file-jpg.svg">
+                </div>
+                <div class="icon" *ngSwitchDefault>
+                    <img src="./../../../../assets/img/custom-icons/icon-file-none.svg">
+                </div>
+            </div>
+            <div class="info">
+                <h4 class="name">
+                    {{ fileName }}
+                    <span *ngIf="!retornoUpload && fileError == null"> <i class="fa-solid fa-circle-notch fa-spin"></i>
+                    </span>
+                    <span *ngIf="retornoUpload && fileError == null"> <i
+                            class="fa-solid fa-circle-check text-success"></i> </span>
+                    <span *ngIf="dangerError"><i class="fa-solid fa-circle-xmark text-danger"></i></span>
+                </h4>
+                <p class="size" *ngIf="fileError == null">
+                    {{ fileDetails }}
+                </p>
+                <p class="file-error my-0" [ngClass]="{ 'text-danger': dangerError }" *ngIf="fileError !== null">
+                    {{ fileError }}
+                </p>
+            </div>
+        </div>
+
+        <div class="file-download" (click)="onClickDownload()" matTooltip="Download da imagem"
+            title="Download da imagem" *ngIf="obterImagem?.existeImagem && !loading">
+            <i class="fa-regular fa-arrow-down-to-bracket"></i>
+        </div>
+        <div class="file-download" (click)="onClickDownload()" matTooltip="Download da imagem"
+            title="Download da imagem" *ngIf="loading">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </div>
+
+    </div>
+</section>

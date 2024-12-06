@@ -1,0 +1,97 @@
+<div class="dialog">
+  <h2 class="bold text-gray-800" mat-dialog-title>Filtrar</h2>
+
+  <mat-dialog-content>
+    <form [formGroup]="filtroForm" class="example-form" fxLayout="column" fxLayoutGap="12px">
+      <div fxLayout="column" fxLayoutGap="8px">
+        <mat-form-field appearance="outline">
+          <mat-label>Nome da portaria</mat-label>
+          <input
+            matInput
+            placeholder="Escreva o nome da portaria"
+            formControlName="nomePortaria"
+          />
+        </mat-form-field>
+      </div>
+
+      <div fxLayout="column" fxLayoutGap="8px">
+        <mat-form-field appearance="outline">
+          <mat-label>Tipo de normativo</mat-label>
+          <mat-select
+            placeholder="Escolha o tipo de normativo"
+            formControlName="tipoNormativo"
+          >
+            <mat-option
+              *ngFor="let normativo of listaTipoNormativo"
+              [value]="normativo.id"
+            >
+              {{ normativo.nome }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <section fxLayout="row" fxLayoutGap="10px">
+        <div fxLayout="column" fxLayoutGap="8px">
+          <h4>Data de início</h4>
+
+          <mat-form-field fxFlex="100" appearance="outline">
+            <mat-label>Data de vigência</mat-label>
+            <input
+              matInput
+              [matDatepicker]="pickerInicio"
+              placeholder="Selecione a data de início"
+              formControlName="dataVigenciaInicio"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="pickerInicio"
+            ></mat-datepicker-toggle>
+
+            <mat-datepicker #pickerInicio></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div fxLayout="column" fxLayoutGap="8px">
+          <h4>Data de fim</h4>
+          <mat-form-field fxFlex="100" appearance="outline">
+            <mat-label>Data de vigência</mat-label>
+
+            <input
+              matInput
+              [matDatepicker]="pickerFim"
+              placeholder="Selecione a data de fim"
+              formControlName="dataVigenciaFim"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="pickerFim"
+            ></mat-datepicker-toggle>
+
+            <mat-datepicker #pickerFim></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </section>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions fxLayout="row" fxLayoutAlign="end" fxLayoutGap="10px" align="end">
+    <button
+      class="limparFiltros"
+      mat-stroked-button
+      color="primary"
+      (click)="limparFiltros()"
+    >
+      Limpar Filtros
+    </button>
+
+    <button
+      class="aplicarFiltros"
+      mat-flat-button
+      color="primary"
+      (click)="aplicarFiltros()"
+    >
+      Aplicar
+    </button>
+  </mat-dialog-actions>
+</div>

@@ -1,0 +1,127 @@
+<div class="d-flex justify-content-between align-items-center mt-1">
+  <div class="fw-bold text-gray-800">Dados do devedor</div>
+</div>
+
+<form [formGroup]="formulario" novalidate>
+  <div fxLayout="row" fxLayoutGap="10px" class="mt-2">
+    <mat-form-field fxFlex="auto" appearance="outline">
+      <mat-label>Nome do financiado</mat-label>
+      <input [id]="utility.getElementId(0, 'devedor-nome')" type="text" matInput name="nomeDoFinanciado"
+        formControlName="nomeDoFinanciado" placeholder="Digite o nome do financiado" maxlength="40">
+      <mat-hint>Obrigatório</mat-hint>
+      <mat-error *ngIf="formulario.get('nomeDoFinanciado').hasError('required')">Obrigatório</mat-error>
+    </mat-form-field>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="start" fxLayoutGap="10px" class="justify-content-between">
+    <div class="pt-1 toggle-default" fxFlex="auto">
+      <p class="bold desk mt-0">Tipo de documento</p>
+      <div fxLayout="row" class="align-items-start toggle-wrap" fxLayoutGap="10px">
+        <mat-button-toggle-group [id]="utility.getElementId(7, 'devedor-tipo-documento')" name="tipoDocumento"
+          formControlName="tipoDocumento" aria-label="tipoDocumento">
+          <mat-button-toggle value="cnpj" class="btn-toggle">CNPJ</mat-button-toggle>
+          <mat-button-toggle value="cpf" class="btn-toggle">CPF</mat-button-toggle>
+        </mat-button-toggle-group>
+
+        <mat-form-field fxFlex="auto" appearance="outline">
+          <mat-label>{{formulario.get('tipoDocumento')?.value | uppercase}} do financiado</mat-label>
+          <input [id]="utility.getElementId(0, 'devedor-documento')" type="text" matInput name="documento"
+            formControlName="documento" [mask]="mascaraDocumento(formulario.get('tipoDocumento').value)"
+            placeholder="Digite o documento">
+          <mat-hint>Obrigatório</mat-hint>
+          <mat-error *ngIf="formulario.get('documento').hasError('required')">
+            Obrigatório</mat-error>
+          <mat-error *ngIf="formulario.get('documento').hasError('documentNotValid')">
+            {{formulario.get('tipoDocumento').value | uppercase}} inválido
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayoutGap="10px" class="mt-2">
+    <mat-form-field fxFlex="20" appearance="outline">
+      <mat-label>CEP</mat-label>
+      <input [id]="utility.getElementId(0, 'devedor-cep')" type="text" matInput name="cep" formControlName="cep"
+        mask="00000-000" [validation]="false" placeholder="Digite o CEP">
+      <mat-hint>Obrigatório</mat-hint>
+      <mat-error *ngIf="formulario.get('cep').hasError('required')">Obrigatório</mat-error>
+      <mat-error *ngIf="formulario.get('cep').hasError('minlength')">CEP inválido
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field fxFlex="50" appearance="outline">
+      <mat-label>Logradouro</mat-label>
+      <input [id]="utility.getElementId(0, 'devedor-logradouro')" type="text" matInput #logradouroDevedor
+        name="logradouro" formControlName="logradouro" placeholder="Digite o logradouro">
+      <mat-hint>Obrigatório</mat-hint>
+      <mat-error *ngIf="formulario.get('logradouro').hasError('required')">Obrigatório
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field fxFlex="10" appearance="outline">
+      <mat-label>Número</mat-label>
+      <input [id]="utility.getElementId(0, 'devedor-numero')" type="text" matInput alphanumerics-only name="numero"
+        formControlName="numero" placeholder="Digite o número" maxlength="5">
+      <mat-hint>Obrigatório</mat-hint>
+      <mat-error *ngIf="formulario.get('numero').hasError('required')">Obrigatório</mat-error>
+    </mat-form-field>
+
+    <mat-form-field fxFlex="20" appearance="outline">
+      <mat-label>Complemento</mat-label>
+      <input [id]="utility.getElementId(0, 'devedor-complemento')" type="text" matInput name="complemento"
+        formControlName="complemento" placeholder="Digite o complemento" maxlength="20">
+    </mat-form-field>
+  </div>
+
+  <div fxLayout="row" fxLayoutGap="10px">
+    <mat-form-field fxFlex="30" appearance="outline">
+      <mat-label>Bairro</mat-label>
+      <input [id]="utility.getElementId(0, 'devedor-bairro')" type="text" matInput name="bairro"
+        formControlName="bairro" placeholder="Digite o bairro" maxlength="20"
+        [alphanumerics-only]="['acento', 'espaco']">
+      <mat-hint>Obrigatório</mat-hint>
+      <mat-error *ngIf="formulario.get('bairro').hasError('required')">Obrigatório</mat-error>
+    </mat-form-field>
+
+    <mat-form-field fxFlex="10" appearance="outline">
+      <mat-label>UF</mat-label>
+      <mat-select [id]="utility.getElementId(5, 'devedor-uf')" name="uf" formControlName="uf">
+        <mat-option>Selecione</mat-option>
+        <mat-option *ngFor="let uf of ufsLicenciamento" [value]="uf">{{ uf }}</mat-option>
+      </mat-select>
+      <mat-hint>Obrigatório</mat-hint>
+      <mat-error *ngIf="formulario.get('uf').hasError('required')">Obrigatório</mat-error>
+    </mat-form-field>
+
+    <mat-form-field fxFlex="auto" appearance="outline">
+      <mat-label>Município</mat-label>
+      <input [id]="utility.getElementId(0, 'devedor-municipio')" type="text" matInput name="municipio"
+        formControlName="municipio" placeholder="Digite o município" maxlength="30"
+        [alphanumerics-only]="['acento', 'espaco']">
+      <mat-hint>Obrigatório</mat-hint>
+      <mat-error *ngIf="formulario.get('municipio').hasError('required')">Obrigatório
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div fxLayout="row" fxLayoutGap="10px">
+    <mat-form-field fxFlex="30" appearance="outline">
+      <mat-label>Telefone</mat-label>
+      <input [id]="utility.getElementId(0, 'devedor-telefone')" type="text" matInput name="telefone"
+        formControlName="telefone" mask="(00) 0000-0000 || (00) 0 0000-0000" [showMaskTyped]="false"
+        placeholder="Digite o telefone">
+      <mat-hint>Obrigatório</mat-hint>
+      <mat-error *ngIf="formulario.get('telefone').hasError('required')">Obrigatório
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field fxFlex="auto" appearance="outline">
+      <mat-label>E-mail</mat-label>
+      <input [id]="utility.getElementId(0, 'devedor-email')" type="email" matInput name="email" formControlName="email"
+        placeholder="Digite o e-mail" [maxlength]="contratoResponse.contrato.ufLicenciamento === 'PR' ? 40 : 255" email>
+      <mat-error *ngIf="formulario.get('email').hasError('email')">E-mail inválido
+      </mat-error>
+    </mat-form-field>
+  </div>
+</form>

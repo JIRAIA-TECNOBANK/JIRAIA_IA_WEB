@@ -1,0 +1,175 @@
+@import '$settings';
+@import '$tools';
+
+tr.example-detail-row {
+    height: 0;
+  }
+  
+  .example-element-row td {
+    border-bottom-width: 0;
+  }
+  
+  .column__image {
+    i {
+      margin-left: 20%
+    }
+  }
+  
+  .fas {
+    &.success {
+      color: $success-900
+    }
+  
+    &.warnig {
+      color: $warning-900
+    }
+  }
+  
+  .example__element--detail {
+    overflow: hidden;
+    display: flex;
+  
+    .example__element--boxLeft {
+      flex: 1 0 70%;
+  
+      ul {
+        flex-wrap: wrap;
+        display: flex;
+        list-style: none;
+        padding: 0;
+  
+        li {
+          margin: 0 8% 0 0;
+  
+          p {
+            @include fontMontserratRegular(400);
+            font-size: 14px;
+          }
+  
+          button {
+            min-width: 160px;
+          }
+        }
+      }
+    }
+  
+    .example__element--boxRight {
+      flex: 1 1 auto;
+      flex-direction: column;
+      display: flex;
+  
+      button {
+        margin-bottom: 10px;
+      }
+  
+      p {
+        text-align: center;
+      }
+  
+      .btn {
+        @include transition(opacity 0.2s ease-in-out);
+        background: $blue-800;
+        padding: 0 3rem;
+        opacity: 1;
+  
+        span {
+          font-size: 14px !important;
+        }
+  
+        &:hover {
+          filter: alpha(opacity=80);
+          opacity: 0.8;
+        }
+      }
+    }
+  }
+  
+  .btn_warning {
+    background: $warning-900;
+    border: 2px solid $warning-900;
+    color: inherit;
+  }
+  
+  .space-column {
+    padding-right: 10px;
+  }
+  
+  .wrapper {
+    @include border-radius(50px);
+    background: $blue-600;
+    width: 21px;
+    height: 21px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $white;
+    font-size: 11px;
+    margin: 0 auto;
+  }
+  
+  .campo__maxWidth {
+    max-width: 298px;
+  }
+  
+  .column-max-width {
+    text-overflow: ellipsis !important;
+    max-width: 145px !important;
+    white-space: nowrap;
+    overflow: hidden;
+    padding-right: 10px;
+  }
+  
+  .btn-disabled {
+    color: rgba(0, 0, 0, 0.26) !important;
+    cursor: default !important;
+  }
+  
+  .icon-contrato {
+    background-color: $primary;
+    color: $white;
+    padding: 5px 8px;
+    border-radius: 50px;
+    font-size: .8em;
+  }
+  
+  .icon-frota {
+    background-color: $blue-700;
+  }
+  
+  .icon-cancelado {
+    background-color: $warning-700;
+  }
+  
+  .icon-baixado {
+    background-color: $error-800;
+  }
+  
+  .detalhes-registro {
+    @include border-radius(10px);
+    border: 1px solid $gray-400;
+    padding: 0 1rem;
+    margin-bottom: 15px;
+  
+    .bb-1 {
+      border-bottom: 1px solid $gray-400;
+    }
+  
+    .titulo {
+      display: block;
+      width: 17%;
+      border-bottom: 1px solid $gray-400;
+      padding: 1rem 0 0.2rem 0;
+      margin-top: 0;
+      font-size: 1rem;
+      color: #000000de;
+    }
+  
+    p {
+      font-size: 16px;
+      color: $blue-800;
+  
+      strong {
+        color: #000000de;
+      }
+    }
+  }

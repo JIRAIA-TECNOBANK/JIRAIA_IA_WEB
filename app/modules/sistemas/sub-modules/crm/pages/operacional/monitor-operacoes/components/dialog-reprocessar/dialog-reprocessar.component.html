@@ -1,0 +1,11 @@
+<form [formGroup]="formReprocessar" fxLayout="column" fxLayoutGap="10px" class="px-2">
+    <mat-form-field appearance="outline" class="mb-0">
+        <input matInput formControlName="codigo" [id]="utility.getElementId(1, 'codigo')" />
+    </mat-form-field>
+
+    <section class="disclaimer text-center">
+        <p class="m-0"> Ao reprocessar essa operação, será acatado o retorno 30, indicando que a operação foi finalizada
+            com sucesso. </p>
+        <p class="m-0"> Confirmar o seu reprocessamento? </p>
+    </section>
+</form>

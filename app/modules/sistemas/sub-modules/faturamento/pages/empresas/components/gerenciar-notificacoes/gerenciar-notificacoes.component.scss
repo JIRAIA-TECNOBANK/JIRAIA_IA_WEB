@@ -1,0 +1,55 @@
+@import '$settings';
+@import '$tools';
+
+h6 {
+    @include fontMontserratBold;
+    font-size: 16px;
+    color: $gray-800;
+    margin: 8px 0 8px 0;
+}
+
+.label {
+    font-size: 12px;
+}
+
+.habilitar-gerenciamento {
+    border: 1px solid #D0DFF0;
+    border-radius: 6px;
+    padding: 0 20px;
+}
+
+p {
+    font-size: 13px;
+}
+
+.acao {
+    @include border-radius(5px);
+    @include fontMontserratRegular;
+    font-size: 13px;
+    width: 117px;
+    height: 30px;
+    opacity: 0px;
+    box-shadow: 0px 4px 4px 0px #00000040;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $primary;
+    color: $white;
+    border: 1px solid $white;
+
+    &.habilitado {
+        background: $white;
+        color: $gray-800;
+        border: 1px solid $gray-800;
+    }
+}
+
+.conteudo {
+    p {
+        width: 80%;
+    }
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}

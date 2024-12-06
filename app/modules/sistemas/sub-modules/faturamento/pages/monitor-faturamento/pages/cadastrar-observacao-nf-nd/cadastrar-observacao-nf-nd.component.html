@@ -1,0 +1,40 @@
+<div class="default-tab px-2 pb-3">
+    <mat-card class="mat-elevation-z8">
+        <p class="bold desk gray-800 mt-0">Observação na Nota Fiscal/Nota de Débito</p>
+        <form [formGroup]="formulario" fxLayout="row wrap" fxLayoutGap="10px grid" (ngSubmit)="confirmarObservacao()">
+            <mat-form-field class="input-width-8 mt-1" fxFlex="100" appearance="outline">
+                <mat-label>Observação da Nota Fiscal</mat-label>
+                <textarea [id]="utility.getElementId(0, 'obs-nota-fiscal')" matInput rows="3" name="notaFiscal"
+                    formControlName="notaFiscal" maxlength="3990" #notaFiscal></textarea>
+                <mat-hint align="end">{{ notaFiscal.value?.length || 0 }}/3990</mat-hint>
+                <mat-error *ngIf="formulario.controls['notaFiscal'].hasError('maxlength')" align="end">{{
+                    notaFiscal.value?.length || 0 }}/3990</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="input-width-8" fxFlex="100" appearance="outline">
+                <mat-label>Observação da Nota de Débito</mat-label>
+                <textarea [id]="utility.getElementId(0, 'obs-nota-debito')" matInput rows="3" name="notaDebito"
+                    formControlName="notaDebito" maxlength="4990" #notaDebito></textarea>
+                <mat-hint align="end">{{ notaDebito.value?.length || 0 }}/4990</mat-hint>
+                <mat-error *ngIf="formulario.controls['notaDebito'].hasError('maxlength')" align="end">{{
+                    notaDebito.value?.length || 0 }}/4990</mat-error>
+            </mat-form-field>
+
+            <div class="d-flex justify-content-end" fxFlex="100">
+                <button mat-flat-button class="btn-excluir mr-2" [id]="utility.getElementId(2, 'excluir-observacao')"
+                    type="button" (click)="clickExcluir()" *ngIf="mostrarExcluir && !somenteConsulta">
+                    Excluir
+                </button>
+
+                <button mat-stroked-button class="btn-outline-primary" [ngClass]="{ 'mr-2': !somenteConsulta }"
+                    color="primary" (click)="voltar()">
+                    {{ somenteConsulta ? 'Fechar' : 'Cancelar' }}
+                </button>
+                <button *ngIf="!somenteConsulta" mat-flat-button color="primary" type="submit"
+                    [disabled]="!formulario.valid" [id]="utility.getElementId(2, 'confirmar-observacao')">
+                    Confirmar
+                </button>
+            </div>
+        </form>
+    </mat-card>
+</div>

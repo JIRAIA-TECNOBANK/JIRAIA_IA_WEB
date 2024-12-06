@@ -1,0 +1,159 @@
+<mat-card class="mat-elevation-z8 card__form mx-2">
+  <form [formGroup]="formulario" (submit)="submitForm()" #form="ngForm" fxLayout="row "
+    fxLayoutAlign="space-between center">
+    <section fxFlex="90" fxLayout="row wrap" fxLayoutGap="10px" fxLayoutAlign="start grid">
+      <mat-form-field appearance="outline" fxFlex="10">
+        <mat-label>UF </mat-label>
+        <mat-select formControlName="uf" required [id]="utility.getElementId(5, 'uf-detran')">
+          <mat-option *ngFor="let uf of ufs" [value]="uf.valor"> {{ uf.valor }} </mat-option>
+        </mat-select>
+        <mat-hint>Obrigatório</mat-hint>
+        <mat-error *ngIf="formulario.controls['uf'].hasError('required')">Obrigatório
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field fxFlex="25" appearance="outline"
+        *ngIf="formulario.get('uf').value && formulario.get('uf').value != 'MS'">
+        <mat-label *ngIf="formulario.get('uf').value != 'MG'">CNPJ</mat-label>
+        <mat-label *ngIf="formulario.get('uf').value == 'MG'">CNPJ Tecnobank</mat-label>
+        <input type="text" matInput name="cnpj" formControlName="cnpj" mask="00.000.000/0000-00"
+          [id]="utility.getElementId(0, 'confirmar-registro-cnpj')" required>
+        <mat-hint>Obrigatório</mat-hint>
+        <mat-error *ngIf="formulario.controls['cnpj'].hasError('required')">Obrigatório
+        </mat-error>
+      </mat-form-field>
+
+      <div class="toggle-default inline" *ngIf="mostrarCampo('REMARCADO')">
+        <p class="bold desk my-0 mr-1 text-gray-800">Remarcado?</p>
+        <div fxLayout="row" class="align-items-start" fxLayoutGap="10px">
+          <mat-button-toggle-group name="remarcado" [id]="utility.getElementId(7, 'remarcado')"
+            formControlName="remarcado" aria-label="remarcado">
+            <mat-button-toggle [id]="utility.getElementId(2, 'remarcado-sim')" value="true"
+              class="btn-toggle">Sim</mat-button-toggle>
+            <mat-button-toggle [id]="utility.getElementId(2, 'remarcado-nao')" value="false"
+              class="btn-toggle">Não</mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+      </div>
+
+      <mat-form-field fxFlex="40" appearance="outline" *ngIf="mostrarCampo('TIPO_RESTRICAO')">
+        <mat-label>Tipo de restrição</mat-label>
+        <mat-select [id]="utility.getElementId(5, 'tipo-restricao')" name="tipoRestricao"
+          formControlName="tipoRestricao" required>
+          <mat-option *ngFor="let restricao of tiposRestricao" [value]="restricao.id">{{restricao.valor}}</mat-option>
+        </mat-select>
+        <mat-hint>Obrigatório</mat-hint>
+        <mat-error *ngIf="formulario.get('tipoRestricao').hasError('required')">Obrigatório
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" fxFlex *ngIf="mostrarTipoPesquisa(formulario.get('uf').value)" fxFlex="20">
+        <mat-label>Pesquisar por </mat-label>
+        <mat-select formControlName="pesquisa" required [id]="utility.getElementId(5, 'pesquisa')">
+          <mat-option *ngFor="let pesquisa of pesquisarPor" [value]="pesquisa.palavraChave"> {{ pesquisa.valor }}
+          </mat-option>
+        </mat-select>
+        <mat-hint>Obrigatório</mat-hint>
+        <mat-error *ngIf="formulario.controls['pesquisa'].hasError('required')">Obrigatório
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field fxFlex="auto" appearance="outline" *ngIf="mostrarCampo('DEFAULT')">
+        <mat-label>Escolha o tipo de pesquisa</mat-label>
+        <input type="text" matInput name="valorPesquisa" formControlName="valorPesquisa"
+          [id]="utility.getElementId(0, 'confirmar-registro-valor-pesquisa')" required>
+        <mat-hint>Obrigatório</mat-hint>
+        <mat-error *ngIf="formulario.controls['valorPesquisa'].hasError('required')">Obrigatório
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" *ngIf="mostrarCampo('CHASSI')" fxFlex>
+        <mat-label>Digite o número do chassi</mat-label>
+        <input type="text" matInput name="chassi" formControlName="chassi" maxlength="21"
+          [id]="utility.getElementId(0, 'confirmar-registro-chassi')" required>
+        <mat-hint>Obrigatório</mat-hint>
+        <mat-error *ngIf="formulario.controls['chassi'].hasError('required')">Obrigatório
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" *ngIf="mostrarCampo('NCONTRATO')" fxFlex>
+        <mat-label>Digite o número do contrato</mat-label>
+        <input type="text" matInput name="numeroContrato" formControlName="numeroContrato"
+          [id]="utility.getElementId(0, 'confirmar-registro-numero-contrato')" required>
+        <mat-hint>Obrigatório</mat-hint>
+        <mat-error *ngIf="formulario.controls['numeroContrato'].hasError('required')">Obrigatório
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" *ngIf="mostrarCampo('NGRAVAME')" fxFlex>
+        <mat-label>Digite o número do gravame</mat-label>
+        <input type="text" matInput name="numeroGravame" formControlName="numeroGravame"
+          [id]="utility.getElementId(0, 'confirmar-registro-numero-gravame')" required>
+        <mat-hint>Obrigatório</mat-hint>
+        <mat-error *ngIf="formulario.controls['numeroGravame'].hasError('required')">Obrigatório
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" *ngIf="mostrarCampo('NDUDA')" fxFlex>
+        <mat-label>Digite o número da DUDA</mat-label>
+        <input type="text" matInput name="numeroDuda" formControlName="numeroDuda"
+          [id]="utility.getElementId(0, 'confirmar-registro-numero-duda')" required>
+        <mat-hint>Obrigatório</mat-hint>
+        <mat-error *ngIf="formulario.controls['numeroDuda'].hasError('required')">Obrigatório
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" *ngIf="mostrarCampo('MESANO')" fxFlex>
+        <mat-label>Digite mês e ano</mat-label>
+        <input type="text" matInput name="mesAno" formControlName="mesAno" placeholder="MMAAAA" maxlength="6"
+          [id]="utility.getElementId(0, 'confirmar-registro-mes-ano')" required numbers-only>
+        <mat-hint>Obrigatório</mat-hint>
+        <mat-error *ngIf="formulario.controls['mesAno'].hasError('required')">Obrigatório
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" *ngIf="mostrarCampo('ETAPA')" fxFlex>
+        <mat-label>Etapa</mat-label>
+        <input type="text" matInput name="etapa" formControlName="etapa"
+          [id]="utility.getElementId(0, 'confirmar-registro-etapa')" required>
+        <mat-hint>Obrigatório</mat-hint>
+        <mat-error *ngIf="formulario.controls['etapa'].hasError('required')">Obrigatório
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" *ngIf="mostrarCampo('NSEQUENCIAL')" fxFlex>
+        <mat-label>Digite o número sequencial</mat-label>
+        <input type="text" matInput name="numeroSequencial" formControlName="numeroSequencial"
+          [id]="utility.getElementId(0, 'confirmar-registro-numero-sequencial')" required>
+        <mat-hint>Obrigatório</mat-hint>
+        <mat-error *ngIf="formulario.controls['numeroSequencial'].hasError('required')">Obrigatório
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" *ngIf="mostrarCampo('DOCDEVEDOR')" fxFlex>
+        <mat-label>Digite o documento do devedor</mat-label>
+        <input type="text" matInput name="documentoDevedor" formControlName="documentoDevedor"
+          [id]="utility.getElementId(0, 'confirmar-registro-documento-devedor')" required>
+        <mat-hint>Obrigatório</mat-hint>
+        <mat-error *ngIf="formulario.controls['documentoDevedor'].hasError('required')">Obrigatório
+        </mat-error>
+      </mat-form-field>
+    </section>
+
+    <button mat-flat-button color="secondary" class="card__button" type="submit" [disabled]="!formulario.valid"
+      [id]="utility.getElementId(2, 'consultar')">
+      Consultar
+    </button>
+  </form>
+</mat-card>
+
+<mat-card class="mat-elevation-z8 card__form m-2" *ngIf="response">
+  <div class="fw-bold">Dados do contrato <i class="fa-solid fa-copy text-primary"
+      (click)="copiarRetornoDetran(response)" matTooltip="Copiar"></i> <span class="copiado ml-1"
+      [ngClass]="{ 'd-none': !copiado }">Copiado!</span></div>
+
+  <div [ngSwitch]="obterTipoRetornoConsulta(response)">
+    <pre *ngSwitchCase="1">{{response | jsonBeautify}}</pre>
+    <pre *ngSwitchCase="3">{{response | xmlBeautify}}</pre>
+    <p *ngSwitchDefault>{{response}}</p>
+  </div>
+</mat-card>

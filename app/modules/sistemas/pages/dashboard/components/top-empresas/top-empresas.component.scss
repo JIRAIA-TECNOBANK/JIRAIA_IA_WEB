@@ -1,0 +1,161 @@
+@import "$settings";
+@import "$tools";
+
+.top-empresas {
+    p {
+        font-size: 12px;
+    }
+
+    .wrapper {
+        @include border-radius(5px);
+        background-color: #F9F9F9;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+
+        &.disabled {
+            opacity: .5;
+            cursor: default;
+        }
+
+        i {
+            color: $gray-800;
+        }
+    }
+
+
+    .filtro {
+        background-color: #DFEEFC;
+        color: $blue-700;
+        font-size: 12px;
+        margin-left: 1rem;
+
+        &:hover {
+            color: $white;
+            background-color: $blue-600;
+        }
+
+        &.selected {
+            color: $white;
+            background-color: $primary;
+        }
+    }
+
+    .expandir-registros {
+        @include border-radius(100%);
+        background-color: $blue-600;
+        width: 22px;
+        height: 22px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+
+        i {
+            color: $white;
+            font-size: 13px;
+            margin-top: 1px;
+        }
+    }
+
+    .detalhes {
+        font-size: 12px;
+        color: $gray-800;
+
+        span {
+            height: 52px;
+            display: flex;
+            align-items: center;
+
+            &.total-col {
+                justify-content: end;
+            }
+        }
+
+        .titulo {
+            @include fontMontserratRegular;
+        }
+
+        .valores {
+            display: flex;
+            align-items: center;
+
+            .conteudo {
+                border-top: 1px solid $gray-300;
+            }
+
+            span {
+                @include fontMontserratBold;
+
+                &.classificacao {
+                    @include border-radius(5px);
+                    width: 30px;
+                    height: 30px;
+                    border-radius: 5px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 0;
+                }
+
+                &.total-valor {
+                    justify-content: end;
+                }
+            }
+        }
+    }
+
+    &.sucesso {
+        .classificacao {
+            background: $primary;
+            color: $white;
+        }
+
+        .total-valor {
+            color: $primary;
+        }
+    }
+
+    &.inconsistencia {
+        .classificacao {
+            background: #FFCAB5;
+            color: $gray-900;
+        }
+
+        .total-valor {
+            color: #E31D1D;
+        }
+    }
+
+    .spinner {
+        height: 500px;
+    }
+}
+
+.filter-search {
+    font-size: 12px !important;
+
+    .filter-header {
+        border-bottom: 1px solid $gray-400;
+        align-items: center;
+
+        span {
+            @include fontMontserratBold;
+            color: $gray-800;
+        }
+
+        button {
+            font-size: 12px !important;
+            border-bottom: none;
+        }
+    }
+
+    .filtro-ufs {
+        max-height: 200px;
+        overflow: auto;
+        padding: 1rem;
+    }
+}

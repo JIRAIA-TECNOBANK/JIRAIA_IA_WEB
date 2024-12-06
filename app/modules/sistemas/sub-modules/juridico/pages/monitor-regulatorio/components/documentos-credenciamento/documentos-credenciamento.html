@@ -1,0 +1,39 @@
+<div class="top-empresas p-1" fxLayout="column" fxLayoutAlign="space-between"
+    [ngClass]="sucesso ? 'sucesso' : 'inconsistencia'"
+    *ngIf="loading || !mostrarDetalhes || (mostrarDetalhes && listaDocumentos.length > 0)">
+    <div fxLayout="row" [fxLayoutAlign]="mostrarDetalhes ? 'space-between' : 'space-between center'">
+        <p class="bold my-0" style="white-space: nowrap;">{{ 'Documentos para credenciamento' }}
+        </p>
+
+        <section fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px" fxFlex="100">
+            <div *ngIf="mostrarDetalhes" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px">
+
+                
+            </div>
+
+            <div fxLayout="column" fxLayoutAlign="center center" fxFlex="20">
+                <div class="expandir-registros" [id]="utility.getElementId(2, 'expandir-top-empresas')"
+                    (click)="expandirDetalhes()">
+                    <i class="fa-solid" [ngClass]="mostrarDetalhes ? 'fa-angle-up' : 'fa-angle-down'"></i>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <section class="detalhes mt-1 px-1" *ngIf="mostrarDetalhes && !loading" fxLayout="column">
+        <div fxLayout="row" class="valores" *ngFor="let item of listaDocumentos; let i = index" fxLayoutGap="10px">
+            <span class="bullet"></span>
+            <div class="conteudo" fxLayout="row" fxLayoutAlign="space-between" fxFlex="95">
+                <span fxFlex="85">{{item.documento}}</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="w-100 spinner d-flex align-items-center justify-content-center" *ngIf="loading">
+        <mat-spinner [diameter]="100"></mat-spinner>
+    </section>
+
+</div>
+
+<app-bloco-vazio *ngIf="!loading && mostrarDetalhes && listaDocumentos.length === 0"
+    [options]="blocoVazio"></app-bloco-vazio>

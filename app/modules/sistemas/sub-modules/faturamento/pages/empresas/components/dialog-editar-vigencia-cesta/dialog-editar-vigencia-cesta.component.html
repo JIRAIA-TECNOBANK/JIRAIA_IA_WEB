@@ -1,0 +1,17 @@
+<p class="bold desk mt-0">Editar início da vigência</p>
+
+<p class="titulo"><span class="fnt-12 bold">Cesta:</span> {{ preco.nome }}</p>
+
+<form class="formulario pb-2" [formGroup]="formulario">
+    <app-escolha-vigencia-cesta [opcaoVigenciaControl]="formulario.get('periodoVigencia')"
+        [dataInicioVigenciaControl]="formulario.get('dataInicioVigencia')"></app-escolha-vigencia-cesta>
+
+    <mat-dialog-actions class="d-flex justify-content-end p-0">
+        <button mat-stroked-button class="btn-outline-primary" color="primary" type="button" [mat-dialog-close]="false"
+            [id]="utility.getElementId(2, 'edicao-vigencia-cancelar')">Cancelar</button>
+
+        <button mat-flat-button color="secondary" [mat-dialog-close]="formulario.value" type="button"
+            [disabled]="!formulario.valid"
+            [id]="utility.getElementId(2, 'edicao-vigencia-confirmar')">Confirmar</button>
+    </mat-dialog-actions>
+</form>

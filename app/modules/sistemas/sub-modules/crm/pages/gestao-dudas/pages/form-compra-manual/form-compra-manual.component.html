@@ -1,0 +1,35 @@
+<div class="px-2">
+    <mat-card class="mb-4 mat-elevation-z8">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="fw-bold">Compra manual</div>
+        </div>
+        <form [formGroup]="compraManualForm" (ngSubmit)="submitCompraManual()" class="mt-2">
+            <div fxLayout="row" fxLayoutGap="10px">
+                <mat-form-field appearance="outline" fxFlex="25">
+                    <mat-label>CNPJ </mat-label>
+                    <input matInput placeholder="CNPJ" formControlName="cnpj" mask="00.000.000/0000-00"
+                        [id]="utility.getElementId(0, 'compra-manual-cnpj')" />
+                </mat-form-field>
+                <mat-form-field appearance="outline" fxFlex="25">
+                    <mat-label>Quantidade </mat-label>
+                    <input matInput placeholder="Quantidade" formControlName="quantidade" required type="number"
+                        maxlength="3" [id]="utility.getElementId(0, 'compra-manual-qtd')" />
+                    <mat-hint class="text-danger bold" *ngIf="compraManualForm.get('quantidade').hasError('max')">
+                        Quantidade não pode ser maior que 200</mat-hint>
+                </mat-form-field>
+                <mat-form-field appearance="outline" fxFlex="auto">
+                    <mat-label>Justificativa </mat-label>
+                    <input matInput placeholder="Justificativa" formControlName="justificativa" required
+                        [id]="utility.getElementId(0, 'compra-manual-justificativa')" />
+                </mat-form-field>
+            </div>
+
+            <div class="d-flex justify-content-end mt-2">
+                <button mat-flat-button color="primary" type="submit" [disabled]="!compraManualForm.valid"
+                    [id]="utility.getElementId(2, 'compra-manual-confirmar')">
+                    Confirmar
+                </button>
+            </div>
+        </form>
+    </mat-card>
+</div>

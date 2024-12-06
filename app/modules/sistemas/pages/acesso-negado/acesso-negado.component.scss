@@ -1,0 +1,33 @@
+@import '$tools';
+@import '$settings';
+
+div {
+  height: 457px;
+  width: 727px;
+  margin: 0 auto;
+}
+
+mat-card {
+  height: 100%;
+  background-image: url('./../../../../../assets/img/bg-error.svg');
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+
+  section {
+    width: 55%;
+    padding-right: 5rem;
+
+    h3 {
+      @include fontMontserratBold;
+      color: $primary;
+      font-size: 32px;
+    }
+
+    p {
+      font-size: 14px;
+      color: $gray-900;
+    }
+  }
+}

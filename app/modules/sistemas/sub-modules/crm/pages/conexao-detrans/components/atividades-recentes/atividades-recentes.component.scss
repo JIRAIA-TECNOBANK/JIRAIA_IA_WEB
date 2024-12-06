@@ -1,0 +1,45 @@
+@import '$settings';
+@import '$tools';
+
+.card__atividades {
+    @include desktop-up {
+        margin-left: 24px;
+    }
+    max-height: 520px;
+
+    .card__title {
+        @include fontMontserratBold();
+        font-size: 14px;
+    }
+
+    .card__list {
+        list-style: none;
+        margin-top: 20px;
+        padding: 0;
+
+        li {
+            align-items: center;
+            display: flex;
+            margin-bottom: 20px;
+
+            span {
+                @include fontMontserratBold();
+                @include border-radius(100%);
+                background-color: $blue-800;
+                color: #CEE8FF;
+                font-size: 12px;
+                height: 28px;
+                line-height: 27px;
+                margin-right: 10px;
+                text-align: center;
+                width: 28px;
+            }
+
+            p {
+                @include fontMontserratRegular();
+                font-size: 14px;
+                margin: 0;
+            }
+        }
+    }
+}

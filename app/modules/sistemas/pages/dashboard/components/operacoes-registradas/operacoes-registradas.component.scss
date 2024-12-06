@@ -1,0 +1,43 @@
+@import "$settings";
+@import "$tools";
+
+.operacoes-registradas {
+    overflow: hidden;
+    
+    p {
+        font-size: 12px;
+    }
+
+    section {
+        &.grafico {
+            height: 300px;
+            
+            .grafico-rosquinha {
+                position: absolute;
+                width: 90%;
+            }
+        }
+
+        &.legenda {
+            @include fontMontserratRegular;
+            font-size: 12px;
+            align-items: center;
+            margin-top: 0.5rem;
+
+            .bullet {
+                @include border-radius(2px);
+                width: 21px;
+                height: 6px;
+                margin-right: 4px;
+
+                &.sucesso {
+                    background-color: #9EF19C;
+                }
+
+                &.inconsistencia {
+                    background-color: #FEA481;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,21 @@
+<section fxLayout="column" fxLayoutAlign="space-between" class="h-100">
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+        <div class="fw-bold mb-1">Conexão com DETRANs</div>
+        <div class="wrapper" (click)="irParaConexaoDetrans()" [id]="utility.getElementId(2, 'dashboard-detrans')">
+            <i class="fa-solid fa-angle-right"></i>
+        </div>
+    </div>
+
+    <section class="mapa-conexao">
+        <app-mapa-conexao [conexoesDetrans]="conexoes"></app-mapa-conexao>
+    </section>
+
+    <section fxLayout="row" fxALayoutAlign="start" fxLayoutGap="24px" class="mapa-legenda">
+        <div fxLayout="row" fxLayoutAlign="start center">
+            <div class="legenda conectado mr-1"></div> Conectado
+        </div>
+        <div fxLayout="row" fxLayoutAlign="start center">
+            <div class="legenda nao-identificado mr-1"></div> Não identificado
+        </div>
+    </section>
+</section>

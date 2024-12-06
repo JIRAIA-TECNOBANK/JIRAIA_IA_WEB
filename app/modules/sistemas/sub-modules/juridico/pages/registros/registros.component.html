@@ -1,0 +1,101 @@
+<div [hidden]="childstate">
+    <section class="top-options mb-2">
+        <app-atualizar-pagina (atualizar)="atualizarPagina()"></app-atualizar-pagina>
+
+        <button 
+            *ngIf="tabelaAtual === 0"
+            mat-button 
+            color="secondary" 
+            [id]="utility.getElementId(2, 'incluir-registro')"
+            [routerLink]="['/registros/incluir-registro']"
+        >
+            Incluir registro de contrato
+        </button>
+
+        <button 
+            *ngIf="tabelaAtual === 1"
+            mat-button 
+            color="secondary" 
+            [id]="utility.getElementId(2, 'incluir-garantia')"
+            [routerLink]="['/registros/incluir-garantia']"
+        >
+            Incluir registro de garantia
+        </button>
+
+        <button
+            *ngIf="tabelaAtual === 2"
+            mat-button
+            color="secondary"
+            [id]="utility.getElementId(2, 'incluir-instituicao')"
+            [routerLink]="['/registros/incluir-instituicao']"
+        >
+            Incluir registro de instituição
+        </button>
+    </section>
+
+    <mat-tab-group (selectedTabChange)="onTabChange($event)" [selectedIndex]="activeIndex">
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <div class="tab-label">
+                    <i class="fa-regular fa-file-contract"></i>
+                    <span>Registro de contrato</span>
+                </div>
+            </ng-template>
+
+            <div class="px-2">
+                <app-filtro-registros (filtro)="filtroRegistros = $event"></app-filtro-registros>
+            </div>
+
+            <div class="default-tab px-2 pb-3">
+                <mat-card class="mat-elevation-z8 mt-2 p-0">
+                    <app-table-registros 
+                        [refreshGrid]="refreshGrid" 
+                        [filtro]="filtroRegistros"
+                    ></app-table-registros>
+                </mat-card>
+            </div>
+        </mat-tab>
+
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <div class="tab-label">
+                    <i class="fa-regular fa-badge-check"></i>
+                    <span>Registro de garantia</span>
+                </div>
+            </ng-template>
+
+            <div class="px-2">
+                <app-filtro-garantias (filtro)="filtroGarantias = $event"></app-filtro-garantias>
+            </div>
+
+            <div class="default-tab px-2 pb-3">
+                <mat-card class="mat-elevation-z8 mt-2 p-0">
+                    <app-table-garantias 
+                        [refreshGrid]="refreshGrid" 
+                        [filtro]="filtroGarantias"
+                    ></app-table-garantias>
+                </mat-card>
+            </div>
+        </mat-tab>
+
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <div class="tab-label">
+                    <i class="fa-regular fa-building-memo"></i>
+                    <span>Instituição financeira</span>
+                </div>
+            </ng-template>
+
+            <div class="default-tab px-2 pb-3">
+                <mat-card class="mat-elevation-z8 mt-2 p-0">
+                    <app-table-instituicao 
+                        app-table-instituicao 
+                        [refreshGrid]="refreshGrid"
+                    ></app-table-instituicao>
+                </mat-card>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>
+
+<router-outlet></router-outlet>

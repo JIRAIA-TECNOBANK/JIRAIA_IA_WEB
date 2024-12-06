@@ -1,0 +1,41 @@
+<div fxLayout="row" fxLayoutAlign="space-between none">
+    <div fxFlex>
+        <div *ngIf="isLoading" class="d-flex" fxLayout="row" fxLayoutAlign="space-between none">
+            <div *skeleton="
+            isLoading;
+            className: 'mr-1';
+            height: '36px';
+            width: '10%';"></div>
+            <div *skeleton="
+            isLoading;
+            className: 'mr-1';
+            height: '36px';
+            width: '80%';"></div>
+            <div *skeleton="
+            isLoading;
+            className: 'mr-1';
+            height: '36px';
+            width: '10%';"></div>
+        </div>
+
+        <table class="resumo-descricao" aria-describedby="Dados do Financiamento">
+            <colgroup>
+                <col id="header-label">
+                <col id="header-value">
+                <col id="header-error">
+            </colgroup>
+            <tbody>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+                <ng-container *ngFor="let dadosContrato of dadosInconsistenciasContrato">
+                    <tr [ngClass]="{'error-cell': dadosContrato.possuiInconsistencia }">
+                        <td class="color-primary">{{dadosContrato.nomeExibicao}}</td>
+                        <td>{{formatarDados(dadosContrato)}}</td>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,91 @@
+<div [hidden]="childstate">
+
+  <div class="d-flex justify-content-end top-options" style="gap: 10px">
+    <button mat-flat-button color="secondary" (click)="criarPerfil()" *ngIf="tabNumber == 0"
+      [disabled]="!utility.getPermission([Permissoes.GESTAO_EMPRESA_USUARIO_CRM_CADASTRAR])"
+      [id]="utility.getElementId(2, 'incluir-perfil')">
+      Incluir perfil </button>
+
+    <button mat-flat-button color="secondary" (click)="criarUsuario()" *ngIf="tabNumber == 1"
+      [disabled]="!utility.getPermission([Permissoes.GESTAO_EMPRESA_USUARIO_CRM_CADASTRAR])"
+      [id]="utility.getElementId(2, 'incluir-usuario')">
+      Incluir usuário
+    </button>
+
+    <button mat-flat-button color="secondary" (click)="criarUsuarioSrd()" *ngIf="tabNumber == 2"
+      [disabled]="!utility.getPermission([Permissoes.GESTAO_EMPRESA_USUARIO_CRM_CADASTRAR])"
+      [id]="utility.getElementId(2, 'incluir-usuario-srd')">
+      Incluir usuário SRD
+    </button>
+  </div>
+
+  <mat-tab-group (selectedTabChange)="changeTab($event)" [selectedIndex]="tabNumber">
+    <mat-tab label="Perfis"
+      [disabled]="!utility.getPermission([Permissoes.GESTAO_EMPRESA_USUARIO_MASTER_CONSULTAR, Permissoes.GESTAO_EMPRESA_USUARIO_CRM_CADASTRAR])">
+      <ng-template mat-tab-label>
+        <div class="empresas-tab-label">
+          <i class="fa-regular fa-lock-keyhole"></i>
+          <span>Perfis</span>
+        </div>
+      </ng-template>
+      <div class="px-2">
+        <app-grid-filter [filter]="filter" (pesquisar)="searchPerfil($event)" (redefinir)="redefinirFiltroPerfil()"
+          [radiusTop]="false" [showRedefinir]="showRedefinirPerfilBtn"
+          (onSearchInput)="searchFieldPerfil($event)"></app-grid-filter>
+      </div>
+
+      <div class="default-tab px-2 pb-3">
+        <mat-card class="mat-elevation-z8 mt-2 p-0">
+          <app-table-perfis [empresaId]="empresaId" [refreshGrid]="refreshPerfilGrid"
+            (hasActivePerfil)="hasActivePerfil = $event" (clickEditar)="obterPerfilPorId($event)"
+            [filtro]="filtroPerfil"></app-table-perfis>
+        </mat-card>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Usuários"
+      [disabled]="!utility.getPermission([Permissoes.GESTAO_EMPRESA_USUARIO_MASTER_CONSULTAR, Permissoes.GESTAO_EMPRESA_USUARIO_CRM_CADASTRAR]) || !hasActivePerfil">
+      <ng-template mat-tab-label>
+        <div class="empresas-tab-label">
+          <i class="fa-regular fa-user"></i>
+          <span>Usuários</span>
+        </div>
+        <i class="far fa-info-circle" *ngIf="!hasActivePerfil"
+          matTooltip="Para que usuários sejam cadastrados, é necessário que exista pelo menos um perfil disponível."
+          matTooltipPosition="right" matTooltipClass="info-tooltip" style="padding: 1px 0 0 4px;"></i>
+      </ng-template>
+      <div class="px-2">
+        <app-grid-filter [filter]="filterUsuarios" (pesquisar)="searchUsuario($event)"
+          (redefinir)="redefinirFiltroUsuario()" [radiusTop]="false" [showRedefinir]="showRedefinirUsuarioBtn"
+          (onSearchInput)="searchField($event)"></app-grid-filter>
+      </div>
+
+      <div class="default-tab px-2 pb-3">
+        <mat-card class="mat-elevation-z8 mt-2 p-0">
+          <app-table-usuarios [empresaId]="empresaId" [refreshGrid]="refreshUsuarioGrid"
+            (clickEditar)="obterUsuarioPorGuid($event)" [filtro]="filtroUsuario"></app-table-usuarios>
+        </mat-card>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Usuários SRD"
+      [disabled]="!utility.getPermission([Permissoes.GESTAO_EMPRESA_USUARIO_API_CONSULTAR, Permissoes.GESTAO_EMPRESA_USUARIO_API_INATIVAR_ATIVAR, Permissoes.GESTAO_EMPRESA_USUARIO_API_REDEFINIR_SENHA, Permissoes.GESTAO_EMPRESA_USUARIO_API_ENVIAR_CREDENCIAIS])">
+      <ng-template mat-tab-label>
+        <div class="empresas-tab-label">
+          <i class="fa-regular fa-display-code"></i>
+          <span>Usuários SRD</span>
+        </div>
+      </ng-template>
+
+      <div class="default-tab px-2 pb-3">
+        <mat-card class="mat-elevation-z8 p-0" style="border-radius: 0px 0 10px 10px !important;">
+          <app-table-usuarios-srd [empresaId]="empresaId" [refreshGrid]="refreshUsuarioSrdGrid"></app-table-usuarios-srd>
+        </mat-card>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+
+<div class="px-2">
+  <router-outlet></router-outlet>
+</div>

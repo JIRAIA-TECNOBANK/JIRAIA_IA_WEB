@@ -1,0 +1,12 @@
+@import '$tools';
+@import '$settings';
+
+span {
+    &.icone-informacao-grid {
+        @include border-radius(50px);
+        color: $white;
+        padding: 4px 11px;
+        font-size: 1.1em;
+        background-color: $primary;
+    }
+}

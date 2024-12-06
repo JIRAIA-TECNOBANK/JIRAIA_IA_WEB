@@ -1,0 +1,97 @@
+<div class="d-flex justify-content-between align-items-center mt-1">
+  <div class="fw-bold text-gray-800">Dados do financiamento</div>
+</div>
+
+<form [formGroup]="formulario" autocomplete="off" novalidate>
+  <div fxLayout="row wrap" fxLayoutGap="10px grid" class="mt-2">
+    <mat-form-field fxFlex="24" appearance="outline">
+      <mat-label>Valor total da dívida</mat-label>
+      <input type="text" name="valorTotalDivida" formControlName="valorTotalDivida" prefix="R$ " matInput
+        placehoder="Digite o valor" max="99999999.99" maxlength="16" currencyMask
+        [id]="utility.getElementId(0, 'financiamento-valor-total')">
+      <mat-hint>Obrigatório</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field fxFlex="18" appearance="outline">
+      <mat-label>Valor da parcela</mat-label>
+      <input type="text" name="valorParcela" formControlName="valorParcela" matInput placehoder="Digite o valor"
+        max="9999999.99" maxlength="15" currencyMask [id]="utility.getElementId(0, 'financiamento-valor-parcela')">
+      <mat-hint>Obrigatório</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field fxFlex="24" appearance="outline">
+      <mat-label>Quant. de parcelas</mat-label>
+      <input type="number" name="qtdeParcela" formControlName="qtdeParcela" matInput placehoder="Quant. de parcelas"
+        maxlength="3" #qtdeParcela [id]="utility.getElementId(0, 'financiamento-qtd-parcelas')">
+      <mat-hint>Obrigatório</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field fxFlex="34" appearance="outline">
+      <mat-label>Data venc. da 1 parcela</mat-label>
+      <input name="dataVencimentoPrimeiraParcela" formControlName="dataVencimentoPrimeiraParcela" matInput
+        placeholder="dd/mm/aaaa" [matDatepicker]="dataParcela1" maxlength="10"
+        [id]="utility.getElementId(0, 'financiamento-venc-prim-parcela')">
+      <mat-datepicker-toggle matSuffix [for]="dataParcela1"></mat-datepicker-toggle>
+      <mat-datepicker #dataParcela1></mat-datepicker>
+      <mat-hint>Obrigatório</mat-hint>
+    </mat-form-field>
+  </div>
+  <div fxLayout="row" fxLayoutGap="10px" class="mt-1">
+
+    <mat-form-field fxFlex="30" appearance="outline">
+      <mat-label>Data venc. última parcela</mat-label>
+      <input name="dataVencimentoUltimaParcela" formControlName="dataVencimentoUltimaParcela" matInput
+        placeholder="dd/mm/aaaa" [min]="minDate" [matDatepicker]="dataParcela2" maxlength="10"
+        [id]="utility.getElementId(0, 'financiamento-venc-ult-parcela')">
+      <mat-datepicker-toggle matSuffix [for]="dataParcela2"></mat-datepicker-toggle>
+      <mat-datepicker #dataParcela2></mat-datepicker>
+      <mat-hint>Obrigatório</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field fxFlex="40" appearance="outline">
+      <mat-label>Data de liberação do crédito</mat-label>
+      <input name="dataLiberacaoCredito" formControlName="dataLiberacaoCredito" matInput placeholder="dd/mm/aaaa"
+        [max]="maxDate" [matDatepicker]="dataLiberacao" maxlength="10"
+        [id]="utility.getElementId(0, 'financiamento-data-liberacao')">
+      <mat-datepicker-toggle matSuffix [for]="dataLiberacao"></mat-datepicker-toggle>
+      <mat-datepicker #dataLiberacao></mat-datepicker>
+      <mat-hint>Obrigatório</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field fxFlex="30" appearance="outline">
+      <mat-label>UF de liberação do crédito</mat-label>
+      <mat-select [id]="utility.getElementId(5, 'financiamento-uf')" name="ufLiberacaoCredito"
+        formControlName="ufLiberacaoCredito">
+        <mat-option>Selecione</mat-option>
+        <mat-option *ngFor="let uf of ufsLicenciamento" [value]="uf">{{ uf }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div fxLayout="row" fxLayoutGap="10px" class="mt-1">
+    <mat-form-field fxFlex="100" appearance="outline">
+      <mat-label>Município</mat-label>
+      <input type="text" name="municipioLiberacaoCredito" formControlName="municipioLiberacaoCredito" matInput
+        placeholder="Digite o município liberação de crédito" [id]="utility.getElementId(0, 'financiamento-municipio')">
+      <mat-hint>Obrigatório</mat-hint>
+    </mat-form-field>
+  </div>
+  <div fxLayout="row" fxLayoutGap="30px" class="mt-2">
+    <div class="fw-bold text-gray-800">Para empresas administradoras de consórcio</div>
+  </div>
+  <div fxLayout="row" fxLayoutGap="10px" class="mt-2">
+    <mat-form-field fxFlex="50" appearance="outline">
+      <mat-label>Cota do consórcio</mat-label>
+      <input type="text" name="cotaConsorcio" #cotaConsorcio maxlength="6" numbers-only formControlName="cotaConsorcio"
+        matInput placeholder="Digite a cota do consórcio"
+        [id]="utility.getElementId(0, 'financiamento-cota-consorcio')">
+    </mat-form-field>
+
+    <mat-form-field fxFlex="50" appearance="outline">
+      <mat-label>Número do grupo</mat-label>
+      <input type="text" name="numeroGrupo" formControlName="numeroGrupo" matInput
+        placeholder="Digite o número do grupo" maxlength="6" #numeroGrupo
+        [id]="utility.getElementId(0, 'financiamento-numero-grupo')">
+    </mat-form-field>
+  </div>
+</form>

@@ -1,0 +1,192 @@
+<div
+  fxLayout="row"
+  fxLayoutAlign="start start"
+  fxLayoutGap="24px"
+  class="px-2 pb-3"
+>
+  <div fxFlex="40" fxLayout="column" fxLayoutGap="24px">
+    <div fxFlex="80">
+      <mat-card>
+        <div>
+          <div fxLayout="row" fxLayoutAlign="start center">
+            <p class="m-0 bold p-selecionado">
+              {{ufSelecionada ? formatEstado(ufSelecionada) : "Visão nacional"}}
+            </p>
+          </div>
+
+          <div fxLayout="row" fxLayoutAlign="start center">
+            <p class="mB-1">
+              Selecione um estado abaixo para consultar as respectivas
+              informações na visão estadual.
+            </p>
+          </div>
+        </div>
+
+        <app-mapa-juridico
+          [limparFiltros]="limparFiltros"
+          (estadoSelecionado)="selecionarEstado($event)"
+        ></app-mapa-juridico>
+      </mat-card>
+    </div>
+
+    <div fxFlex="20">
+      <app-observacoes *ngIf="formulario.get('aba').value == AbaVisualizacao.PrimeiraAba && observacaoPrimeiraAba"
+        [observacao]="observacaoPrimeiraAba"></app-observacoes>
+      <app-observacoes
+        *ngIf="
+          formulario.get('aba').value == AbaVisualizacao.SegundaAba &&
+          opcaoVisaoEstadualSelecionada == 0
+        "
+        [observacao]="observacaoSegundaAba"
+      ></app-observacoes>
+      
+      <app-observacoes
+        *ngIf="
+          formulario.get('aba').value == AbaVisualizacao.SegundaAba &&
+          opcaoVisaoEstadualSelecionada == 1
+        "
+        [observacao]="observacaoTerceiraAba"
+      ></app-observacoes>
+      <app-observacoes
+        *ngIf="
+          formulario.get('aba').value == AbaVisualizacao.SegundaAba &&
+          opcaoVisaoEstadualSelecionada == 2
+        "
+        [observacao]="observacaoTerceiraAba"
+      ></app-observacoes>
+    </div>
+  </div>
+
+  <section fxLayout="column" fxFlex="60" fxLayoutGap="24px">
+    <form [formGroup]="formulario">
+      <div fxLayout="row" class="group-button" fxLayoutGap="10px">
+        <div class="toggle-juridico" fxFlex="100">
+          <mat-button-toggle-group
+            name="tipoVisao"
+            [id]="utility.getElementId(7, 'visao-tipo')"
+            formControlName="aba"
+            aria-label="tipoVisao"
+          >
+            <mat-button-toggle
+              [id]="utility.getElementId(2, 'visao-nacional')"
+              [value]="0"
+              class="btn-toggle"
+              (click)="changeLimparEstado()"
+            >
+              <span>Visão Nacional</span>
+            </mat-button-toggle>
+
+            <mat-button-toggle
+              [id]="utility.getElementId(2, 'visao-estadual')"
+              [value]="1"
+              class="btn-toggle"
+              matTooltip="Selecione um estado ao lado para consultar as respectivas informações na visão estadual."
+              [matTooltipDisabled]="ufSelecionada != null"
+              [disabled]="ufSelecionada == null"
+            >
+              <span>Visão Estadual</span>
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+      </div>
+    </form>
+
+    <ng-container [ngSwitch]="formulario.get('aba').value">
+      <ng-container
+        *ngSwitchCase="AbaVisualizacao.PrimeiraAba"
+        [ngTemplateOutlet]="visaoNacionalTemplate"
+      ></ng-container>
+
+      <ng-container
+        *ngSwitchCase="AbaVisualizacao.SegundaAba"
+        [ngTemplateOutlet]="visaoEstadualTemplate"
+      ></ng-container>
+    </ng-container>
+
+    <ng-template #visaoNacionalTemplate>
+      <mat-card>
+        <app-selecao-regulamentos
+          [totalRegistrosEstadual]="totalRegistrosNormativosEstadual"
+          [totalRegistrosNacional]="totalRegistrosNormativosNacional"
+          (pageChangeNacionalEvent)="onPageRegulamentosNacionaisChange($event)"
+          (optionChangeNacionalEvent)="onVisaoNacionalOptionChange($event)"
+          (optionChangeEvent)="onVisaoEstadualOptionChange($event)"
+          [layoutAlternativo]="false"
+        ></app-selecao-regulamentos>
+
+        <app-lista-regulamentos
+          [totalRegistrosNacional]="totalRegistrosNormativosNacional"
+          [regulamentos]="listaNormativosNacional"
+          [skeletonGrid]="carregandoSkeleton"
+          (pageChangeNacionalEvent)="onPageRegulamentosNacionaisChange($event)"
+          (optionChangeNacionalEvent)="onVisaoNacionalOptionChange($event)"
+        >
+        </app-lista-regulamentos>
+      </mat-card>
+    </ng-template>
+
+    <ng-template #visaoEstadualTemplate>
+      <mat-card fxLayout="column" fxLayoutGap="2em">
+        <app-selecao-regulamentos
+          [totalRegistrosEstadual]="totalRegistrosNormativosEstadual"
+          (pageChangeEstadualEvent)="onVisaoEstadualChange($event)"
+          (optionChangeEstadualEvent)="onVisaoEstadualOptionChange($event)"
+          (optionChangeEvent)="onVisaoEstadualOptionChange($event)"
+          [layoutAlternativo]="true"
+        ></app-selecao-regulamentos>
+
+        <app-modelo-regulamento
+          *ngIf="ufSelecionada && opcaoVisaoEstadualSelecionada == 0"
+
+          [totalRegistrosEstadual]="totalRegistrosNormativosEstadual"
+          [dadosModeloRegulamento]="dadosRegistro"
+          [subtitulo]="subtituloDadosRegistro"
+          [skeletonGrid]="carregandoSkeleton"
+          [uf]="ufSelecionada"
+          [registroDeContrato]="true"
+          (pageChangeEstadualEvent)="onVisaoEstadualChange($event)"
+          (optionChangeEstadualEvent)="onVisaoEstadualOptionChange($event)"
+          (optionChangeEvent)="onVisaoEstadualOptionChange($event)"
+        ></app-modelo-regulamento>
+
+        <app-modelo-regulamento
+          *ngIf="ufSelecionada && opcaoVisaoEstadualSelecionada == 1"
+        
+          [totalRegistrosEstadual]="totalRegistrosNormativosEstadual"
+          [dadosModeloRegulamento]="dadosGarantia"
+          [subtitulo]="subtituloDadosGarantia"
+          [skeletonGrid]="carregandoSkeleton"
+          [uf]="ufSelecionada"
+          [registroDeContrato]="false"
+          (pageChangeEstadualEvent)="onVisaoEstadualChange($event)"
+          (optionChangeEstadualEvent)="onVisaoEstadualOptionChange($event)"
+          (optionChangeEvent)="onVisaoEstadualOptionChange($event)"
+        ></app-modelo-regulamento>
+
+        <app-modelo-regulamento
+          [totalRegistrosEstadual]="totalRegistrosNormativosEstadual"
+
+          *ngIf="ufSelecionada && opcaoVisaoEstadualSelecionada == 2"
+          [dadosModeloRegulamento]="dadosInstituicao"
+          [subtitulo]="subtituloDadosInstituicao"
+          [skeletonGrid]="carregandoSkeleton"
+          [uf]="ufSelecionada"
+          [registroDeContrato]="false"
+          [registroDeInstituicao]="true"
+          (pageChangeEstadualEvent)="onVisaoEstadualChange($event)"
+          (optionChangeEstadualEvent)="onVisaoEstadualOptionChange($event)"
+          (optionChangeEvent)="onVisaoEstadualOptionChange($event)"
+        ></app-modelo-regulamento>
+
+        <app-lista-regulamentos
+          [totalRegistrosEstadual]="totalRegistrosNormativosEstadual"
+          [regulamentos]="listaNormativosEstadual"
+          [skeletonGrid]="carregandoSkeleton"
+          (pageChangeEstadualEvent)="onVisaoEstadualChange($event)"
+          (optionChangeEstadualEvent)="onVisaoEstadualOptionChange($event)"
+          [layoutAlternativo]="true"
+        ></app-lista-regulamentos>
+      </mat-card>
+    </ng-template>
+  </section>
+</div>

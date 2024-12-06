@@ -1,0 +1,9 @@
+@import '$tools';
+
+.description {
+  text-align: center;
+
+  h4 {
+    @include fontMontserratBold(700);
+  }
+}

@@ -1,0 +1,208 @@
+@import "$settings";
+@import "$tools";
+
+.disabled {
+  border: 1px dashed $gray-800;
+}
+
+h2 {
+  @include fontMontserratBold;
+  margin: 0px;
+  color: $primary;
+  font-size: 18px;
+}
+
+.pre-visualizacao {
+  @include border-radius(10px);
+  background-color: $gray-300;
+  padding: 2rem;
+  height: calc(100% - 2rem);
+
+  p {
+    @include fontMontserratBold;
+    color: $gray-500;
+    font-size: 14px;
+  }
+
+  #cabecalho {
+    @include border-radius(10px);
+    object-fit: cover;
+    width: 425px;
+
+    &.promocional {
+      height: 300px;
+    }
+
+    &.carrossel {
+      height: 99.42px;
+    }
+  }
+
+  mat-card {
+    width: 425px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &.promocional {
+      height: 300px;
+    }
+
+    &.carrossel {
+      height: 99.42px;
+    }
+
+    i {
+      font-size: 4rem;
+      color: $gray-400;
+    }
+  }
+}
+
+.dropzone {
+  @include border-radius(5px);
+  border: 1px dashed $blue-600;
+  display: flex;
+  justify-content: center;
+
+  .desk {
+    color: $gray-700;
+    font-size: 12px;
+
+    i {
+      font-size: 12px;
+    }
+
+    u {
+      cursor: pointer;
+      font-size: 12px;
+    }
+  }
+
+  &.disabled {
+    border: 1px dashed $gray-400 !important;
+
+    .text-primary {
+      color: $gray-400 !important;
+    }
+  }
+}
+
+.legenda {
+  color: $gray-800;
+  font-size: 12px;
+}
+
+
+.bold {
+  @include fontMontserratBold;
+}
+
+.dropzone-hint {
+  @include fontMontserratRegular;
+  color: $gray-800;
+  font-size: 12px;
+  letter-spacing: 0.25px;
+  margin-top: 5px;
+}
+
+.files-list {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.files-list .mat-icon {
+  color: $primary;
+  margin-right: 0.3rem;
+}
+
+.single-file {
+  @include border-radius(0.25rem);
+  padding: 10px;
+  justify-content: space-between;
+  align-items: center;
+  border: solid 1px #cacccf;
+  margin-bottom: 1rem;
+}
+
+.file-name {
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  margin-right: 1rem;
+}
+
+.info {
+  width: 100%;
+}
+
+.name {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 350px;
+}
+
+.size {
+  @include border-radius(0.25rem);
+  font-size: 12px;
+  font-weight: 500;
+  color: #a4a4a4;
+  margin: 0;
+}
+
+.error {
+  @include fontMontserratBold;
+  font-size: 12px;
+}
+
+.file-actions {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.btn-tentar-novamente {
+  border: solid 2px #384047;
+  height: 32px;
+  line-height: 2;
+
+  i {
+    margin-right: 5px;
+  }
+}
+
+.file-delete {
+  @include border-radius(1rem);
+  background: $blue-600;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.file-delete i {
+  color: $white !important;
+  font-size: 8px;
+  display: inline-flex !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  width: 20px;
+}
+
+.porcentagem {
+  font-size: 12px;
+  color: $primary;
+  margin-top: 0.5rem;
+}
+
+.progress-bar {
+  width: 100%;
+}

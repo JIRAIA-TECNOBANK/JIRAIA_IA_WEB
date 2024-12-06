@@ -1,0 +1,124 @@
+<div>
+  <section class="text-paginator">
+    <div class="row d-flex">
+      <section class="default-text" *ngIf="paginatorArtigo">
+        Mostrando
+        {{
+        paginatorArtigo?.pageSize > totalItems
+        ? totalItems
+        : paginatorArtigo?.pageSize
+        }}
+        de {{ totalItems }} resultados
+      </section>
+    </div>
+  </section>
+  <mat-paginator [pageSizeOptions]="[25, 50, 75, 100]" [length]="totalItems" aria-label="Itens por página"
+    #paginatorArtigo>
+  </mat-paginator>
+
+  <div>
+    <table mat-table [dataSource]="itemsArtigo$ | async" #table="matSort" matSort multiTemplateDataRows>
+      <ng-container matColumnDef="titulo">
+        <th mat-header-cell *matHeaderCellDef>
+          Título
+        </th>
+        <td mat-cell *matCellDef="let element" [title]="element.titulo" class="column-title-max">{{ element.titulo
+          }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="criadoPor">
+        <th mat-header-cell *matHeaderCellDef>Criado por</th>
+        <td mat-cell *matCellDef="let element" [title]="element.criadoPor" class="column-max-width">{{
+          element.criadoPor }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="secao">
+        <th mat-header-cell *matHeaderCellDef>
+          Seção
+        </th>
+        <td mat-cell *matCellDef="let element" [title]="element.secao" class="column-max-width">
+          {{ element.secao }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="dataCadastro">
+        <th mat-header-cell *matHeaderCellDef>
+          Data cadastro
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ formatDate(element.dataCadastro) ?? '-' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="dataPublicacao">
+        <th mat-header-cell *matHeaderCellDef>
+          Data publicação
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ formatDate(element.dataPublicacao) ?? '-' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>
+          Status
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.status }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="acoes">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+          <div>
+            <button mat-button [matMenuTriggerFor]="menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="editarArtigo(element.id)"
+                [id]="utility.getElementId(2, 'editar-consultar', element.id)"
+                [disabled]="!utility.getPermission([Permissoes.GESTAO_CENTRAL_AJUDA_CONSULTAR, Permissoes.GESTAO_CENTRAL_AJUDA_CADASTRAR])">
+                Editar/Consultar
+              </button>
+              <button mat-menu-item [id]="utility.getElementId(2, 'arquivar-desarquivar', element.id)"
+                (click)="arquivarOuDesarquivarArtigo(element.id, element.status !== 'Arquivado')"
+                [disabled]="!utility.getPermission([Permissoes.GESTAO_CENTRAL_AJUDA_CADASTRAR]) || element.status == 'Arquivado'">
+                Arquivar
+              </button>
+            </mat-menu>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="semRegistro">
+        <th class="text-center feedBack pt-1" mat-cell *matFooterCellDef colspan="11">
+          <img src="./../../../../../../../../../../assets/img/custom-icons/icon-vazio-artigos.svg" />
+          <p class="desk bold text-gray-700"> Não há registros. </p>
+        </th>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumnsArtigo"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumnsArtigo"></tr>
+      <tr mat-row *matFooterRowDef="['semRegistro']" [ngClass]="{'d-none': totalItems > 0 }"></tr>
+    </table>
+
+    <section class="text-paginator">
+      <div class="row d-flex">
+        <section class="default-text">
+          Mostrando
+          {{
+          paginatorArtigo?.pageSize > totalItems
+          ? totalItems
+          : paginatorArtigo?.pageSize
+          }}
+          de {{ totalItems }} resultados
+        </section>
+      </div>
+    </section>
+    <mat-paginator (page)="syncPrimaryPaginator($event)" [pageSize]="paginatorArtigo.pageSize"
+      [pageIndex]="paginatorArtigo.pageIndex" [length]="paginatorArtigo.length"
+      [pageSizeOptions]="paginatorArtigo?.pageSizeOptions">
+    </mat-paginator>
+  </div>
+</div>

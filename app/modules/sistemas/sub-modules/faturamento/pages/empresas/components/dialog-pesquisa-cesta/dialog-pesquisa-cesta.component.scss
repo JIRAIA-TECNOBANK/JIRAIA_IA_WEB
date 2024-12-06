@@ -1,0 +1,19 @@
+.resultado {
+    max-height: 30%;
+    overflow: auto;
+}
+
+.card__button {
+    display: flex;
+    align-items: center;
+    height: 35px;
+}
+
+.formulario {
+    max-height: 70vh;
+    overflow: auto;
+
+    &.pb-24 {
+        padding-bottom: 24px;
+    }
+}

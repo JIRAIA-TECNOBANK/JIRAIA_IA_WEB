@@ -1,0 +1,24 @@
+<div class="listar-veiculos" (click)="stopPropagation($event)">
+  <table mat-table [dataSource]="dataSource">
+
+    <ng-container matColumnDef="ufchassi">
+      <th mat-header-cell *matHeaderCellDef class="ufchassi">UF/Chassi</th>
+      <td mat-cell *matCellDef="let element"> {{element.ufPlaca ? element.ufPlaca + '/' : '' }}{{element.chassi}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="acoes">
+      <th mat-header-cell *matHeaderCellDef>Ações</th>
+      <td mat-cell *matCellDef="let element" class="pr-0">
+        <button mat-button mat-icon-button type="button"
+          (click)="onClickVerVeiculo(element.id)" title="Editar" [id]="utility.getElementId(2, 'lista-veiculos-editar')">
+          <i class="fa-solid fa-eye"></i>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator #paginator [pageSizeOptions]="[10, 15]" [length]="totalItems"></mat-paginator>
+</div>

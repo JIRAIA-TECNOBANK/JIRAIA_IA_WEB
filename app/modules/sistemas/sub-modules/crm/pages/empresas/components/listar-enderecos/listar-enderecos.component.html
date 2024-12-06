@@ -1,0 +1,86 @@
+<div class="mt-2">
+  <form [formGroup]="enderecosForm" class="mt-2">
+    <mat-radio-group formControlName="endereco">
+      <div
+        class="endereco"
+        fxLayout="column"
+        *ngFor="let endereco of listaEnderecos; let i = index"
+      >
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <div class="mr-3">
+            <mat-radio-button [value]="endereco.id" *ngIf="!isCreate">
+              <div class="ml-1 pl-1" fxLayout="column">
+                <span class="endereco-span"
+                  >{{ endereco.endereco.logradouro }}
+                  {{ endereco.endereco.numero }}</span
+                >
+                <span class="endereco-span"
+                  >{{ endereco.endereco.bairro }} -
+                  {{ endereco.endereco.municipio }}</span
+                >
+              </div>
+            </mat-radio-button>
+            <div *ngIf="isCreate" class="ml-1 pl-1" fxLayout="column">
+              <span class="endereco-span"
+                >{{ endereco.endereco.logradouro }}
+                {{ endereco.endereco.numero }}</span
+              >
+              <span class="endereco-span"
+                >{{ endereco.endereco.bairro }} -
+                {{ endereco.endereco.municipio }}</span
+              >
+            </div>
+            <i
+              class="fa-regular fa-circle-info"
+              *ngIf="endereco.endereco.ehEnderecoDetran"
+              [matTooltip]="
+                'Este endereço não poderá ser excluído pois está vinculado ao(s) DETRAN(s): ' +
+                separaDetrans(endereco.endereco.ufDetran)
+              "
+              matTooltipClass="info-tooltip"
+            ></i>
+          </div>
+
+          <div fxLayout="row">
+            <span class="endereco-principal" *ngIf="endereco.enderecoPrincipal"
+              >Endereço principal</span
+            >
+            <button
+              mat-flat-button
+              class="btn edit-btn"
+              id="editar_endereco_botao_{{ i }}"
+              (click)="editEndereco(endereco.id)"
+              *ngIf="
+                utility.getPermission([Permissoes.GESTAO_EMPRESA_CADASTRAR])
+              "
+            >
+              <i class="fa fa-pencil"></i>
+            </button>
+            <button
+              mat-flat-button
+              class="btn delete-btn"
+              *ngIf="
+                !endereco.enderecoPrincipal &&
+                !endereco.endereco.ehEnderecoDetran &&
+                utility.getPermission([Permissoes.GESTAO_EMPRESA_CADASTRAR])
+              "
+              id="deletar_contato_botao_{{ i }}"
+              (click)="openDialog(empresaId, endereco.id)"
+            >
+              <i class="fa fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </mat-radio-group>
+  </form>
+  <button
+    mat-flat-button
+    class="btn-add"
+    (click)="addEndereco()"
+    *ngIf="utility.getPermission([Permissoes.GESTAO_EMPRESA_CADASTRAR])"
+    id="abrir_formulario_endereco"
+  >
+    <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Add novo endereço
+  </button>
+</div>

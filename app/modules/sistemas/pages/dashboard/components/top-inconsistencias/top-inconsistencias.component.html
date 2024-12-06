@@ -1,0 +1,88 @@
+<div class="top-inconsistencias" fxLayout="column" fxLayoutAlign="space-between"
+    *ngIf="loading || !mostrarDetalhes || (mostrarDetalhes && topInconsistencias.length > 0)">
+    <div fxLayout="row" [fxLayoutAlign]="mostrarDetalhes ? 'space-between' : 'space-between center'">
+        <p class="bold my-0">Top inconsistências </p>
+
+        <section fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px" fxFlex="50">
+            <div *ngIf="mostrarDetalhes" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px">
+                <button mat-flat-button type="button" class="bold filtro"
+                    [class.selected]="ufsSelecionadas.selected.length > 0"
+                    [matMenuTriggerFor]="fitrarTopInconsistencias"
+                    [id]="utility.getElementId(2, 'top-inconsistencias-uf')"><i
+                        class="fa-regular fa-map-location-dot"></i> UF
+                </button>
+
+                <mat-menu #fitrarTopInconsistencias="matMenu" class="mat-elevation-z8 filtro-top-10 pt-0"
+                    xPosition="before">
+                    <div class="filter-search" (click)="stopPropagation($event)">
+                        <div class="filter-header d-flex justify-content-between align-items-center pl-2">
+                            <span> Filtrar</span>
+                            <button [id]="utility.getElementId(2, 'limpar-filtro', 'top-inconsistencias')" mat-button
+                                color="primary" class="btn-redefinir filter-header" (click)="limparFiltros()">
+                                Redefinir
+                            </button>
+                        </div>
+
+                        <section fxLayout="column" class="filtro-ufs" fxLayoutGap="10px">
+                            <mat-checkbox [id]="utility.getElementId(4, 'select-all-op')" fxLayout="row"
+                                (change)="selecionarTodasUfs($event)" [checked]="verificarUfSelecionada() === 1"
+                                [indeterminate]="verificarUfSelecionada() === 2">Todas
+                            </mat-checkbox>
+
+                            <mat-checkbox [id]="utility.getElementId(4, 'top-empresa', uf)" fxLayout="row"
+                                *ngFor="let uf of ufDetrans" (click)="$event.stopPropagation()"
+                                [checked]=" isSelected(uf)" (change)="$event ? check(uf) : null">{{ uf }}
+                            </mat-checkbox>
+                        </section>
+                    </div>
+                </mat-menu>
+            </div>
+
+            <div fxLayout="column" fxLayoutAlign="center center" fxFlex="20">
+                <div class="expandir-registros" [id]="utility.getElementId(2, 'expandir-top-inconsistencias')"
+                    (click)="expandirDetalhes()">
+                    <i class="fa-solid" [ngClass]="mostrarDetalhes ? 'fa-angle-up' : 'fa-angle-down'"></i>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <section class="detalhes mt-1 px-1" *ngIf="mostrarDetalhes && !loading" fxLayout="column">
+        <div fxLayout="row" class="titulo" fxLayoutGap="10px">
+            <span fxFlex="5"></span>
+            <div class="conteudo" fxLayout="row" fxLayoutAlign="space-between" fxFlex="95">
+                <span fxFlex="8">CÓD.</span>
+                <span fxFlex="75">DESCRIÇÃO</span>
+                <span fxFlex="5" class="uf">UF</span>
+                <span fxFlex="10" class="total-col">TOTAL</span>
+            </div>
+        </div>
+
+        <div fxLayout="row" class="valores" *ngFor="let topInconsistencia of topInconsistencias; let i = index"
+            fxLayoutGap="10px">
+            <span fxFlex="5" class="classificacao">{{ i+1 }}º</span>
+            <div class="conteudo" fxLayout="row" fxLayoutAlign="space-between" fxFlex="95">
+                <span fxFlex="8">
+                    <p class="my-0 descricao" [matTooltip]="topInconsistencia.codigo">
+                        {{topInconsistencia.codigo}}
+                    </p>
+                </span>
+                <span fxFlex="75">
+                    <p class="my-0 descricao" [matTooltip]="topInconsistencia.descricao">
+                        {{topInconsistencia.descricao}}
+                    </p>
+                </span>
+                <span fxFlex="5" class="uf">{{topInconsistencia.uf}}</span>
+                <span fxFlex="10" class="total-valor">{{topInconsistencia.total?.toLocaleString()}}</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="w-100 spinner d-flex align-items-center justify-content-center" *ngIf="loading">
+        <mat-spinner [diameter]="50"></mat-spinner>
+    </section>
+
+</div>
+
+<app-bloco-vazio *ngIf="!loading && mostrarDetalhes && topInconsistencias.length === 0"
+    [options]="blocoVazio"></app-bloco-vazio>

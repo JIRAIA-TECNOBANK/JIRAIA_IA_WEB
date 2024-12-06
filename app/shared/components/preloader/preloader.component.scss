@@ -1,0 +1,36 @@
+/*Para habilitar a visibilidade mudar para display: block*/
+
+.d-none {
+    display: none !important;
+}
+
+.d-display {
+    display: 'display' !important;
+}
+
+.preloader {
+    align-items: center;
+    backdrop-filter: blur(7px);
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 9;
+}
+
+.preloader .preloader-message {
+    text-align: center;
+    color: #003e69;
+    font-size: 22px;
+    z-index: 9;
+    animation: blink 5s linear infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}

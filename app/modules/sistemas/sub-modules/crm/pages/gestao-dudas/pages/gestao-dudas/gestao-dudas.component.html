@@ -1,0 +1,27 @@
+<div class="px-2 pb-3" [hidden]="childstate">
+  <app-grid-filter [filter]="filter" (pesquisar)="search($event)" (customControls)="setCustomControls($event)"
+    (redefinir)="redefinir()" [showRedefinir]="showRedefinirBtn">
+    <!--Por empresa-->
+    <app-filter-field [field]="fieldEmpresa" [control]="empresaControl" [searchControl]="empresaSearchControl"
+      (searchInput)="searchFilter($event)" [redefinirField]="redefinirField">
+    </app-filter-field>
+
+    <!--Por CNPJ-->
+    <app-filter-field [field]="fieldCnpj" [control]="cnpjControl">
+    </app-filter-field>
+
+    <!--Por status-->
+    <app-filter-field [field]="fieldStatus" [control]="statusControl" (selectAll)="selectAll($event)">
+    </app-filter-field>
+
+    <!--Por quantidade-->
+    <app-filter-field [field]="fieldAmount" [control]="amountControl">
+    </app-filter-field>
+  </app-grid-filter>
+
+  <mat-card class="mat-elevation-z8 mt-2 p-0">
+    <app-table-dudas [filtro]="filtro" [atualizarGrid]="atualizarGrid"></app-table-dudas>
+  </mat-card>
+</div>
+
+<router-outlet></router-outlet>

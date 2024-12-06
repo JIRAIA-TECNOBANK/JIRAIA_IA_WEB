@@ -1,0 +1,44 @@
+@import '$settings';
+@import '$tools';
+
+div {
+  .endereco {
+    min-height: 60px;
+    border: 2px solid #ECEEEF;
+    border-radius: 5px;
+    align-self: center;
+    padding: 10px 15px 0 15px;
+    margin-top: 5px;
+  }
+
+  .endereco-span {
+    font-weight: 600;
+    font-size: 14px;
+    color: $gray-800;
+  }
+
+  .endereco-principal {
+    @include fontMontserratBold;
+    font-size: 16px;
+    color: $gray-800;
+    align-self: center;
+  }
+
+  .edit-btn {
+    margin-left: 30px;
+    background-color: #E0EFFF;
+    color: #70B2E7;
+  }
+
+  .delete-btn {
+    margin-left: 10px;
+    background-color: #FFE2EB;
+    color: #F47298;
+  }
+
+  .btn-add {
+    margin-top: 30px;
+    background-color: #E0EFFF;
+    color: #70B2E7;
+  }
+}

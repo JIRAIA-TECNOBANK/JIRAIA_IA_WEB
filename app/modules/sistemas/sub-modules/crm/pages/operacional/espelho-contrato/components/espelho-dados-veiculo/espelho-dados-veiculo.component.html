@@ -1,0 +1,64 @@
+<mat-card class="espelho-contrato">
+  <div class="panel-title"> Dados do veículo </div>
+
+  <section *ngFor="let veiculo of veiculos" [ngClass]="{ 'frota': veiculos?.length > 1 }">
+
+    <div fxLayout="row wrap" fxLayoutGap="10px grid" class="mt-2">
+      <div [fxFlex]="veiculos?.length > 1 ? 25 : 50" class="item">
+        <div class="item-title">Chassi</div>
+        <div class="item-description">{{ veiculo.chassi ?? '-' }}</div>
+      </div>
+      <div [fxFlex]="veiculos?.length > 1 ? 25 : 50" class="item">
+        <div class="item-title">Remarcado</div>
+        <div class="item-description">{{ veiculo.remarcado ? 'Sim' : 'Não' }}</div>
+      </div>
+      <div [fxFlex]="veiculos?.length > 1 ? 25 : 50" class="item">
+        <div class="item-title">Emplacado</div>
+        <div class="item-description">{{ veiculo.emplacado ? 'Sim' : 'Não' }}</div>
+      </div>
+      <div [fxFlex]="veiculos?.length > 1 ? 25 : 50" class="item">
+        <div class="item-title">Nº Renavam</div>
+        <div class="item-description">{{ veiculo?.renavam == '' || veiculo?.renavam == null ? '-' :
+          veiculo?.renavam }}</div>
+      </div>
+      <div [fxFlex]="veiculos?.length > 1 ? 25 : 50" class="item">
+        <div class="item-title">Nº do gravame</div>
+        <div class="item-description">{{ veiculo?.numeroRestricao == '' || veiculo?.numeroRestricao == null ? '-' :
+          veiculo?.numeroRestricao }}</div>
+      </div>
+      <div [fxFlex]="veiculos?.length > 1 ? 25 : 50" class="item">
+        &nbsp;
+      </div>
+      <div [fxFlex]="veiculos?.length > 1 ? 25 : 50" class="item">
+        <div class="item-title">UF / Placa</div>
+        <div class="item-description">{{ veiculo?.ufPlaca == '' || veiculo?.ufPlaca == null ? '--' :
+          veiculo?.ufPlaca }} / {{
+          veiculo?.placa == '' || veiculo?.placa == null ? '-' :
+          veiculo?.placa?.toUpperCase() }}</div>
+      </div>
+      <div [fxFlex]="veiculos?.length > 1 ? 25 : 50" class="item">
+        <div class="item-title">Ano fabricação / Ano modelo</div>
+        <div class="item-description">{{ veiculo.anoFabricacao ?? '-' }} / {{ veiculo.anoModelo ?? '-' }}</div>
+      </div>
+      <div [fxFlex]="veiculos?.length > 1 ? 25 : 50" class="item">
+        <div class="item-title">Marca</div>
+        <div class="item-description">{{ (veiculo.marca == '' || veiculo.marca == null) ? '-' :
+          veiculo.marca }}</div>
+      </div>
+      <div [fxFlex]="veiculos?.length > 1 ? 25 : 50" class="item">
+        <div class="item-title">Modelo</div>
+        <div class="item-description">{{ (veiculo.modelo == '' || veiculo.modelo == null) ? '-' :
+          veiculo.modelo }}</div>
+      </div>
+      <div [fxFlex]="veiculos?.length > 1 ? 25 : 50" class="item">
+        <div class="item-title">Espécie</div>
+        <div class="item-description">{{ getEspecieVeiculo(veiculo.especie) }}</div>
+      </div>
+      <div [fxFlex]="veiculos?.length > 1 ? 25 : 50" class="item">
+        <div class="item-title">Cor</div>
+        <div class="item-description">{{ veiculo.cor ?? '-' }}</div>
+      </div>
+    </div>
+
+  </section>
+</mat-card>

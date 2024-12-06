@@ -1,0 +1,11 @@
+@import '$settings';
+@import '$tools';
+
+mat-hint {
+  @include fontMontserratRegular;
+  font-size: 12px;
+}
+
+input.mat-chip-input {
+  width: 100% !important;
+}

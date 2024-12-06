@@ -1,0 +1,25 @@
+<section class="px-2">
+    <input type="file" hidden #fileDropRef id="fileDropRef" (change)="fileBrowseHandler($event.target.files)">
+
+    <div *ngIf="files === null" class="dropzone" appDragAndDrop (fileDropped)="onFileDropped($event)"
+        (click)="onClickFile(fileDropRef)">
+        <i class="fa-duotone fa-cloud-arrow-up"></i>
+        <h3 class="bold mb-0">Arraste para fazer o upload do arquivo.</h3>
+        <h3 class="mt-0">Ou procure no seu dispositivo</h3>
+    </div>
+
+    <div class="files-list" *ngIf="files !== null">
+        <div class="single-file" appDragAndDrop (fileDropped)="onFileDropped($event)"
+            (click)="onClickFile(fileDropRef)">
+            <mat-icon> insert_drive_file</mat-icon>
+            <div class="info">
+                <h4 class="name">
+                    {{ files?.name }}
+                </h4>
+                <p class="size">
+                    tamanho {{ utility.formatBytes(files?.size) }}
+                </p>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,44 @@
+<div fxLayout="column" fxLayoutAlign="center start" class="text-center">
+  <div class="fw-bold">{{(marca && marca.id) ? 'Editar' : 'Adicionar'}} marca</div>
+    <form [formGroup]="formulario" class="w-100 mt-1">
+      <mat-form-field appearance="outline" fxFlex="100">
+        <mat-label>Marca</mat-label>
+        <input
+          type="text"
+          matInput
+          [id]="utility.getElementId(0, 'marca')"
+          name="nome"
+          formControlName="nome"
+          placeholder="Digite a marca"
+        />
+        <mat-hint>Obrigatório</mat-hint>
+        <mat-error *ngIf="formulario.controls['nome'].hasError('required')"
+          >Campo obrigatório</mat-error
+        >
+      </mat-form-field>
+    </form>
+    <mat-dialog-actions class="d-flex justify-content-end w-100">
+      <button
+        mat-stroked-button
+        class="btn-outline-primary"
+        color="primary"
+        type="button"
+        [mat-dialog-close]="null"
+        [id]="utility.getElementId(2, 'adicionar-marca-cancelar')"
+      >
+        Cancelar
+      </button>
+  
+      <button
+        mat-flat-button
+        color="primary"
+        type="button"
+        [mat-dialog-close]="formulario.value"
+        [disabled]="!formulario.valid"
+        [id]="utility.getElementId(2, 'adicionar-marca-confirmar')"
+      >
+        Confirmar
+      </button>
+    </mat-dialog-actions>
+  </div>
+  

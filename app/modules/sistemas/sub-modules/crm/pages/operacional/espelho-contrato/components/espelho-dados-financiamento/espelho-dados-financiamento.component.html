@@ -1,0 +1,37 @@
+<mat-card class="espelho-contrato">
+  <div class="panel-title"> Dados do financiamento </div>
+
+  <div fxLayout="row wrap" fxLayoutGap="10px grid" class="mt-2">
+    <div fxFlex="50" class="item">
+      <div class="item-title">Valor total da dívida</div>
+      <div class="item-description">{{ valorTotalDivida }}</div>
+    </div>
+    <div fxFlex="50" class="item">
+      <div class="item-title">Valor da parcela</div>
+      <div class="item-description">{{ contrato?.financiamento.quantidadeParcela }}x {{ valorParcela ?? '-' }}</div>
+    </div>
+    <div fxFlex="50" class="item">
+      <div class="item-title">Data liberação do crédito</div>
+      <div class="item-description">{{ contrato?.financiamento.liberacaoCredito.data ?? '-' }}</div>
+    </div>
+    <div fxFlex="50" class="item">
+      &nbsp;
+    </div>
+    <div fxFlex="50" class="item">
+      <div class="item-title">UF do contrato</div>
+      <div class="item-description">{{ contrato?.financiamento.liberacaoCredito.uf ?? '-' }}</div>
+    </div>
+    <div fxFlex="50" class="item">
+      <div class="item-title">Município</div>
+      <div class="item-description">{{ municipio }}</div>
+    </div>
+    <div fxFlex="50" class="item">
+      <div class="item-title">Vencimento da 1ª parcela</div>
+      <div class="item-description">{{ contrato?.financiamento.dataVencimentoPrimeiraParcela ?? '-' }}</div>
+    </div>
+    <div fxFlex="50" class="item">
+      <div class="item-title">Vencimento da última parcela</div>
+      <div class="item-description">{{ contrato?.financiamento.dataVencimentoUltimaParcela ?? '-' }}</div>
+    </div>
+  </div>
+</mat-card>

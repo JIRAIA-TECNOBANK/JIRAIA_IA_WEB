@@ -1,0 +1,16 @@
+<div cdkDropList class="list my-1" (cdkDropListDropped)="drop($event)">
+    <div class="box px-2 py-1" *ngFor="let artigo of artigos" cdkDrag fxLayout="row" fxLayoutAlign="space-between">
+        <div class="start" fxLayout="row" fxLayoutGap="20px" fxFlex="75">
+            <i class="fa-solid fa-grip-dots-vertical"></i>
+            <p class="my-0"> {{ artigo.titulo }} </p>
+        </div>
+        <button mat-button [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item type="button" (click)="editarArtigo(artigo.artigoId)">
+                Editar/Consultar
+            </button>
+        </mat-menu>
+    </div>
+</div>

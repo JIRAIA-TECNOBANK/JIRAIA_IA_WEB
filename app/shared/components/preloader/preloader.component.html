@@ -1,0 +1,8 @@
+<div *ngIf="preloader$ | async as preloader">
+    <div [ngClass]="preloader.cssDisplay" class="preloader">
+        <div class="preloader-message">
+            <img src="./../assets/img/preloader-tecnobank.gif" width="300" alt="prealoader tecnobank">
+            <p> {{ preloader.message }}</p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,38 @@
+@import '$settings';
+@import '$tools';
+
+div {
+  margin-bottom: 15px;
+
+
+  div {
+    cursor: pointer;
+    padding: 0 15px 0 15px;
+    background-color: white;
+    border-radius: 10px;
+    max-height: 53px;
+
+    div {
+      padding: 0px;
+      margin-bottom: 0px;
+    }
+  }
+
+  .active {
+    border-left: 10px solid #1666AE;
+    border-radius: 0px 10px 10px 0px;
+    transition: border-left 0.3s ease-in;
+  }
+
+  p:first-child {
+    font-weight: 700;
+    padding-left: 10px;
+    font-size: 14px;
+    align-self: center;
+  }
+
+  p {
+    @include fontMontserratRegular;
+    color: #818A93;
+  }
+}

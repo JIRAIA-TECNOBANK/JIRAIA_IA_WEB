@@ -1,0 +1,10 @@
+<div class="dialog">
+  <h2 mat-dialog-title class="text-center">{{ data.title }}</h2>
+  <mat-dialog-content>
+      <p class="text-center">{{ data.text }}</p>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+      <button [id]="utility.getElementId(2, 'cancelar')" mat-button [mat-dialog-close]="data.buttonCancel.value" [ngClass]="{ 'd-none': disableCancelBtn }">{{ data.buttonCancel.text }}</button>
+      <button [id]="utility.getElementId(2, 'confirmar')" mat-button mat-raised-button class="btn btn-primary bold font-14"  [ngClass]="{ 'w-100': disableCancelBtn }" [mat-dialog-close]="data.buttonConfirm.value" cdkFocusInitial>{{ data.buttonConfirm.text }}</button>
+  </mat-dialog-actions>
+</div>

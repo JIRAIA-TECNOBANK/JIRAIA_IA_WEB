@@ -1,0 +1,33 @@
+<div class="sidebar">
+  <ul
+    class="list-group flex-column d-flex first-menu"
+    [ngClass]="{ active: activeMenu }"
+  >
+    <li
+      class="list-group-item"
+      *ngFor="let menuItem of menuItems"
+      [id]="menuItem.id"
+      [ngClass]="{ active: menuItem.active }"
+      (click)="clickLink($event, menuItem)"
+    >
+      <a>
+        <div class="wrapper">
+          <i [ngClass]="menuItem.icon" aria-hidden="true"> </i>
+        </div>
+
+        <div class="menu-label-item">
+          <span class="ml-1 align-middle">{{ menuItem.label }}</span>
+          <p class="arrow-child" *ngIf="menuItem.child">
+            <i *ngIf="menuItem.child" [ngClass]="menuItem.active ? 'fa-angle-up' : 'fa-angle-down'" class="fa-regular" aria-hidden="true"></i>
+          </p>
+        </div>
+      </a>
+
+      <app-menu-items
+        *ngIf="menuItem.active"
+        [menuItems]="menuItem.child"
+        [parentId]="menuItem.id"
+      ></app-menu-items>
+    </li>
+  </ul>
+</div>

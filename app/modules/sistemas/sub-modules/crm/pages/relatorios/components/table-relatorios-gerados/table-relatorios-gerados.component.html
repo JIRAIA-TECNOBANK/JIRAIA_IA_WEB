@@ -1,0 +1,161 @@
+<section class="text-paginator">
+  <div class="row d-flex">
+    <section class="default-text" *ngIf="paginator">
+      Mostrando
+      {{ paginator?.pageSize > totalItems ? totalItems : paginator?.pageSize }}
+      de {{ totalItems }} resultados
+    </section>
+  </div>
+</section>
+<mat-paginator [pageSizeOptions]="[25, 50, 75, 100]" [length]="totalItems" aria-label="Itens por página" #paginator>
+</mat-paginator>
+
+<div>
+  <table mat-table [dataSource]="items$ | async" #tableRelatorios="matSort" (matSortChange)="sortData($event)" matSort>
+
+    <!--Empresa-->
+    <ng-container matColumnDef="empresa">
+      <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Empresa</th>
+      <td mat-cell *matCellDef="let element" [matTooltip]="element.nomeEmpresa" class="column-max-width">{{
+        element.nomeEmpresa }}</td>
+    </ng-container>
+    <ng-container matColumnDef="TituloEmpresa">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header [attr.rowspan]="2">Empresa</th>
+    </ng-container>
+
+    <!--Modelo-->
+    <ng-container matColumnDef="nome">
+      <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Modelo</th>
+      <td mat-cell class="pr-1 column-max-width" *matCellDef="let element" [matTooltip]="element.nome">{{ element.nome
+        }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="TituloNome">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header [attr.rowspan]="2" class="pr-1">Modelo</th>
+    </ng-container>
+
+    <!--Formato-->
+    <ng-container matColumnDef="tipo">
+      <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}"> Formato </th>
+      <td mat-cell class="pr-1" *matCellDef="let element"> {{element.tipoArquivo}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="TituloTipo">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header [attr.rowspan]="2" class="pr-1">Formato</th>
+    </ng-container>
+
+
+    <!--Data inicial-->
+    <ng-container matColumnDef="dataInicio">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center"> Data inicial </th>
+      <td mat-cell *matCellDef="let element" class="pr-1 text-center">{{
+        formatJustDate(element.dataInicio)}}
+      </td>
+    </ng-container>
+
+    <!--Data final-->
+    <ng-container matColumnDef="dataFinal">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center"> Data final </th>
+      <td mat-cell *matCellDef="let element" class="pr-1 text-center">{{
+        formatJustDate(element.dataFinal)}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="solicitadoPor">
+      <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}"> Solicitado por </th>
+      <td mat-cell *matCellDef="let element"> {{element.solicitadoPor}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="TituloSolicitadoPor">
+      <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Solicitado por</th>
+    </ng-container>
+
+    <!-- Data solicitacao -->
+    <ng-container matColumnDef="dataSolicitacao">
+      <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">
+        Data <br />solicitação
+      </th>
+      <td class="adjust-text" mat-cell *matCellDef="let element">
+        {{ formatDate(element.dataSolicitacao) }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="TituloDataSolicitacao">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header class="adjust-text" [attr.rowspan]="2">Data solicitação</th>
+    </ng-container>
+
+    <!--Status-->
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}"> Status </th>
+      <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="TituloStatus">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header [attr.rowspan]="2">Status</th>
+    </ng-container>
+
+    <!-- Options Column-->
+    <ng-container matColumnDef="acoes">
+      <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}"></th>
+      <td mat-cell *matCellDef="let element" class="column-min-width">
+        <button mat-button [matMenuTriggerFor]="menu" [id]="utility.getElementId(2, 'relatorios-acoes')">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <div>
+            <button mat-menu-item [disabled]="element.status != 'Processado'" (click)="baixarRelatorio(element.url)"
+              [id]="utility.getElementId(2, 'relatorios-baixar')">
+              Baixar
+            </button>
+            <button mat-menu-item [disabled]="element.status != 'Processado'"
+              (click)="openDialogEnviarRelatorios(element.protocolo, element.empresaId)"
+              [id]="utility.getElementId(2, 'relatorios-enviar-email')"
+              *ngIf="element.palavraChave !== 'RELATORIO_DR' && element.palavraChave !== 'RELATORIO_DUDA'">
+              Enviar por e-mail
+            </button>
+          </div>
+        </mat-menu>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="TituloAcoes">
+      <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"></th>
+    </ng-container>
+    <!-- Primeira linha -->
+
+    <!-- Segunda linha -->
+    <ng-container matColumnDef="header-row-second-group">
+      <th mat-header-cell *matHeaderCellDef [attr.colspan]="2" class="text-center table-rowspan pr-1"> Período </th>
+    </ng-container>
+    <!-- Segunda linha -->
+
+    <tr mat-header-row
+      *matHeaderRowDef="['TituloEmpresa', 'TituloNome', 'TituloTipo', 'header-row-second-group', 'TituloSolicitadoPor', 'TituloDataSolicitacao', 'TituloStatus','TituloAcoes']"
+      class="table-rowspan">
+    </tr>
+
+    <ng-container matColumnDef="semRegistro">
+      <th class="text-center feedBack pt-1" mat-cell *matFooterCellDef colspan="11">
+        <img src="./../../../../../../../../../assets/img/custom-icons/icon-vazio-artigos.svg" />
+        <p class="desk bold text-gray-700"> Não há registros. </p>
+      </th>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns" class="table-rowspan text-center"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    <tr mat-row *matFooterRowDef="['semRegistro']" [ngClass]="{'d-none': totalItems > 0 }"></tr>
+  </table>
+  <section class="text-paginator">
+    <div class="row d-flex">
+      <section class="default-text">
+        Mostrando
+        {{
+        paginator?.pageSize > totalItems ? totalItems : paginator?.pageSize
+        }}
+        de {{ totalItems }} resultados
+      </section>
+    </div>
+  </section>
+  <mat-paginator (page)="syncPrimaryPaginator($event)" [pageSize]="paginator.pageSize" [pageIndex]="paginator.pageIndex"
+    [length]="paginator.length" [pageSizeOptions]="paginator?.pageSizeOptions">
+  </mat-paginator>
+</div>

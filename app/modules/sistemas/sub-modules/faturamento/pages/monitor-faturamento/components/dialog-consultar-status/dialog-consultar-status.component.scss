@@ -1,0 +1,58 @@
+@import "$settings";
+@import "$tools";
+
+#page {
+  padding: 15px;
+
+  .cabecalho {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+		padding-bottom: 15px;
+
+    div {
+      display: flex;
+      flex-direction: column;
+    }
+
+    div > span:first-child {
+      color: $gray-800;
+      font-size: 11px;
+    }
+
+    div > span:last-child {
+      @include fontMontserratBold;
+    }
+  }
+
+  .nota {
+		h2 {
+			@include fontMontserratBold;
+			margin: 10px 0;
+			font-size: 16px;
+			color: $gray-800;;
+		}
+
+    div {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      div {
+        display: flex;
+        flex-direction: column;
+				
+				span {
+					@include fontMontserratRegular;
+					font-size: 14px;
+					color: $gray-700;
+					margin: 10px 0;
+				}
+      }
+
+      div > span:first-child {
+        font-weight: 700;
+      }
+    }
+  }
+}

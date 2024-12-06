@@ -1,0 +1,202 @@
+<section class="text-paginator">
+    <div class="row d-flex">
+        <section class="default-text" *ngIf="paginator">
+            Mostrando {{ paginator?.pageSize > totalItems ? totalItems :
+            paginator?.pageSize }} de {{
+            totalItems }} resultados
+        </section>
+    </div>
+</section>
+<mat-paginator [pageSizeOptions]="[25, 50, 75, 100]" [length]="totalItems" #paginator>
+</mat-paginator>
+<table mat-table [dataSource]="items$ | async" matSort multiTemplateDataRows>
+    <!-- UF Column -->
+    <ng-container matColumnDef="uf">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="space-column">Estado</th>
+        <td mat-cell *matCellDef="let element">{{ element.uf }}</td>
+    </ng-container>
+
+    <!-- Nome da Portaria Column -->
+    <ng-container matColumnDef="nomePortaria">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Nome da portaria</th>
+        <td mat-cell *matCellDef="let element" class="column-max-width">{{ element.nomePortaria }}</td>
+    </ng-container>
+
+    <!-- Nome do arquivo Column -->
+    <!-- <ng-container matColumnDef="nomeArquivo">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Nome do arquivo</th>
+        <td mat-cell *matCellDef="let element" class="column-max-width">{{ element.nomeArquivo }}</td>
+    </ng-container> -->
+
+    <!-- Data de vigencia Column -->
+    <ng-container matColumnDef="dataVigencia">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Data de vigência</th>
+        <td mat-cell *matCellDef="let element">{{ element.dataVigencia | date:"dd/MM/yyyy" }}</td>
+    </ng-container>
+
+    <!-- Data de criação Column -->
+    <ng-container matColumnDef="dataCriacao">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Data de criação</th>
+        <td mat-cell *matCellDef="let element">{{ element.criadoEm | date:"dd/MM/yyyy HH:mm" }}</td>
+    </ng-container>
+
+    <!-- Tipo Column -->
+    <ng-container matColumnDef="tipo">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</th>
+        <td mat-cell *matCellDef="let element">
+            <div [ngSwitch]="element.tipoNormativo">
+                <div *ngSwitchCase="'1'">Lei</div>
+                <div *ngSwitchCase="'2'">Resolução</div>
+                <div *ngSwitchCase="'3'">Decreto</div>
+                <div *ngSwitchCase="'4'">Portaria</div>
+                <div *ngSwitchCase="'5'">Edital</div>
+                <div *ngSwitchCase="'6'">Instrução</div>
+                <div *ngSwitchCase="'7'">Outros</div>
+            </div>
+        </td>
+    </ng-container>
+
+    <!-- Tipo de registro Column -->
+    <ng-container matColumnDef="tipoRegistro">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de registro</th>
+        <td mat-cell *matCellDef="let element">
+            <div [ngSwitch]="element.tipoRegistro ">
+                <div *ngSwitchCase="'1'">Registro de contrato</div>
+                <div *ngSwitchCase="'2'">Registro de garantia</div>
+                <div *ngSwitchCase="'3'">Registro de instituição financeira</div>
+            </div>
+        </td>
+    </ng-container>
+
+    <!-- Nacional Column -->
+    <ng-container matColumnDef="nacional">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Visão</th>
+        <td mat-cell *matCellDef="let element">{{ element.ehVisaoNacional ? 'Nacional' : 'Estadual' }}</td>
+    </ng-container>
+
+    <!-- Status Column -->
+    <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+        <td mat-cell *matCellDef="let element">{{ element.status === 1 ? 'Ativo' : 'Arquivado' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="semRegistro">
+        <th class="text-center feedBack pt-1" mat-cell *matFooterCellDef colspan="11">
+            <img src="./../../../../../../../../../assets/img/custom-icons/icon-vazio-artigos.svg" />
+            <p class="desk bold text-gray-700"> Não há registros. </p>
+        </th>
+    </ng-container>
+
+    <ng-container matColumnDef="expand">
+        <th mat-header-cell *matHeaderCellDef aria-label="row actions"></th>
+        <td mat-cell *matCellDef="let element">
+            <button mat-icon-button aria-label="expand row"
+                (click)="expandedElement = expandedElement === element ? null : element; expandDetail(element, expandedElement === element); $event.stopPropagation(); ">
+                <div class="wrapper">
+                    <i [ngClass]="expandedElement !== element ? 'fa-solid fa-chevron-down' : 'fa-solid fa-chevron-up' "
+                        aria-hidden="true"> </i>
+                </div>
+            </button>
+        </td>
+    </ng-container>
+    <!-- Expanded Content Column -->
+    <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
+            <div class="example__element--detail" fxLayout.sm="column" fxFlexLayout="column"
+                [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                <div class="example__element--boxLeft">
+                    <ul fxLayout="row" fxLayoutAlign="start" fxLayoutGap="24px">
+                        <li>
+                            <button mat-flat-button color="primary" (click)="arquivarNormativo(element, element.status === 1 ? 'Arquivar' : 'Ativar')">
+                                {{element.status === 1 ? 'Arquivar' : 'Ativar'}}
+                            </button>
+                        </li>
+                        <li>
+                            <button mat-flat-button color="primary"
+                                [routerLink]="['/normativos/editar-normativo', element.id]">
+                                Editar
+                            </button>
+                        </li>
+                        <li>
+                            <button mat-flat-button color="primary" (click)="downloadNormativo(element)">
+                                Baixar arquivo
+                            </button>
+                        </li>
+                        <li>
+                            <button mat-flat-button color="warn" class="h-100" (click)="deletarNormativo(element)">
+                                Deletar
+                            </button>
+                        </li>
+                    </ul>
+
+                    <section class="detalhes-registro">
+                        <p class="titulo mt-1">Dados do normativo</p>
+                        <ul class="bb-1">
+                            <li>
+                                <p>Estado: <strong>{{ utility.converterUfParaSiglaENome(expandedElement?.uf) }}</strong></p>
+                                <p>Tipo:
+                                    <strong>
+                                        <div [ngSwitch]="expandedElement?.tipoNormativo">
+                                            <div *ngSwitchCase="'1'">Lei</div>
+                                            <div *ngSwitchCase="'2'">Resolução</div>
+                                            <div *ngSwitchCase="'3'">Decreto</div>
+                                            <div *ngSwitchCase="'4'">Portaria</div>
+                                            <div *ngSwitchCase="'5'">Edital</div>
+                                            <div *ngSwitchCase="'6'">Instrução</div>
+                                            <div *ngSwitchCase="'7'">Outros</div>
+                                        </div>
+                                    </strong>
+                                </p>
+                                <p>Tipo de registro:
+                                    <strong>
+                                        <div [ngSwitch]="expandedElement?.tipoRegistro ">
+                                            <div *ngSwitchCase="'1'">Registro de contrato</div>
+                                            <div *ngSwitchCase="'2'">Registro de garantia</div>
+                                            <div *ngSwitchCase="'3'">Registro de instituição financeira</div>
+                                        </div>
+                                    </strong>
+                                </p>
+                            </li>
+                            <li>
+                                <p>Data de vigência: <strong>{{ expandedElement?.dataVigencia | date:"dd/MM/yyyy" }}</strong></p>
+                                <p>Data de criação: <strong>{{ expandedElement?.criadoEm | date:"dd/MM/yyyy HH:mm" }}</strong></p>
+                            </li>
+                            <li>
+                                <p>Visão: <strong>{{ expandedElement?.nacional ? 'Nacional' : 'Estadual' }}</strong></p>
+                                <p>Status: <strong>{{ expandedElement?.status === 1 ? 'Ativo' : 'Arquivado' }}</strong></p>
+                            </li>
+                        </ul>
+                        <p class="titulo">Nome da portaria </p>
+                        <ul>
+                            <li>
+                                <p><strong>{{ expandedElement?.nomePortaria }}</strong></p>
+                            </li>
+                        </ul>
+                    </section>
+                </div>
+            </div>
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
+    <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand;" class="example-element-row"
+        [class.expanded-row]="expandedElement === element"
+        (click)="expandedElement = expandedElement === element ? null : element; expandDetail(element, expandedElement === element)">
+    </tr>
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+    <tr mat-row *matFooterRowDef="['semRegistro']" [ngClass]="{'d-none': totalItems > 0 }"></tr>
+
+</table>
+
+<section class="text-paginator">
+    <div class="row d-flex">
+        <section class="default-text">
+            Mostrando {{ paginator?.pageSize > totalItems ? totalItems :
+            paginator?.pageSize }} de {{
+            totalItems }} resultados
+        </section>
+    </div>
+</section>
+<mat-paginator (page)="syncPrimaryPaginator($event)" [pageSize]="paginator.pageSize" [pageIndex]="paginator.pageIndex"
+    [length]="paginator.length" [pageSizeOptions]="paginator?.pageSizeOptions">
+</mat-paginator>

@@ -1,0 +1,58 @@
+<button [id]="getElementId(2, 'espelho-print')" mat-flat-button color="primary" (click)="printPage()" class="mb-1"> <i
+    class="fa-solid fa-print"></i> Imprimir</button>
+
+<section #espelhoContrato id="espelhoContrato">
+  <section fxLayoutGap="20px grid" [fxLayout]="contrato?.contrato.ehFrota ? 'row wrap' : 'row'">
+
+    <div [fxFlex]="contrato?.contrato.ehFrota ? 100 : 50" [ngClass]="{ 'max-height mb-0': contrato?.contrato.ehFrota }">
+      <app-espelho-dados-veiculo></app-espelho-dados-veiculo>
+    </div>
+
+    <div [fxFlex]="contrato?.contrato.ehFrota ? 100 : 50" [ngClass]="{ 'max-height': contrato?.contrato.ehFrota }">
+      <app-espelho-dados-contrato></app-espelho-dados-contrato>
+    </div>
+
+  </section>
+
+  <section fxFlexLayout="row" fxLayoutGap="20px">
+    <div fxFlex="100" class="max-height">
+      <app-espelho-dados-complementares></app-espelho-dados-complementares>
+    </div>
+  </section>
+
+  <section fxFlexLayout="row" fxLayoutGap="20px" class="pagebreak">
+
+    <div fxFlex="50" class="max-height">
+      <app-espelho-dados-financiamento></app-espelho-dados-financiamento>
+    </div>
+
+    <div fxFlex="50" class="max-height">
+      <app-espelho-adm-consorcios></app-espelho-adm-consorcios>
+    </div>
+
+  </section>
+
+  <section fxFlexLayout="row" fxLayoutGap="20px">
+
+    <div fxFlex="50">
+      <app-espelho-dados-credor></app-espelho-dados-credor>
+    </div>
+
+    <div fxFlex="50">
+      <app-espelho-dados-devedor></app-espelho-dados-devedor>
+    </div>
+
+  </section>
+
+  <section fxFlexLayout="row" fxLayoutGap="20px">
+
+    <div fxFlex="50" *ngIf="showTerceiroGarantidor()" class="max-height">
+      <app-espelho-dados-garantidor></app-espelho-dados-garantidor>
+    </div>
+
+    <div fxFlex="50" class="max-height">
+      <app-espelho-dados-nsa-protocolo></app-espelho-dados-nsa-protocolo>
+    </div>
+
+  </section>
+</section>

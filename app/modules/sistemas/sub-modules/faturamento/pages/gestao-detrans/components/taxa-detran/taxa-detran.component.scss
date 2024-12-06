@@ -1,0 +1,16 @@
+@import '$settings';
+@import '$tools';
+
+.btn-add {
+  background-color: #E0EFFF;
+  color: #70B2E7;
+}
+
+.btn-cancelar {
+  background-color: #FFE2EB;
+  color: $error-600;
+}
+
+.conteudo {
+  height: calc(100% - 57px);
+}

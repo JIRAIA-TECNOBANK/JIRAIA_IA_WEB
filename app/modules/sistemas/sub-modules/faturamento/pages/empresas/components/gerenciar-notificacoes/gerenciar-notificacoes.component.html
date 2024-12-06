@@ -1,0 +1,70 @@
+<section (click)="formularioAberto = true" fxLayout="row" [ngClass]="{ 'cursor-pointer': !formularioAberto }">
+    <h6 class="mb-1">Gerenciar notificações de faturamento
+        <i *ngIf="!formularioAberto" class="fas fa-check text-success"></i>
+    </h6>
+</section>
+
+<form [formGroup]="form" (ngSubmit)="salvarNotificacoes()" [ngClass]="{ 'd-none': !formularioAberto }">
+    <section class="habilitar-gerenciamento" fxLayout="column">
+        <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px">
+            <div class="descricao w-100" fxLayout="column">
+                <p class="bold mb-0">Faturamento</p>
+                <p class="text-gray-800">Gerencie os tipos de notificações relacionadas a este tema que serão enviadas
+                    por
+                    e-mail.</p>
+            </div>
+
+            <button mat-flat-button type="button" class="acao" [ngClass]="{ 'habilitado': habilitado }"
+                [id]="utility.getElementId(2, 'habilitar-notificacoes')" (click)="alterarConfiguracao()" type="button">
+                {{ habilitado ? 'Desabilitar' : 'Habilitar' }}
+            </button>
+        </div>
+
+        <section class="conteudo" fxLayout="column" *ngIf="habilitado">
+            <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px">
+                <p class="text-gray-800 bold">Notificar por e-mail que os arquivos de notas fiscais (NF), nota de débito
+                    (ND) e respectivos boletos estão disponíveis para consulta no Portal</p>
+
+                <mat-slide-toggle formControlName="notificaArquivosPortal"
+                    [id]="utility.getElementId(8, 'notificacao-arquivos-portal')"></mat-slide-toggle>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px">
+                <p class="text-gray-800 bold">Notificar e enviar por e-mail os arquivos de notas fiscais (NF), notas de
+                    débito (ND) e respectivos boletos</p>
+                <mat-slide-toggle formControlName="notificaArquivosComAnexoPortal"
+                    [id]="utility.getElementId(8, 'notificacao-anexo-portal')"></mat-slide-toggle>
+            </div>
+
+            <section class="arquivos" *ngIf="form.get('notificaArquivosComAnexoPortal').value" fxLayout="column">
+                <mat-checkbox [id]="utility.getElementId(4, 'nf-boleto')" fxLayout="row"
+                    (click)="$event.stopPropagation()" [checked]="form.get('notificaNfPortal').value"
+                    (change)="$event ? check('notificaNfPortal') : null" class="mb-1">Nota fiscal + boleto
+                </mat-checkbox>
+
+                <mat-checkbox [id]="utility.getElementId(4, 'nd-boleto')" fxLayout="row"
+                    (click)="$event.stopPropagation()" [checked]="form.get('notificaNdPortal').value"
+                    (change)="$event ? check('notificaNdPortal') : null" class="mb-1">Nota de débito + boleto
+                </mat-checkbox>
+
+                <mat-checkbox [id]="utility.getElementId(4, 'relatorio-fechamento')" fxLayout="row"
+                    (click)="$event.stopPropagation()" [checked]="form.get('notificaExtratoPortal').value"
+                    (change)="$event ? check('notificaExtratoPortal') : null" class="mb-1">Relatório de fechamento
+                    (extrato)
+                </mat-checkbox>
+
+                <mat-checkbox [id]="utility.getElementId(4, 'todas-opcoes')" fxLayout="row"
+                    (change)="selecionarTodos($event)" [checked]="todosSelecionados()" class="mb-1">Enviar todas as
+                    opções acima
+                </mat-checkbox>
+            </section>
+        </section>
+    </section>
+
+    <div fxLayout="row" fxLayoutAlign="end" class="mt-1">
+        <button mat-flat-button color="primary" [id]="utility.getElementId(2, 'salvar-notificacoes-financeiro')"
+            type="submit" [disabled]="!form.valid" class="bold">
+            Salvar
+        </button>
+    </div>
+</form>

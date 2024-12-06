@@ -1,0 +1,63 @@
+@import "$settings";
+@import "$tools";
+
+.registros-inconsistencia {
+    p {
+        font-size: 12px;
+    }
+
+    .total {
+        @include border-radius(10px);
+        background-color: #FFCAB5;
+        padding: 0 15px;
+        max-width: 10vw;
+    }
+
+    .expandir-registros {
+        @include border-radius(100%);
+        background-color: $blue-600;
+        width: 22px;
+        height: 22px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+
+        i {
+            color: $white;
+            font-size: 13px;
+            margin-top: 1px;
+        }
+    }
+
+    .detalhes {
+        font-size: 12px;
+        color: $gray-800;
+
+        span {
+            padding: 5px 0;
+
+            &.total-col {
+                text-align: right;
+            }
+        }
+
+        .titulo {
+            @include fontMontserratRegular;
+        }
+
+        .valores {
+            border-top: 1px solid $gray-300;
+
+            span {
+                @include fontMontserratBold;
+
+                &.total-uf {
+                    color: #E31D1D;
+                    text-align: right;
+                }
+            }
+        }
+
+    }
+}

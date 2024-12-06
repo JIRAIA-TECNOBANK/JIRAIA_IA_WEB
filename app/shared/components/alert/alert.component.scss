@@ -1,0 +1,37 @@
+@import '$settings';
+
+.alert-container {
+    border-radius: 5px;
+    font-size: 12px;
+
+    .title-alert {
+        font-size: 12px;
+        text-transform: uppercase;
+    }
+
+    .icone-alert {
+        i {
+            font-size: 1rem;
+        }
+    }
+}
+
+.primary {
+    color: $primary;
+    background-color: $blue-200;
+}
+
+.success {
+    color: $text-success;
+    background-color: $success-200;
+}
+
+.error {
+    color: $spotlight-900;
+    background-color: $error-100;
+}
+
+.warning {
+    color: $text-warning;
+    background-color: $warning-200;
+}

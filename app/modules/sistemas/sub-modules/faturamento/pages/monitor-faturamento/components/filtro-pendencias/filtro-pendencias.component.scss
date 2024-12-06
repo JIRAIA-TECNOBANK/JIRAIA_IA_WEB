@@ -1,0 +1,171 @@
+@import "$settings";
+@import "$tools";
+
+.filter-content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.filter-button {
+    @include border-radius(8px);
+    color: $gray-500;
+    margin-right: 20px;
+}
+
+.filter-search {
+    font-size: 12px;
+
+    i {
+        padding-right: 10px;
+        margin-top: -10px;
+        color: $gray-600;
+        font-weight: 700;
+    }
+
+}
+
+.filter {
+    display: none;
+    position: absolute;
+    left: 15px;
+    top: 60px;
+    z-index: 9;
+
+    &.active {
+        display: block;
+    }
+
+    .filter-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 12px;
+        margin-bottom: 8px;
+
+        button {
+            font-size: 12px;
+        }
+    }
+
+    .filter-checklist {
+        list-style: none;
+        padding-left: 0;
+        margin-top: 0;
+
+        li {
+            padding: 5px 0
+        }
+    }
+}
+
+.filter-multiple-select {
+    @include border-radius(8px);
+    color: $gray-500;
+    margin-right: 20px;
+    border: 1px rgba(0, 0, 0, .12) solid !important;
+    line-height: 33px;
+    padding: 0 16px;
+    height: 36px;
+}
+
+.filter-card-select {
+    margin-left: 0;
+    box-shadow: 0px 12px 17px rgb(0 0 0 / 8%), 0px 5px 22px rgb(0 0 0 / 8%), 0px 7px 8px rgb(0 0 0 / 5%) !important;
+}
+
+.filter-header {
+    span {
+        @include fontMontserratBold;
+        color: $gray-800;
+        line-height: 35px;
+        font-size: 12px;
+    }
+}
+
+.filter-title {
+    @include fontMontserratBold;
+    font-size: 12px;
+}
+
+.btn-redefinir {
+    font-size: 12px;
+}
+
+.b-divider {
+    border-bottom: 1px solid $gray-400;
+}
+
+.filter-options {
+    max-height: 180px;
+    overflow: auto;
+}
+
+.filter-button,
+.filter-multiple-select {
+    i {
+        font-size: 10px;
+        line-height: 18px;
+    }
+}
+
+.filter-multiple-select {
+    &:hover {
+        background: #f5f5f5;
+    }
+}
+
+.filter-active {
+    border: 1px solid $primary !important;
+    color: $primary !important;
+}
+
+.filter-error {
+    border: 1px solid $spotlight-700 !important;
+    color: $spotlight-700 !important;
+}
+
+mat-label i,
+.filter-button i {
+    padding-left: 40px;
+}
+
+.campo__selecionado {
+    ::ng-deep {
+        .mat-form-field-appearance-outline .mat-form-field-outline {
+            @include border-radius(8px);
+            background: linear-gradient(90deg, $primary 39.07%, $blue-600 100%);
+        }
+
+        .campo__selecionado--text,
+        .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+            @include fontMontserratBold;
+            color: $white;
+            font-size: 14px;
+        }
+
+        .mat-select-arrow {
+            border-top-color: $white
+        }
+
+        .mat-form-field-appearance-outline .mat-form-field-outline-start,
+        .mat-form-field-appearance-outline .mat-form-field-outline-gap,
+        .mat-form-field-appearance-outline .mat-form-field-outline-end {
+            border-color: transparent
+        }
+    }
+
+    .campo__selecionado--feed {
+        @include border-radius(100%);
+        @include fontMontserratBold;
+        background-color: $blue-800;
+        color: $white;
+        font-size: 12px;
+        height: 22px;
+        line-height: 22px;
+        position: absolute;
+        right: 20px;
+        text-align: center;
+        top: 2px;
+        width: 22px;
+    }
+}

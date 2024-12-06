@@ -1,0 +1,186 @@
+<div class="px-2 pb-3" [hidden]="childstate">
+
+  <div class="box__btn">
+    <app-atualizar-pagina (atualizar)="atualizarPagina()"></app-atualizar-pagina>
+    <!-- <button
+      mat-stroked-button
+      class="box__btn--btn btn-info"
+      color="primary"
+      (click)="openDialogInformacoes()"
+      [id]="utility.getElementId(2, 'informacoes')"
+    >
+      <i class="fa-solid fa-question"></i>
+    </button> -->
+
+    <button
+      mat-flat-button
+      class="box__btn--btn"
+      color="secondary"
+      (click)="openDialogSolicitarRelatorio()"
+      [id]="utility.getElementId(2, 'solicitar-relatorio')"
+    >
+      <i class="fa-regular fa-file-chart-column"></i>
+      &nbsp;Solicitar relatório
+    </button>
+  </div>
+  <div class="mt-3">
+    <app-grid-filter [filter]="filterEmpresas" (pesquisar)="searchEmpresas($event)"
+      (customControls)="setCustomControls($event)" (redefinir)="redefinirEmpresas()" [radiusTop]="true"
+      [showRedefinir]="showRedefinirGruposBtn">
+      <section class="first-row d-flex" fxLayout.sm="column">
+        <app-filter-field [field]="fieldNomeEmpresa" [control]="empresaNomeControl"
+          [searchControl]="empresaNomeSearchControl" (searchInput)="searchFilterEmpresas($event)"
+          [redefinirField]="refreshEmpresasGrid">
+        </app-filter-field>
+
+      <button
+        mat-stroked-button
+        [matMenuTriggerFor]="menuRadio"
+        class="filter-button mt-2"
+        [id]="utility.getElementId(2, 'filter', fieldPeriodoEmpresa.id)"
+        type="button"
+        [ngClass]="{
+          'filter-active':
+            (periodoEmpresaControl.value ||
+              dataInicialEmpresaControl.value ||
+              dataFinalEmpresaControl.value) &&
+            !dataInicialEmpresaControl.invalid &&
+            !dataFinalEmpresaControl.invalid,
+          'filter-error':
+            requiredFieldsError ||
+            dataInicialEmpresaControl.invalid ||
+            dataFinalEmpresaControl.invalid
+        }"
+        fxFlex
+      >
+        <span class="filter-title">{{ fieldPeriodoEmpresa.titulo }}</span>
+        <i class="fal fa-chevron-down mr-1"></i>
+      </button>
+      <mat-menu #menuRadio="matMenu" class="mat-elevation-z8 filter">
+        <div class="filter-search" (click)="stopPropagation($event)">
+          <div
+            class="filter-header d-flex justify-content-between pl-2 b-divider"
+          >
+            <span> Por período</span>
+            <button
+              [id]="
+                utility.getElementId(2, 'filter-clean', fieldPeriodoEmpresa.id)
+              "
+              mat-button
+              color="primary"
+              class="btn-redefinir"
+              (click)="
+                redefinir(periodoEmpresaControl, fieldPeriodoEmpresa)
+              ">
+                Limpar
+              </button>
+            </div>
+
+          <section class="filter-options py-1 px-2">
+            <mat-radio-group
+              [formControl]="periodoEmpresaControl"
+              [id]="utility.getElementId(3, 'filter', fieldPeriodoEmpresa.id)"
+            >
+              <mat-radio-button
+                *ngFor="let option of fieldPeriodoEmpresa.options"
+                [value]="option.value"
+                class="mb-1"
+                (change)="cleanDates()"
+              >
+                {{ option.label }}</mat-radio-button
+              >
+            </mat-radio-group>
+
+            <div class="row pt-1" fxLayoutGap="10">
+              <mat-form-field
+                appearance="outline"
+                fxFlex="50"
+                class="mat-field-small mr-1"
+              >
+                <mat-label>DE</mat-label>
+                <input
+                  [id]="
+                    utility.getElementId(6, 'filter-de', fieldPeriodoEmpresa.id)
+                  "
+                  [formControl]="dataInicialEmpresaControl"
+                  matInput
+                  placeholder="dd/mm/aaaa"
+                  (keydown.tab)="$event.stopPropagation(); de.close(); ate.open()"
+                  (dateChange)="
+                    onChangePeriodo($event.target.value, true)
+                  " [min]="minInitialEmpresaDate" [max]="maxDate" [matDatepicker]="de" [required]="
+                    dataFinalEmpresaControl.value != null &&
+                    dataFinalEmpresaControl.value != ''
+                  " (click)="de.open()" />
+                  <mat-datepicker-toggle matSuffix [for]="de" hidden>
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #de></mat-datepicker>
+                  <mat-hint class="text-danger bold" *ngIf="dataInicialEmpresaControl.hasError('required')">
+                    Campo obrigatório
+                  </mat-hint>
+                  <mat-hint class="text-danger bold" *ngIf="
+                    dataInicialEmpresaControl.hasError('matDatepickerMax')
+                  ">
+                    Data inicial não pode ser maior que hoje
+                  </mat-hint>
+                </mat-form-field>
+
+              <mat-form-field
+                appearance="outline"
+                fxFlex="50"
+                class="mat-field-small"
+              >
+                <mat-label>ATÉ</mat-label>
+                <input
+                  [id]="
+                    utility.getElementId(6, 'filter-ate', fieldPeriodoEmpresa.id)
+                  "
+                  [formControl]="dataFinalEmpresaControl"
+                  matInput
+                  placeholder="dd/mm/aaaa"
+                  (keydown.tab)="ate.close()"
+                  (dateChange)="
+                    onChangePeriodo($event.target.value, false)
+                  " [min]="minDate" [matDatepicker]="ate" (click)="ate.open()" [required]="
+                    dataInicialEmpresaControl.value != null &&
+                    dataInicialEmpresaControl.value != ''
+                  " />
+                  <mat-datepicker-toggle matSuffix [for]="ate" hidden>
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #ate></mat-datepicker>
+                  <mat-error class="text-danger bold" *ngIf="
+                    erroDataFinalEmpresa ||
+                    dataFinalEmpresaControl.hasError('matDatepickerMin')
+                  ">
+                    Data final deve ser maior que a data inicial
+                  </mat-error>
+                  <mat-hint class="text-danger bold" *ngIf="dataFinalEmpresaControl.hasError('required')">
+                    Campo obrigatório
+                  </mat-hint>
+                  <mat-hint class="text-danger bold" *ngIf="
+                    dataFinalEmpresaControl.hasError('matDatepickerMax')
+                  ">
+                    Data final não pode ser maior que hoje
+                  </mat-hint>
+                </mat-form-field>
+              </div>
+            </section>
+          </div>
+        </mat-menu>
+        <app-filter-field [field]="fieldStatusEmpresas" [control]="statusEmpresaControl"
+          (selectAll)="selectAll($event)">
+        </app-filter-field>
+        <app-filter-field [field]="fieldNome" [control]="nomeControl">
+      </app-filter-field>
+      </section>
+
+    </app-grid-filter>
+  </div>
+  <mat-card class="mat-elevation-z8 mt-3 p-0">
+    <app-table-relatorios-gerados [filtro]="filtroEmpresas" [refreshGrid]="refreshGrid"></app-table-relatorios-gerados>
+  </mat-card>
+</div>
+
+<div class="px-2">
+  <router-outlet></router-outlet>
+</div>

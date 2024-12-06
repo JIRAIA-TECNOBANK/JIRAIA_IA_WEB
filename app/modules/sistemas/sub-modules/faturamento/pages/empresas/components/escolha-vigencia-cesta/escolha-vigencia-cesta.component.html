@@ -1,0 +1,40 @@
+<p class="bold desk mt-0" *ngIf="mostrarTitulo">Selecione uma das opções abaixo indicando o período de vigência dessa
+    cesta</p>
+
+<mat-radio-group [formControl]="opcaoVigenciaControl" [id]="utility.getElementId(3, 'tipo-vigencia')">
+    <div fxLayout="column">
+        <mat-radio-button [value]="0" class="mb-2">Essa cesta entra em vigor a partir de hoje para as
+            operações
+            registradas com sucesso</mat-radio-button>
+
+        <mat-radio-button [value]="2" class="mb-2">Indique uma data futura em que o valor dessa cesta
+            passará a vigorar para as operações registradas com sucesso</mat-radio-button>
+
+        <ng-container *ngIf="opcaoVigenciaControl.value == 2; then dataVigencia">
+        </ng-container>
+
+        <mat-radio-button [value]="1" class="mb-2" [disabled]="diasMesVigente == 1">
+            Indique uma data retroativa (dentro do mês vigente) para
+            aplicar o preço dessa cesta. Ao selecionar essa opção, o preço dessa cesta será atribuído as
+            operações registradas com sucesso a partir da data indicada
+        </mat-radio-button>
+
+        <ng-container *ngIf="opcaoVigenciaControl.value == 1; then dataVigencia">
+        </ng-container>
+    </div>
+</mat-radio-group>
+
+<ng-template #dataVigencia>
+    <div class="pl-3">
+        <mat-form-field appearance="outline" fxFlex="25" class="mat-field-small mr-1">
+            <mat-label>Início vigência</mat-label>
+            <input matInput [formControl]="dataInicioVigenciaControl" placeholder="dd/mm/aaaa" [matDatepicker]="de"
+                (click)="de.open()" [id]="utility.getElementId(6, 'data-inicial')"
+                [min]="opcaoVigenciaControl.value == 2 ? addDays(1) : addDays(-(diasMesVigente - 1))"
+                [max]="opcaoVigenciaControl.value == 1 ? addDays(-1) : ''" />
+            <mat-datepicker-toggle matSuffix [for]="de"> </mat-datepicker-toggle>
+            <mat-datepicker #de></mat-datepicker>
+            <mat-hint>Obrigatório</mat-hint>
+        </mat-form-field>
+    </div>
+</ng-template>

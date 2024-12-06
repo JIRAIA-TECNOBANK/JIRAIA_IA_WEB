@@ -1,0 +1,96 @@
+<div class="detalhes-taxa" fxLayout="column" fxLayoutGap="10px">
+    <div fxLayout="row" fxLayoutAlign="space-between" class="cabecalho">
+        <span class="bold gray-600" fxFlex="30">Operação </span>
+        <div class="w-100" fxLayoutAlign="center">
+            <span class="bold gray-600" fxLayoutAlign="center"> Taxa DETRAN </span>
+        </div>
+        <div class="w-100" fxLayoutAlign="center">
+            <span class="bold gray-600" fxLayoutAlign="center"> Preço {{ preco.tipoPreco === 1 ? 'público' :
+                'privado'}} TBK
+            </span>
+        </div>
+        <div class="w-100" fxLayoutAlign="center">
+            <span class="bold gray-600" fxLayoutAlign="center"> Total </span>
+        </div>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="operacoes" *ngIf="retornarOperacaoAtivo(preco, 1)">
+        <span class=" bold gray-600" fxFlex="30">Registro de
+            contrato </span>
+        <div class="w-100" fxLayoutAlign="center">
+            <span class="valor bold" fxLayoutAlign="center"> {{
+                retornarTaxaDetranOperacao(1) | currency : 'BRL' }}
+            </span>
+        </div>
+        <div class="w-100" fxLayoutAlign="center">
+            <span class="valor bold" fxLayoutAlign="center"> {{
+                retornarValorOperacao(preco, 1) | currency : 'BRL' }}
+            </span>
+        </div>
+        <div class="w-100" fxLayoutAlign="center">
+            <span class="valor bold" fxLayoutAlign="center"> {{
+                retornarTotalOperacao(preco, 1) | currency : 'BRL' }}
+            </span>
+        </div>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="operacoes" *ngIf="retornarOperacaoAtivo(preco, 2)">
+        <span class="bold gray-600" fxFlex="30">Alteração de
+            contrato </span>
+        <div class="w-100" fxLayoutAlign="center">
+            <span class="valor bold" fxLayoutAlign="center"> {{
+                retornarTaxaDetranOperacao(2) | currency : 'BRL' }}
+            </span>
+        </div>
+        <div class="w-100" fxLayoutAlign="center">
+            <span class="valor bold" fxLayoutAlign="center"> {{
+                retornarValorOperacao(preco, 2) | currency : 'BRL' }}
+            </span>
+        </div>
+        <div class="w-100" fxLayoutAlign="center">
+            <span class="valor bold" fxLayoutAlign="center"> {{
+                retornarTotalOperacao(preco, 2) | currency : 'BRL' }}
+            </span>
+        </div>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="operacoes" *ngIf="retornarOperacaoAtivo(preco, 3)">
+        <span class="bold gray-600" fxFlex="30">Registro de aditivo
+        </span>
+        <div class="w-100" fxLayoutAlign="center">
+            <span class="valor bold" fxLayoutAlign="center"> {{
+                retornarTaxaDetranOperacao(3) | currency : 'BRL' }}
+            </span>
+        </div>
+        <div class="w-100" fxLayoutAlign="center">
+            <span class="valor bold" fxLayoutAlign="center"> {{
+                retornarValorOperacao(preco, 3) | currency : 'BRL' }}
+            </span>
+        </div>
+        <div class="w-100" fxLayoutAlign="center">
+            <span class="valor bold" fxLayoutAlign="center"> {{
+                retornarTotalOperacao(preco, 3) | currency : 'BRL' }}
+            </span>
+        </div>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="operacoes" *ngIf="retornarOperacaoAtivo(preco, 4)">
+        <span class="bold gray-600" fxFlex="30">Alteração de
+            aditivo </span>
+        <div class="w-100" fxLayoutAlign="center">
+            <span class="valor bold" fxLayoutAlign="center"> {{
+                retornarTaxaDetranOperacao(4) | currency : 'BRL' }}
+            </span>
+        </div>
+        <div class="w-100" fxLayoutAlign="center">
+            <span class="valor bold" fxLayoutAlign="center"> {{
+                retornarValorOperacao(preco, 4) | currency : 'BRL' }}
+            </span>
+        </div>
+        <div class="w-100" fxLayoutAlign="center">
+            <span class="valor bold" fxLayoutAlign="center"> {{
+                retornarTotalOperacao(preco, 4) | currency : 'BRL' }}
+            </span>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,68 @@
+@import '$settings';
+@import '$tools';
+
+.filter-content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.filter-button {
+    @include border-radius(8px);
+    color: $gray-500;
+    margin-right: 20px;
+}
+
+.btn-show-more {
+    min-width: 32px;
+    border-width: 1px !important;
+}
+
+.filter-search {
+    font-size: 12px;
+
+    i {
+        padding-right: 10px;
+        margin-top: -10px
+    }
+
+}
+
+.filter-content .mat-primary {
+    max-height: 36px;
+    display: flex;
+    align-items: center;
+}
+
+.filter {
+    display: none;
+    position: absolute;
+    left: 15px;
+    top: 60px;
+    z-index: 9;
+
+    &.active {
+        display: block;
+    }
+
+    .filter-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 12px;
+        margin-bottom: 8px;
+
+        button {
+            font-size: 12px;
+        }
+    }
+
+    .filter-checklist {
+        list-style: none;
+        padding-left: 0;
+        margin-top: 0;
+
+        li {
+            padding: 5px 0
+        }
+    }
+}

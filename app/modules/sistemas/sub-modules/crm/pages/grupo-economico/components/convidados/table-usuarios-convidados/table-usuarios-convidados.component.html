@@ -1,0 +1,114 @@
+<section class="text-paginator">
+  <div class="row d-flex">
+    <section class="default-text" *ngIf="paginatorConvidados">
+      Mostrando {{ paginatorConvidados?.pageSize > totalItems ? totalItems : paginatorConvidados?.pageSize }} de {{
+      totalItems }} resultados
+    </section>
+  </div>
+</section>
+<mat-paginator #paginatorConvidados [pageSizeOptions]="[25, 50, 75, 100]" [length]="totalItems"></mat-paginator>
+
+<div>
+  <table mat-table [dataSource]="items$ | async" #tableUsuariosConvidados="matSort" (matSortChange)="sortData($event)"
+    matSort>
+    <ng-container matColumnDef="nome">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Nome</th>
+      <td mat-cell *matCellDef="let element">{{ element.nome }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>E-mail</th>
+      <td mat-cell *matCellDef="let element" [matTooltip]="element.email" class="column-max-width">
+        {{ element.email }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="tipoUsuario">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de usuário</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.tipo }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="empresaOrigem">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Empresa de origem</th>
+      <td mat-cell *matCellDef="let element" [matTooltip]="element.nomeEmpresaOrigem" class="column-max-width">
+        {{ element.nomeEmpresaOrigem }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="dataLiberacao">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Data liberação</th>
+      <td mat-cell *matCellDef="let element">
+        {{ formatDate(element.dataLiberacao) }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="nomePerfil">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Perfil</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.nomePerfil }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="nomeEmpresa">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Convidado para empresa</th>
+      <td mat-cell *matCellDef="let element" [matTooltip]="element.nomeEmpresaConvidado" class="column-max-width">
+        {{ element.nomeEmpresaConvidado }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.status }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="opcoes">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element">
+        <div>
+          <button mat-button [matMenuTriggerFor]="menu" [id]="getElementId(2, 'usuarios-opcoes')">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="editarUsuarioConvidado(element.id)"
+              [id]="getElementId(2, 'usuarios-convidados-editar')"
+              [disabled]="!utility.getPermission([Permissoes.GESTAO_EMPRESA_USUARIO_CONVIDADO_CADASTRAR])">
+              Editar
+            </button>
+            <button mat-menu-item (click)="excluirUsuarioConvidado(element)"
+              [id]="getElementId(2, 'usuarios-convidados-excluir')"
+              [disabled]="!utility.getPermission([Permissoes.GESTAO_EMPRESA_USUARIO_CONVIDADO_CADASTRAR])">
+              Excluir
+            </button>
+          </mat-menu>
+        </div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="semRegistro">
+      <th class="text-center feedBack pt-1" mat-cell *matFooterCellDef colspan="11">
+        <img src="./../../../../../../../../../../assets/img/custom-icons/icon-vazio-artigos.svg" />
+        <p class="desk bold text-gray-700"> Não há registros. </p>
+      </th>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    <tr mat-row *matFooterRowDef="['semRegistro']" [ngClass]="{'d-none': totalItems > 0 }"></tr>
+  </table>
+  <section class="text-paginator">
+    <div class="row d-flex">
+      <section class="default-text">
+        Mostrando {{ paginatorConvidados?.pageSize > totalItems ? totalItems : paginatorConvidados?.pageSize }} de {{
+        totalItems }} resultados
+      </section>
+    </div>
+  </section>
+  <mat-paginator (page)="syncPrimaryPaginator($event)" [pageSize]="paginatorConvidados.pageSize"
+    [pageIndex]="paginatorConvidados.pageIndex" [length]="paginatorConvidados.length"
+    [pageSizeOptions]="paginatorConvidados?.pageSizeOptions">
+  </mat-paginator>
+</div>

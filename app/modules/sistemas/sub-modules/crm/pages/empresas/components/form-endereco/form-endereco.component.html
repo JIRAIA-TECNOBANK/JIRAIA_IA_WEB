@@ -1,0 +1,158 @@
+<form [formGroup]="createEnderecoForm" (ngSubmit)="onSubmit()" class="mt-2">
+  <div fxLayout="row" fxLayoutGap="10px">
+    <mat-form-field appearance="outline" fxFlex="auto">
+      <mat-label>CEP </mat-label>
+      <input
+        matInput
+        placeholder="00000-000"
+        formControlName="cep"
+        mask="00000-000"
+        id="cep_endereco"
+        required
+      />
+      <mat-icon matSuffix>
+        <mat-spinner *ngIf="loading" [diameter]="25"></mat-spinner>
+      </mat-icon>
+      <mat-hint>Obrigatório</mat-hint>
+      <mat-error *ngIf="createEnderecoForm.get('cep').hasError('required')"
+        >Cep é obrigatório</mat-error
+      >
+      <mat-hint *ngIf="cepInvalido">CEP não localizado</mat-hint>
+    </mat-form-field>
+    <mat-form-field appearance="outline" fxFlex="auto">
+      <mat-label>Endereço </mat-label>
+      <input
+        matInput
+        placeholder="Endereço"
+        formControlName="logradouro"
+        id="logradouro_endereco"
+        required
+      />
+      <mat-hint>Obrigatório</mat-hint>
+      <mat-error
+        *ngIf="createEnderecoForm.get('logradouro').hasError('required')"
+        >Logradouro é obrigatório</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field appearance="outline" [style.width.px]="100">
+      <mat-label>Número </mat-label>
+      <input
+        matInput
+        placeholder="Número"
+        formControlName="numero"
+        id="numero_endereco"
+        required
+      />
+      <mat-hint>Obrigatório</mat-hint>
+      <mat-error *ngIf="createEnderecoForm.get('numero').hasError('required')"
+        >Número é obrigatório</mat-error
+      >
+    </mat-form-field>
+  </div>
+  <div fxLayout="row" fxLayoutGap="10px">
+    <mat-form-field appearance="outline" fxFlex="auto">
+      <mat-label>Complemento</mat-label>
+      <input
+        matInput
+        placeholder="Complemento"
+        formControlName="complemento"
+        maxlength="20"
+        id="complemento_endereco"
+      />
+    </mat-form-field>
+    <mat-form-field appearance="outline" fxFlex="auto">
+      <mat-label>Bairro </mat-label>
+      <input
+        matInput
+        placeholder="Bairro"
+        formControlName="bairro"
+        id="bairro_endereco"
+        required
+      />
+      <mat-hint>Obrigatório</mat-hint>
+      <mat-error *ngIf="createEnderecoForm.get('bairro').hasError('required')"
+        >Bairro é obrigatório</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field appearance="outline" [style.width.px]="100">
+      <mat-label>Estado</mat-label>
+      <mat-select
+        formControlName="uf"
+        required
+        (blur)="onChangeCidade()"
+        id="estado_endereco"
+      >
+        <mat-option> Estado*</mat-option>
+        <mat-option *ngFor="let uf of ufs" [value]="uf.sigla">{{
+          uf.sigla
+        }}</mat-option>
+      </mat-select>
+      <mat-hint>Obrigatório</mat-hint>
+      <mat-error *ngIf="createEnderecoForm.get('uf').hasError('required')"
+        >Estado é obrigatório</mat-error
+      >
+    </mat-form-field>
+  </div>
+  <div fxLayout="row" fxLayoutGap="10px">
+    <mat-form-field appearance="outline" fxFlex="auto">
+      <mat-label>Cidade </mat-label>
+      <input
+        type="text"
+        name="cidade"
+        formControlName="cidade"
+        matInput
+        [matAutocomplete]="municipio"
+        placeholder="Cidade"
+        id="cidade_endereco"
+        required
+        (ngModelChange)="onChangeCidade()"
+      />
+      <mat-autocomplete #municipio="matAutocomplete">
+        <mat-option
+          *ngFor="let municipio of municipiosFiltrados"
+          [value]="municipio.nome"
+          >{{ municipio.nome }}</mat-option
+        >
+      </mat-autocomplete>
+      <mat-hint>Obrigatório</mat-hint>
+      <mat-error *ngIf="createEnderecoForm.get('cidade').hasError('required')"
+        >Cidade é obrigatória</mat-error
+      >
+      <mat-error
+        *ngIf="
+          !createEnderecoForm.get('cidade').hasError('required') &&
+          createEnderecoForm.get('cidade').getError('invalidIdentifier') ==
+            'cidadeInvalida'
+        "
+      >
+        Cidade inválida
+      </mat-error>
+    </mat-form-field>
+    <div class="d-flex align-items-center" fxFlex="auto">
+      <mat-checkbox formControlName="principal" id="principal_endereco"
+        >Principal?
+      </mat-checkbox>
+    </div>
+  </div>
+  <div class="d-flex justify-content-end">
+    <button
+      mat-stroked-button
+      class="btn-outline-primary mr-2"
+      color="primary"
+      type="button"
+      id="cancelar_endereco"
+      (click)="onCancelar()"
+    >
+      Cancelar
+    </button>
+    <button
+      mat-flat-button
+      color="primary"
+      type="submit"
+      id="adicionar_endereco"
+      [disabled]="!createEnderecoForm.valid"
+    >
+      {{ isCreate ? "Confirmar" : "Adicionar" }}
+    </button>
+  </div>
+</form>

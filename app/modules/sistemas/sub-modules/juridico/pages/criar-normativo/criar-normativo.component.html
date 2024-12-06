@@ -1,0 +1,223 @@
+<mat-card class="mb-4 mx-2">
+  <form [formGroup]="criarNormativoForm" (ngSubmit)="submitFormulario()">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="fw-bold">Dados do normativo </div>
+    </div>
+    <section fxLayout="column" class="mt-2">
+      <div fxLayout="row" fxFlex>
+        <mat-form-field class="input-padrao-height" fxFlex="auto" appearance="outline">
+          <mat-label>Nome da portaria</mat-label>
+          <textarea placeholder="Digite o nome da portaria" matInput rows="1" name="nomePortaria"
+            formControlName="nomePortaria" maxlength="1000"></textarea>
+          <mat-hint>Obrigatório</mat-hint>
+          <mat-error *ngIf="criarNormativoForm.controls['nomePortaria'].hasError('required')">Obrigatório
+          </mat-error>
+          <mat-error *ngIf="criarNormativoForm.controls['nomePortaria'].hasError('minlength')">Nome deve conter ao
+            menos 3 caracteres</mat-error>
+        </mat-form-field>
+      </div>
+      <div fxFlex>
+        <input formControlName="arquivo" type="file" hidden #fileDropRef id="fileDropRef"
+          (change)="fileBrowseHandler($event.target.files)" [accept]="acceptedTypes" />
+        <div class="dropzone" appDragAndDrop (fileDropped)="onFileDropped($event)" (click)="onClickFile(fileDropRef)">
+          <i class="fa-solid fa-folder-open"></i>
+          <span class="primeira-frase">&nbsp;Arraste a imagem aqui, ou&nbsp;</span>
+          <span class="segunda-frase">procure no seu dispositivo.</span>
+
+          <br />
+          <span *ngIf="fileError !== null" class="file-error">
+            <mat-icon>warning</mat-icon> {{ fileError }}
+          </span>
+        </div>
+        <div class="dropzone-hint mb-3" fxLayout="row" fxLayoutAlign="space-between center">
+          <mat-hint>Arquivos PDF, PPTX, DOC, DOCX, JPG e JPEG com tamanho máximo de 10MB</mat-hint>
+          <mat-hint>Obrigatório</mat-hint>
+        </div>
+        <div class="files-list mt-3" fxLayout="column">
+          <div class="single-file" *ngIf="arquivo != null">
+            <div class="d-flex justify-content-between" fxLayout="row">
+              <div class="file-name">
+                <div [ngSwitch]="getExtension(arquivo)">
+                  <div class="icon" *ngSwitchCase="'PDF'">
+                    <img src="./../../../../../../../assets//img//custom-icons/icon-file-pdf.svg" alt="icon file PDF" />
+                  </div>
+                  <div class="icon" *ngSwitchCase="'PNG'">
+                    <img src="./../../../../../../../assets/img/custom-icons/icon-file-png.svg" alt="icon file PNG" />
+                  </div>
+                  <div class="icon" *ngSwitchCase="'JPG'">
+                    <img src="./../../../../../../../assets/img/custom-icons/icon-file-jpg.svg" alt="icon file JPG" />
+                  </div>
+                  <div class="icon" *ngSwitchCase="'JPEG'">
+                    <img src="./../../../../../../../assets/img/custom-icons/icon-file-jpg.svg" alt="icon file JPEG" />
+                  </div>
+                  <div class="icon" *ngSwitchCase="'DOCX'">
+                    <img src="./../../../../../../../assets/img/custom-icons/icon-file-docx.svg" alt="icon file DOCX" />
+                  </div>
+                  <div class="icon" *ngSwitchCase="'DOC'">
+                    <img src="./../../../../../../../assets/img/custom-icons/icon-file-doc.svg" alt="icon file DOC" />
+                  </div>
+                  <!-- <div class="icon" *ngSwitchCase="'PPTX'">
+                    <img src="./../../../../../../../assets/img/custom-icons/icon-file-doc.svg" alt="icon file DOC" />
+                  </div> -->
+                  <div class="icon" *ngSwitchDefault>
+                    <img src="./../../../../../../../assets/img/custom-icons/icon-file-none.svg" alt="icon file NONE" />
+                  </div>
+                </div>
+                <div class="info">
+                  <h4 class="name">
+                    {{ arquivo.nome }} &nbsp;
+                    <span [ngSwitch]="arquivo.statusArquivo">
+                      <i *ngSwitchCase="5" class="fas fa-check-circle text-success"></i>
+                      <i *ngSwitchCase="1" class="fas fa-times-circle text-danger"></i>
+                      <i *ngSwitchCase="2" class="fa-solid fa-circle-exclamation text-warning"></i>
+                      <i *ngSwitchCase="3" class="fa-solid fa-circle-exclamation text-warning"></i>
+                      <i *ngSwitchCase="4" class="fas fa-times-circle text-danger"></i>
+                    </span>
+                  </h4>
+                  <p class="size" *ngIf="arquivo.statusArquivo == 5">
+                    {{ arquivo.dataEnvio }} tamanho
+                    {{ utility.formatBytes(arquivo.tamanho, 2) }}
+                  </p>
+                  <div [ngSwitch]="arquivo.statusArquivo">
+                    <div *ngSwitchCase="1" class="error text-danger">Falha no upload, o formato é incompatível.</div>
+                    <div *ngSwitchCase="2" class="error text-warning">Falha no upload, o tamanho é superior ao
+                      permitido.
+                    </div>
+                    <div *ngSwitchCase="3" class="error text-warning">Falha no upload, o nome do arquivo é inválido.
+                    </div>
+                    <div *ngSwitchCase="4" class="error text-danger">Falha no upload, tente novamente.</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="file-actions">
+                <button mat-stroked-button class="btn-tentar-novamente" *ngIf="arquivo.statusArquivo == 4"
+                  (click)="onClickTenteNovamente(arquivo)">
+                  <i class="fa-solid fa-arrow-rotate-right"></i>
+                  tente novamente
+                </button>
+                <div class="left-info">
+                  <div class="d-flex justify-content-end">
+                    <div class="file-delete" (click)="onClickDelete()" matTooltip="Deletar arquivo"
+                      title="Deletar arquivo">
+                      <i class="fa-solid fa-trash-alt"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-start align-items-center mt-2 mb-1">
+        <div class="fw-bold">Informações do normativo</div>
+      </div>
+      <div fxLayout="row wrap" fxLayoutGap="10px grid" fxFlex>
+        <div fxLayout="row" fxLayoutGap="10px" fxFlex="100">
+          <mat-form-field appearance="outline" fxFlex="33">
+            <mat-label>Visão do normativo</mat-label>
+
+            <mat-select formControlName="visao">
+              <mat-option [value]="true">Visão nacional</mat-option>
+              <mat-option [value]="false">Visão estadual</mat-option>
+            </mat-select>
+
+            <mat-hint>Obrigatório</mat-hint>
+
+            <mat-error *ngIf="criarNormativoForm.controls['visao'].hasError('required')">Obrigatório
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" fxFlex="33">
+            <mat-label>Tipo de normativo</mat-label>
+
+            <mat-select formControlName="tipoNormativo">
+              <mat-option *ngFor="let tipo of opcoesTipoNormativo.tiposNormativo"
+                [value]="tipo.id">{{tipo.nome}}</mat-option>
+            </mat-select>
+
+            <mat-hint>Obrigatório</mat-hint>
+
+            <mat-error *ngIf="criarNormativoForm.controls['tipoNormativo'].hasError('required')">Obrigatório
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" fxFlex="33">
+            <mat-label>Tipo de registro</mat-label>
+
+            <mat-select formControlName="tipoRegistro">
+              <mat-option [value]="1">Registro de contrato</mat-option>
+              <mat-option [value]="2">Registro de garantia</mat-option>
+              <mat-option [value]="3">Registro de instituição financeira</mat-option>
+            </mat-select>
+
+            <mat-hint>Obrigatório</mat-hint>
+
+            <mat-error *ngIf="criarNormativoForm.controls['tipoRegistro'].hasError('required')">Obrigatório
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div fxLayout="row" fxLayoutGap="10px" fxFlex="100">
+          <mat-form-field appearance="outline" fxFlex="50">
+            <mat-label *ngIf="criarNormativoForm.controls['visao'].value == true">Estado de origem</mat-label>
+            <mat-label *ngIf="criarNormativoForm.controls['visao'].value != true">Estado</mat-label>
+
+            <mat-select formControlName="uf">
+              <mat-option value="AC">Acre</mat-option>
+              <mat-option value="AL">Alagoas</mat-option>
+              <mat-option value="AP">Amapá</mat-option>
+              <mat-option value="AM">Amazonas</mat-option>
+              <mat-option value="BA">Bahia</mat-option>
+              <mat-option value="CE">Ceará</mat-option>
+              <mat-option value="DF">Distrito Federal</mat-option>
+              <mat-option value="ES">Espírito Santo</mat-option>
+              <mat-option value="GO">Goiás</mat-option>
+              <mat-option value="MA">Maranhão</mat-option>
+              <mat-option value="MT">Mato Grosso</mat-option>
+              <mat-option value="MS">Mato Grosso do Sul</mat-option>
+              <mat-option value="MG">Minas Gerais</mat-option>
+              <mat-option value="PA">Pará</mat-option>
+              <mat-option value="PB">Paraíba</mat-option>
+              <mat-option value="PR">Paraná</mat-option>
+              <mat-option value="PE">Pernambuco</mat-option>
+              <mat-option value="PI">Piauí</mat-option>
+              <mat-option value="RJ">Rio de Janeiro</mat-option>
+              <mat-option value="RN">Rio Grande do Norte</mat-option>
+              <mat-option value="RS">Rio Grande do Sul</mat-option>
+              <mat-option value="RO">Rondônia</mat-option>
+              <mat-option value="RR">Roraima</mat-option>
+              <mat-option value="SC">Santa Catarina</mat-option>
+              <mat-option value="SP">São Paulo</mat-option>
+              <mat-option value="SE">Sergipe</mat-option>
+              <mat-option value="TO">Tocantins</mat-option>
+            </mat-select>
+
+            <mat-hint *ngIf="criarNormativoForm.controls['visao'].value != true">Obrigatório</mat-hint>
+            <mat-error *ngIf="criarNormativoForm.controls['uf'].hasError('required') && criarNormativoForm.controls['visao'].value == false">Obrigatório
+            </mat-error>
+
+            <mat-hint *ngIf="criarNormativoForm.controls['visao'].value == true">Opcional</mat-hint>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" fxFlex="50">
+            <mat-label>Data de vigência</mat-label>
+
+            <input matInput [matDatepicker]="picker" formControlName="dataVigencia" />
+            
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            
+            <mat-datepicker #picker></mat-datepicker>
+            
+            <mat-hint>Opcional</mat-hint>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="d-flex justify-content-end mt-4">
+        <button mat-flat-button color="secondary" type="submit" [disabled]="criarNormativoForm.invalid || arquivo === null">
+          Confirmar
+        </button>
+      </div>
+    </section>
+  </form>
+</mat-card>

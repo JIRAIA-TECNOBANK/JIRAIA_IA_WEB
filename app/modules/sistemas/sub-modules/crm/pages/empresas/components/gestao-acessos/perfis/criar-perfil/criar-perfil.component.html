@@ -1,0 +1,157 @@
+<mat-card class="mb-4 mat-elevation-z8" style="position: relative">
+  <div class="d-flex justify-content-between align-items-center">
+    <div class="fw-bold">Dados do perfil</div>
+  </div>
+
+  <form [formGroup]="createPerfilForm" (ngSubmit)="onSubmit()" class="mt-2">
+    <div fxLayout="row" fxLayoutGap="10px">
+      <mat-form-field appearance="outline" fxFlex="30">
+        <mat-label>Nome do perfil </mat-label>
+        <input
+          matInput
+          placeholder="Nome do perfil"
+          formControlName="nome"
+          [id]="getElementId(0, 'nome-perfil')"
+          maxlength="50"
+          (keyup)="errorName ? (errorName = null) : errorName"
+          required
+        />
+        <mat-error
+          class="bold"
+          *ngIf="createPerfilForm.controls['nome'].hasError('required')"
+          >Campo obrigatório</mat-error
+        >
+        <mat-error
+          class="bold"
+          *ngIf="
+            !createPerfilForm.get('nome').hasError('required') &&
+            createPerfilForm.get('nome').hasError('nameInvalid')
+          "
+        >
+          MASTER é um nome de perfil reservado do sistema. Você não poderá criar
+          um perfil com este nome.
+        </mat-error>
+        <mat-hint class="text-danger bold" *ngIf="errorName">{{
+          errorName
+        }}</mat-hint>
+      </mat-form-field>
+      <mat-form-field appearance="outline" fxFlex="auto">
+        <mat-label>Descrição </mat-label>
+        <input
+          matInput
+          placeholder="Descrição"
+          formControlName="descricao"
+          [id]="getElementId(0, 'descricao-perfil')"
+          maxlength="200"
+        />
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutGap="10px" class="mt-2">
+      <div fxFlex="30">
+        <mat-slide-toggle
+          formControlName="ativo"
+          [id]="getElementId(8, 'perfil-ativo')"
+          >Ativo?</mat-slide-toggle
+        >
+      </div>
+      <div fxFlex="30">
+        <mat-slide-toggle
+          formControlName="convidado"
+          [id]="getElementId(8, 'perfil-convidado')"
+          (click)="switchGuestUser()"
+          >Perfil para usuário convidado?</mat-slide-toggle
+        >
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mt-3">
+      <div class="fw-bold">Permissões deste perfil</div>
+    </div>
+
+    <mat-accordion class="grupos-permissoes">
+      <mat-expansion-panel
+        hideToggle
+        class="mat-elevation-z8 mt-3 grupo-permissoes"
+        *ngFor="let grupo of gruposList; let i = index"
+      >
+        <mat-expansion-panel-header
+          class="grupo-header"
+          #panelGroup
+          
+          (click)="panelGroup._toggle()"
+        >
+          <mat-panel-title class="mx-0">
+            <table class="permissoes-title">
+              <tr>
+                <td class="panel-title funcionalidade-nome">
+                  <mat-checkbox
+                    [checked]="todosChecados(grupo)"
+                    [indeterminate]="algumSelecionadoGrupo(grupo)"
+                    (change)="selecionaTodosGrupo($event.checked, grupo)"
+                    [id]="getElementId('chk', 'permissao-' + 'all', i)"
+                  >
+                    <span class="panel-title">
+                      {{ grupo.nomeGrupoPermissao }}
+                      <i
+                        class="fa-regular fa-circle-info text-primary"
+                        *ngIf="retornoGrupoInfo(grupo)"
+                        [matTooltip]="retornoGrupoInfo(grupo)"
+                        matTooltipClass="info-tooltip"
+                      ></i>
+                    </span>
+                  </mat-checkbox>
+                </td>
+                <td class="last-td">
+                  <i
+                    [ngClass]="{
+                      'fa-solid fa-circle-chevron-up':
+                        checkAriaExpanded(panelGroup),
+                      'fas fa-chevron-circle-down':
+                        !checkAriaExpanded(panelGroup),
+                      'disabled-pointer': grupo.nome == 'Dashboards'
+                    }"
+                    class="fas fa-chevron-circle-down pr-2"
+                    (click)="panelGroup._toggle()"
+                  ></i>
+                </td>
+              </tr>
+            </table>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <table class="permissoes-body">
+          <tr *ngFor="let permissao of grupo.permissoes">
+            <td class="funcionalidade-nome">
+              {{ permissao.nome }}
+              <i
+                class="fa-regular fa-circle-info text-primary"
+                *ngIf="retornoPermissaoInfo(permissao)"
+                [matTooltip]="retornoPermissaoInfo(permissao)"
+                matTooltipClass="info-tooltip"
+              ></i>
+            </td>
+            <td class="last-td" style="padding-right: 25px">
+              <mat-checkbox
+                [checked]="permissao.ativo"
+                [id]="getElementId('chk', 'permissao', permissao.permissaoId)"
+                (change)="onCheckPermissao(permissao)"
+              >
+              </mat-checkbox>
+            </td>
+          </tr>
+        </table>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <div class="d-flex justify-content-end mt-4">
+      <button
+        mat-flat-button
+        color="primary"
+        type="submit"
+        [disabled]="!createPerfilForm.valid"
+      >
+        Confirmar
+      </button>
+    </div>
+  </form>
+</mat-card>

@@ -1,0 +1,8 @@
+@import '$settings';
+@import '$tools';
+
+.btn-excluir {
+    background-color: #FFE2EB;
+    color: $error-600;
+    width: 117px;
+}

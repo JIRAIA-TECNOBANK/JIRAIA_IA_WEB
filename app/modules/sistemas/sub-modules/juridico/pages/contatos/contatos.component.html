@@ -1,0 +1,36 @@
+<div [hidden]="childstate">
+  <section class="top-options mb-2">
+    <app-atualizar-pagina (atualizar)="atualizarPagina()"></app-atualizar-pagina>
+
+    <button 
+      mat-button color="secondary" 
+      [id]="utility.getElementId(2, 'incluir-contato')"
+      [routerLink]="['/contatos/incluir-contato']"
+    >
+      Incluir contato
+    </button>
+  </section>
+
+  <mat-tab-group (selectedTabChange)="onTabChange($event)" [selectedIndex]="activeIndex">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <div class="tab-label">
+          <i class="fa-regular fa-file-contract"></i>
+          <span>Registro de contato</span>
+        </div>
+      </ng-template>
+
+      <div class="px-2">
+        <app-filtro-contatos (filtro)="filtroContatos = $event"></app-filtro-contatos>
+      </div>
+
+      <div class="default-tab px-2 pb-3">
+        <mat-card class="mat-elevation-z8 mt-2 p-0">
+          <app-table-contatos [refreshGrid]="refreshGrid" [filtro]="filtroContatos"></app-table-contatos>
+        </mat-card>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+
+<router-outlet></router-outlet>

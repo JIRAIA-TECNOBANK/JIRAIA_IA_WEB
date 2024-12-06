@@ -1,0 +1,95 @@
+@import "$settings";
+@import "$tools";
+
+.resumo-conexao {
+  width: 100%;
+}
+
+.mapa {
+  max-height: 615px;
+
+  @media (max-width: 1286px) {
+    max-height: 415px;
+  }
+}
+
+.p-selecionado {
+  color: #1666AE;
+}
+
+// .mapa-legenda {
+//   @include fontMontserratRegular;
+//   font-size: 12px;
+//   align-items: center;
+//   margin-top: 0.5rem;
+
+//   .legenda {
+//     @include border-radius(2px);
+//     width: 21px;
+//     height: 6px;
+//     margin-right: 4px;
+//   }
+
+//   .disponivel {
+//     background-color: $blue-600;
+//   }
+
+//   .selecionado {
+//     background: linear-gradient(to left, $primary 50%, $gray-600 50%);
+//   }
+
+//   .nao-operante {
+//     background-color: $gray-400;
+//   }
+
+//   .atualizado {
+//     background-color: $warning-900;
+//   }
+// }
+
+.group-button {
+  width: 100%;
+  background-color: $gray-300;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.toggle-juridico {
+  .mat-button-toggle-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
+    padding: 0 10px 0 10px;
+  }
+
+  .mat-button-toggle-group-appearance-standard {
+    border: none;
+  }
+
+  .mat-button-toggle-appearance-standard {
+    background: $gray-300;
+    border-radius: 10px;
+    border: none;
+    color: #aaa;
+    font-size: 14px;
+  }
+
+  .mat-button-toggle-group .mat-button-toggle:hover,
+  .mat-button-toggle-group .mat-button-toggle-checked {
+    color: $white !important;
+    background: linear-gradient(90deg, #97ceff 0%, #056ab0 100%) !important;
+  }
+}
+
+.containerRegulamento {
+  background-color: white;
+
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 
+  0px 1px 1px 0px rgba(0, 0, 0, 0.14), 
+  0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+
+  * {
+    border-radius: 0;
+    box-shadow: none;
+  }
+}

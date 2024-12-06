@@ -1,0 +1,62 @@
+<div class="listar-secoes" [hidden]="childstate">
+  <div class="d-flex justify-content-end top-options" style="gap: 10px" *ngIf="activeIndex == 0">
+    <button mat-flat-button color="secondary" class="box__btn--btn" (click)="incluirSecao()"
+      routerLinkActive="router-link-active" [id]="utility.getElementId(2, 'secao-incluir')"
+      [disabled]="!utility.getPermission([Permissoes.GESTAO_CENTRAL_AJUDA_CADASTRAR])">
+      Incluir seção
+    </button>
+  </div>
+
+  <div class="d-flex justify-content-end top-options" style="gap: 10px" *ngIf="activeIndex == 1">
+    <button mat-flat-button color="secondary" class="box__btn--btn" (click)="incluirArtigo()"
+      routerLinkActive="router-link-active" [id]="utility.getElementId(2, 'artigo-incluir')"
+      [disabled]="!utility.getPermission([Permissoes.GESTAO_CENTRAL_AJUDA_CADASTRAR])">
+      Incluir artigo
+    </button>
+  </div>
+
+  <mat-tab-group (selectedTabChange)="onTabChange($event)" [selectedIndex]="activeIndex">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <div class="secoes-tab-label">
+          <i class="fa-regular fa-memo"></i>
+          <span>Seções</span>
+        </div>
+      </ng-template>
+      <div class="px-2">
+        <app-grid-filter [filter]="filterSecoes" (pesquisar)="searchSecoes($event)" (redefinir)="redefinirSecoes()"
+          [radiusTop]="false" [showRedefinir]="showRedefinirSecaoBtn"
+          (onSearchInput)="searchField($event)"></app-grid-filter>
+      </div>
+
+      <div class="default-tab px-2 pb-3">
+        <mat-card class="mat-elevation-z8 mt-2 p-0">
+          <app-table-secoes [filtro]="filtroSecao" [atualizarGrid]="atualizarGrid"></app-table-secoes>
+        </mat-card>
+      </div>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <div class="secoes-tab-label">
+          <i class="fa-regular fa-box"></i>
+          <span>Artigos</span>
+        </div>
+      </ng-template>
+      <div class="px-2">
+        <app-grid-filter [filter]="filterArtigos" (pesquisar)="searchArtigos($event)" (redefinir)="redefinirArtigos()"
+          [radiusTop]="false" [showRedefinir]="showRedefinirArtigoBtn"
+          (onSearchInput)="searchField($event)"></app-grid-filter>
+      </div>
+
+      <div class="default-tab px-2 pb-3">
+        <mat-card class="mat-elevation-z8 mt-2 p-0">
+          <app-table-artigos [filtro]="filtroArtigo" [atualizarGrid]="atualizarGrid"></app-table-artigos>
+        </mat-card>
+      </div>
+    </mat-tab>
+
+  </mat-tab-group>
+</div>
+
+<router-outlet></router-outlet>

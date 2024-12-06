@@ -1,0 +1,26 @@
+<mat-card class="mb-4 mat-elevation-z8 card__atividades">
+  <h2 class="card__title">Atividade recente</h2>
+    <div *ngIf="isLoading" class="d-flex" fxLayout="column" fxLayoutAlign="center">
+        <div *skeleton="
+            isLoading;
+            className: 'mt-1';
+            height: '20px';
+            width: '50%';"></div>
+        <div *skeleton="
+            isLoading;
+            className: 'mt-1';
+            height: '28px';
+            width: '100%';"></div>
+        <div *skeleton="
+            isLoading;
+            className: 'mt-1';
+            height: '28px';
+            width: '100%';"></div>
+    </div>
+    <ul class="card__list" *ngIf="!isLoading">
+        <li *ngFor="let detran of _detrans?.detrans">
+            <span>{{ detran.uf }}</span>
+            <p>Último registro realizado em {{ detran.data}} às {{ detran.hora }}</p>
+        </li>
+    </ul>
+</mat-card>

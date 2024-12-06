@@ -1,0 +1,50 @@
+<div class="d-flex justify-content-end mb-2 top-options" style="gap: 10px">
+    <app-atualizar-pagina (atualizar)="atualizarPagina()"></app-atualizar-pagina>
+
+    <button mat-flat-button color="secondary" (click)="enviarArquivoCompilado()" *ngIf="numeroTab == 1">
+        Enviar arquivo compilado
+    </button>
+</div>
+
+<mat-tab-group (selectedTabChange)="alterarTab($event)" [selectedIndex]="numeroTab">
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <div class="tab-label">
+                <i class="fa-regular fa-thumbs-down"></i>
+                <span>Rejeitado</span>
+            </div>
+        </ng-template>
+
+        <app-table-arquivo-normativo-rejeitado></app-table-arquivo-normativo-rejeitado>
+    </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <div class="tab-label">
+                <i class="fa-regular fa-upload"></i>
+                <span>Envios de planilha</span>
+            </div>
+        </ng-template>
+
+        <app-table-arquivo-compilado></app-table-arquivo-compilado>
+    </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <div class="tab-label">
+                <i class="fa-regular fa-ballot-check"></i>
+                <span>A analisar</span>
+            </div>
+        </ng-template>
+
+        <app-table-arquivo-normativo-aprovacao></app-table-arquivo-normativo-aprovacao>
+    </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <div class="tab-label">
+                <i class="fa-sharp fa-regular fa-thumbs-up"></i>
+                <span>Aprovado</span>
+            </div>
+        </ng-template>
+
+        <app-table-arquivo-normativo-aprovado></app-table-arquivo-normativo-aprovado>
+    </mat-tab>
+</mat-tab-group>

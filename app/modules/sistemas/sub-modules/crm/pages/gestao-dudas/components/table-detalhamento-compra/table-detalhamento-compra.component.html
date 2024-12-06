@@ -1,0 +1,152 @@
+<section class="text-paginator">
+  <div class="row d-flex">
+    <section class="default-text" *ngIf="paginator">
+      Mostrando {{ paginator?.pageSize > totalRegistros ? totalRegistros : paginator?.pageSize }} de {{
+      totalRegistros }} resultados
+    </section>
+  </div>
+</section>
+<mat-paginator [pageSizeOptions]="[25, 50, 75, 100]" [length]="totalRegistros" #paginator></mat-paginator>
+<table aria-describedby="detalhe-compra" mat-table [dataSource]="items$ | async" multiTemplateDataRows matSort>
+  <ng-container matColumnDef="NumeroSolicitacao">
+    <th mat-header-cell *matHeaderCellDef>N.º da Solitação</th>
+    <td mat-cell *matCellDef="let element" class="column-max-width">{{ element.numeroSolicitacao }}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="TipoCompra">
+    <th mat-header-cell *matHeaderCellDef>Compra</th>
+    <td mat-cell *matCellDef="let element" class="column-max-width">{{ element.compraAutomatica ? 'Parametrizada' :
+      'Manual' }}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="DataInclusao">
+    <th mat-header-cell *matHeaderCellDef>Data Inclusão</th>
+    <td mat-cell *matCellDef="let element">{{element.dataInclusao}}</td>
+  </ng-container>
+  <ng-container matColumnDef="Total">
+    <th mat-header-cell *matHeaderCellDef class="space-column">Total</th>
+    <td mat-cell *matCellDef="let element">{{ element.total }}</td>
+  </ng-container>
+  <ng-container matColumnDef="TotalEnviar">
+    <th mat-header-cell *matHeaderCellDef class="space-column">Total a enviar</th>
+    <td mat-cell *matCellDef="let element" class="column-max-width">
+      {{ element.totalEnviar }}</td>
+  </ng-container>
+  <ng-container matColumnDef="TotalErro">
+    <th mat-header-cell *matHeaderCellDef class="space-column">Total com erro</th>
+    <td mat-cell *matCellDef="let element" class="column-max-width">
+      {{ element.totalErro }}</td>
+  </ng-container>
+  <ng-container matColumnDef="TotalEnviado">
+    <th mat-header-cell *matHeaderCellDef>Total enviado</th>
+    <td mat-cell *matCellDef="let element" class="column-max-width">
+      {{ element.totalEnviado }}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="TotalPago">
+    <th mat-header-cell *matHeaderCellDef class="space-column">
+      <div class="d-flex justify-content-start align-items-center mt-1 mb-1">
+        <div>Total Pago</div> &nbsp;<i style="font-size: 14px" class="fa-regular fa-circle-info text-blue-700"
+          [matTooltip]="'Duda disponível para utilização em D+1 após o pagamento'" matTooltipClass="info-tooltip"></i>
+      </div>
+    </th>
+    <td mat-cell *matCellDef="let element">{{ element.totalPago }}</td>
+  </ng-container>
+  <ng-container matColumnDef="Justificativa">
+    <th mat-header-cell *matHeaderCellDef class="space-column"> Justificativa </th>
+    <td mat-cell *matCellDef="let element">{{ element.justificativa }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="expand">
+    <th mat-header-cell *matHeaderCellDef aria-label="row actions"></th>
+    <td mat-cell *matCellDef="let element">
+      <button [id]="utility.getElementId(2, 'expand', element.numeroSolicitacao)" mat-icon-button
+        aria-label="expand row"
+        (click)="(expandedElement = expandedElement === element ? null : element); expandirDetalhes(element.numeroSolicitacao, expandedElement === element); $event.stopPropagation(); ">
+        <div class="wrapper">
+          <i [ngClass]="expandedElement !== element ? 'fa-solid fa-chevron-down' : 'fa-solid fa-chevron-up' "
+            aria-hidden="true"> </i>
+        </div>
+      </button>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="semRegistro">
+    <th class="text-center feedBack pt-1" mat-cell *matFooterCellDef colspan="11">
+      <img src="./../../../../../../../../../../assets/img/custom-icons/icon-vazio-artigos.svg" />
+      <p class="desk bold text-gray-700"> Não há registros. </p>
+    </th>
+  </ng-container>
+
+  <!-- Expanded Content Column -->
+  <ng-container matColumnDef="expandedDetail">
+    <td mat-cell *matCellDef="let element" [attr.colspan]="colunasDetalhes.length">
+      <div class="example__element--detail" fxLayout.sm="column" fxFlexLayout="column"
+        [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+
+        <div class="container">
+          <div *ngFor="let detalhe of detalhes; let indexElement = index;">
+            <div *ngIf="indexElement == 0">
+              <mat-divider style="position: absolute;"></mat-divider>
+            </div>
+            <div class="row">
+              <div>
+                <mat-list-item>
+                  <div mat-line class="lista-detalhes-item-header">N.º da DUDA</div>
+                  <div mat-line>{{detalhe.numeroDuda}}</div>
+                </mat-list-item>
+              </div>
+              <div>
+                <mat-list-item>
+                  <div mat-line class="lista-detalhes-item-header">Código de barras</div>
+                  <div mat-line>{{detalhe.codigoBarras ? detalhe.codigoBarras :
+                    "-"}} </div>
+                </mat-list-item>
+              </div>
+              <div>
+                <mat-list-item>
+                  <div mat-line class="lista-detalhes-item-header">Data pagamento da DUDA</div>
+                  <div mat-line>{{detalhe.dataPagamento}}</div>
+                </mat-list-item>
+              </div>
+              <div>
+                <mat-list-item>
+                  <div mat-line class="lista-detalhes-item-header">Valor</div>
+                  <div mat-line>{{utility.formatCurrencyValue(detalhe.valor)}}</div>
+                </mat-list-item>
+              </div>
+              <div>
+                <mat-list-item>
+                  <div mat-line class="lista-detalhes-item-header">Status</div>
+                  <div mat-line>{{detalhe.status}}</div>
+                </mat-list-item>
+              </div>
+            </div>
+            <div *ngIf="indexElement != detalhes.length - 1">
+              <mat-divider style="position: relative;"></mat-divider>
+            </div>
+          </div>
+        </div>
+      </div>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="colunasDetalhes"></tr>
+  <tr mat-row *matRowDef="let element; columns: colunasDetalhes;" class="example-element-row"
+    [class.expanded-row]="expandedElement === element"
+    (click)="expandedElement = expandedElement === element ? null : element; expandirDetalhes(element.numeroSolicitacao, expandedElement === element)">
+  </tr>
+  <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+  <tr mat-row *matFooterRowDef="['semRegistro']"
+    [ngClass]="{'d-none': !(totalRegistros == 0 || totalRegistros == undefined) }"></tr>
+</table>
+<section class="text-paginator expandido">
+  <div class="row d-flex">
+    <section class="default-text">
+      Mostrando {{ paginator?.pageSize > totalRegistros ? totalRegistros : paginator?.pageSize }} de {{
+      totalRegistros }} resultados
+    </section>
+  </div>
+</section>
+<mat-paginator (page)="syncPrimaryPaginator($event)" [pageSize]="paginator?.pageSize" [pageIndex]="paginator?.pageIndex"
+  [length]="paginator?.length" [pageSizeOptions]="paginator?.pageSizeOptions"></mat-paginator>

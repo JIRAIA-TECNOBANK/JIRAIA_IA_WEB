@@ -1,0 +1,57 @@
+<form [formGroup]="formulario" fxLayout="column" fxLayoutGap="20px" class="px-2 mt-1">
+    <div fxLayout="row" *ngIf="type === 'add-video'">
+        <mat-form-field appearance="outline" fxFlex="auto">
+            <mat-label>Link do vídeo</mat-label>
+            <input matInput placeholder="Link do vídeo" formControlName="conteudo"
+                [id]="utility.getElementId(0, 'artigo-conteudo')" />
+            <mat-hint>Obrigatório</mat-hint>
+            <mat-error *ngIf="formulario.controls['conteudo'].hasError('required')">Obrigatório</mat-error>
+        </mat-form-field>
+    </div>
+
+    <div fxLayout="column" fxLayoutGap="10px" *ngIf="type === 'add-arquivo'">
+        <div class="pt-1 toggle-default" fxLayout="column" fxFlex="100">
+            <input type="file" hidden #fileDropRef id="fileDropRef" (change)="fileBrowseHandler($event.target.files)"
+                [accept]="acceptedTypes">
+
+            <div class="dropzone" appDragAndDrop (fileDropped)="onFileDropped($event)"
+                (click)="onClickFile(fileDropRef)" [id]="utility.getElementId(2, 'artigo-carregar-arquivo')">
+                <p class="desk bold"><i class="fa-solid fa-folder-open text-primary"></i> Arraste o documento aqui, ou
+                    <u class="text-primary">procure no seu dispositivo</u>
+                </p>
+            </div>
+
+            <div fxLayout="row" fxLayoutGap="15px" fxLayoutAlign="space-between" class="mt-1">
+                <span class="legenda">Formato PDF.</span>
+            </div>
+        </div>
+
+        <div class="fileList" *ngIf="formulario.get('conteudo').value" fxFlex="100">
+            <div fxLayout="column">
+                <div fxLayout="row" fxLayoutAlign="space-between center" class="file">
+                    <div fxLayout="row" fxLayoutAlign="space-between center">
+                        <div class="pl-1">
+                            <div class="icon">
+                                <img src="./../../../../../../../../../../assets/img/custom-icons/icon-file-pdf.svg" />
+                            </div>
+                        </div>
+                        <div class="pl-1">
+                            <h4>
+                                {{ fileName }}
+                            </h4>
+                            <p class="file-size">
+                                {{ fileDetails }}
+                            </p>
+                        </div>
+                    </div>
+                    <div fxLayout="row">
+                        <button class="deleteButton mr-1" [id]="utility.getElementId(2, 'artigo-delete-arquivo')"
+                            (click)="onClickDelete()">
+                            <i class="fa-solid fa-trash" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

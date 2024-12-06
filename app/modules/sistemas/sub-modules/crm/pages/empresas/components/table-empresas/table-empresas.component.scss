@@ -1,0 +1,18 @@
+@import '$tools';
+@import '$settings';
+
+.column-max-width {
+  text-overflow: ellipsis !important;
+  max-width: 300px !important;
+  white-space: nowrap;
+  overflow: hidden;
+  padding-right: 10px;
+}
+
+.icon-empresa-migrada {
+  @include border-radius(50%);
+  background-color: $primary;
+  color: $white;
+  padding: 5px 6px;
+  font-size: .8em;
+}

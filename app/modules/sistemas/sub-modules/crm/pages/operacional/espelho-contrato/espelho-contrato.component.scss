@@ -1,0 +1,53 @@
+@import '$settings';
+@import '$tools';
+
+div {
+  height: 23rem;
+  margin-bottom: 1rem;
+
+}
+
+.max-height {
+  height: auto !important;
+}
+
+button {
+  width: 150px;
+}
+
+
+@media print {
+  #espelhoContrato * {
+    visibility: visible !important;
+    font-family: Helvetica, sans-serif;
+    height: 99%;
+  }
+
+  #espelhoContrato .dados-complementares {
+    page-break-after: always;
+  }
+
+  #espelhoContrato .mat-card {
+    box-shadow: none !important;
+  }
+
+  #espelhoContrato {
+    margin-top: -230px;
+  }
+
+  .dados-nsa {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+  }
+
+  p {
+    font-size: 8pt !important;
+    visibility: visible !important;
+  }
+
+  .last-row {
+    margin-bottom: -50px;
+  }
+
+  .pagebreak { page-break-before: always; }
+}

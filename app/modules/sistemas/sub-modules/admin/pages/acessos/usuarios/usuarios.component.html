@@ -1,0 +1,22 @@
+<div [hidden]="childstate" class="px-2 pb-3">
+  <div class="box__btn">
+    <button mat-flat-button class="box__btn--btn" color="secondary" (click)="criarUsuario()"
+      [disabled]="!utility.getPermission([Permissoes.GESTAO_USUARIO_INTERNO_CADASTRAR])">
+      Incluir usuário
+    </button>
+  </div>
+
+  <app-grid-filter [filter]="filterUsuarios" (pesquisar)="search($event)" (redefinir)="redefinirFiltro()"
+    [radiusTop]="false" [showRedefinir]="showRedefinirUsuarioBtn"
+    (onSearchInput)="searchField($event)"></app-grid-filter>
+
+  <mat-card class="mat-elevation-z8 mt-2 p-0">
+    <app-table-usuarios [filtro]="filtroUsuario" [refreshGrid]="refreshUsuarioGrid">
+    </app-table-usuarios>
+  </mat-card>
+
+</div>
+
+<div>
+  <router-outlet></router-outlet>
+</div>

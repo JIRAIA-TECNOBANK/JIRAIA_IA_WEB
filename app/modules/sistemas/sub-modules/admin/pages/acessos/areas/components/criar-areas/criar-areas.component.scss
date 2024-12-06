@@ -1,0 +1,30 @@
+@import '$settings';
+@import '$tools';
+
+.card__form {
+    min-height: calc(100vh - 253px);
+    padding: 20px 25px;
+    position: relative;
+
+    ::ng-deep {
+        .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+            background-color: #ECEEEF
+        }
+    
+        .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+            background-color: $primary
+        }
+    }
+
+}
+
+.card__title {
+    @include fontMontserratExtraBold();
+    font-size: 16px;
+}
+
+.card__button {
+    bottom: 20px;
+    position: absolute;
+    right: 25px;
+}

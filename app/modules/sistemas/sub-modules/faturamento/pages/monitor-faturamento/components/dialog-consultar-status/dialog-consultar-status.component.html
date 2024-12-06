@@ -1,0 +1,57 @@
+<div id="page">
+  <div class="cabecalho">
+    <div>
+      <span>Empresa</span>
+      <span>{{ empresa ?? "" }}</span>
+    </div>
+
+    <div>
+      <span>Código do cliente</span>
+      <span>{{ clienteId ?? "" }}</span>
+    </div>
+
+    <div>
+      <span>UF</span>
+      <span>{{ uf ?? "" }}</span>
+    </div>
+  </div>
+
+  <div class="nota" *ngIf="notaFiscal">
+    <h2>NOTA FISCAL - Status do pedido de venda enviado ao Protheus</h2>
+    <div>
+      <div>
+        <span>Codigo retorno</span>
+        <span>{{ notaFiscal.codigoRetorno ?? "" }}</span>
+      </div>
+      <div>
+        <span>Mensagem</span>
+        <span>{{ getMensagem(notaFiscal) }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="nota" *ngIf="notaDebito">
+    <h2>NOTA DE DÉBITO - Status do pedido de venda enviado ao Protheus</h2>
+    <div>
+      <div>
+        <span>Codigo retorno</span>
+        <span>{{ notaDebito.codigoRetorno ?? "" }}</span>
+      </div>
+      <div>
+        <span>Mensagem</span>
+        <span>{{ getMensagem(notaDebito) }}</span>
+      </div>
+    </div>
+  </div>
+  <mat-dialog-actions class="d-flex justify-content-end w-100">
+    <button
+      mat-flat-button
+      color="primary"
+      type="button"
+      [mat-dialog-close]="true"
+      [id]="utility.getElementId(2, 'finalizar-consulta-pedido')"
+    >
+      Finalizar
+    </button>
+  </mat-dialog-actions>
+</div>

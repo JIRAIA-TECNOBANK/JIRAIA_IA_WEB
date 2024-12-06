@@ -1,0 +1,6 @@
+<div class="background-info-loading" *ngIf="message$ | async as message">
+    <div *ngIf="message.show" fxLayout="row" fxLayoutAlign="center center">
+        <mat-spinner [diameter]="40"></mat-spinner>
+        <span class="info-loading">{{ message.message }}</span>
+    </div>
+</div>

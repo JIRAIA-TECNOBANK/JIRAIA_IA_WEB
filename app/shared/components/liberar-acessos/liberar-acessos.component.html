@@ -1,0 +1,7 @@
+<div class="liberar-acesso" fxLayout="row" fxLayoutAlign="end">
+    <p class="m-0">Para maior segurança, alguns dados podem estar ocultos. Clique em liberar informações se necessário.
+    </p>
+    <button fxFlex="30" mat-stroked-button class="btn-outline-primary ml-1" type="button" (click)="liberarInformacoes()"
+        [disabled]="liberado" [id]="utility.getElementId(2, 'liberar-informacoes')">Liberar
+        informações</button>
+</div>

@@ -1,0 +1,303 @@
+<!--Text Type-->
+<button mat-stroked-button [matMenuTriggerFor]="menu" class="filter-button mt-2"
+  [id]="getElementId(2, 'filter', field.id)" type="button" *ngIf="field.tipo == 1" [ngClass]="{
+    'filter-active': control.value,
+    'filter-error': control.invalid
+  }" fxFlex (click)="triggerFocus(field.id)">
+  <span class="filter-title"> {{ field.titulo }} </span>
+  <i *ngIf="field.iconClass" class="custom-icon" [ngClass]="field.iconClass" [matTooltip]="field.iconTooltip"></i>
+  <i class="fal fa-chevron-down arrow-filter mr-1"></i>
+</button>
+<mat-menu #menu="matMenu" class="mat-elevation-z8 filter">
+  <div class="filter-search" (click)="stopPropagation($event)">
+    <div class="filter-header d-flex justify-content-between pl-2">
+      <span> {{ labelInsideFilter }}</span>
+      <button [id]="getElementId(2, 'filter-clean', field.id)" mat-button color="primary" class="btn-redefinir"
+        (click)="redefinir()">
+        Limpar
+      </button>
+    </div>
+    <mat-form-field appearance="outline" class="fix-prefix px-2 pb-0"
+      style="font-size: 14px; width: 100%; margin-left: -5px">
+      <mat-label>Procure</mat-label>
+      <i matPrefix class="far fa-search"></i>
+      <input matInput placeholder="Procure" class="elevation" [formControl]="control" (keyup)="onKeyEnter($event)"
+        (keydown.home)="$event.stopPropagation()" (keydown.end)="$event.stopPropagation()"
+        (keydown.shift.home)="$event.stopPropagation()" [id]="getElementId(0, 'filter', field.id)" />
+
+      <mat-hint *ngIf="control.hasError('minlength')" class="text-danger bold">
+        Digite ao menos {{ control.errors.minlength.requiredLength }} caracteres
+      </mat-hint>
+      <mat-hint *ngIf="control.hasError('maxlength')" class="text-danger bold">
+        Digite até {{ control.errors.maxlength.requiredLength }} caracteres
+      </mat-hint>
+      <mat-hint *ngIf="control.hasError('required')" class="text-danger bold">
+        Campo obrigatório</mat-hint>
+      <mat-error class="bold" *ngIf="control.hasError('documentInvalid')">
+        Campo inválido </mat-error>
+    </mat-form-field>
+  </div>
+</mat-menu>
+
+<!--Select Multiple Type-->
+<div class="filter-multiple-select mt-2" [id]="field.id" *ngIf="field.tipo == 2" [ngClass]="{
+    campo__selecionado: control.value?.length,
+    'filter-active': control.value && control.value.length > 0,
+    'filter-error': control.invalid
+  }" fxFlex [id]="getElementId(2, 'filter', field.id)">
+  <mat-label class="d-flex justify-content-between align-items-center mr-1">
+    <span class="filter-title">{{ field.titulo }}</span>
+    <i *ngIf="field.iconClass" class="custom-icon" [ngClass]="field.iconClass" [matTooltip]="field.iconTooltip"></i>
+    <i class="fal fa-chevron-down pl-1"></i>
+  </mat-label>
+  <mat-select [id]="getElementId(5, 'filter', field.id)" [formControl]="control" multiple panelClass="grid-filter-panel"
+    disableOptionCentering>
+    <mat-select-trigger class="campo__selecionado--text">
+      <span *ngIf="control.value?.length && !field.searchInput" class="campo__selecionado--feed">
+        {{
+        control.value?.length == field.options.length &&
+        field.selectAllOptions
+        ? field.options.length + 1
+        : control.value?.length
+        }}
+      </span>
+      <span *ngIf="field.searchInput" class="campo__selecionado--feed">
+        {{ listOptionsSelected.length }}
+      </span>
+      <span class="pl-1 arrow-filter"></span>
+    </mat-select-trigger>
+
+    <mat-card class="filter-card-select p-0">
+      <div class="filter-search" (click)="stopPropagation($event)">
+        <div class="filter-header d-flex justify-content-between pl-2" [ngClass]="{ 'b-divider': !field.searchInput }">
+          <span> {{ labelInsideFilter }}</span>
+          <button [id]="getElementId(2, 'filter-clean', field.id)" mat-button color="primary" class="btn-redefinir"
+            (click)="redefinir()">
+            Limpar
+          </button>
+        </div>
+
+        <div class="row b-divider" *ngIf="field.searchInput">
+          <mat-form-field appearance="outline" class="fix-prefix px-2 pb-0"
+            style="font-size: 14px; width: 100%; margin-left: -5px">
+            <mat-label>Procure</mat-label>
+            <i matPrefix class="far fa-search"></i>
+            <input [id]="getElementId(0, 'filter', field.id)" matInput placeholder="Procure" class="elevation"
+              [formControl]="searchControl" (keyup)="onChangeSearch(searchControl.value)"
+              (keydown.enter)="$event.stopPropagation()" (keydown.space)="$event.stopPropagation()"
+              (keydown.home)="$event.stopPropagation()" (keydown.end)="$event.stopPropagation()"
+              (keydown.shift.home)="$event.stopPropagation()" />
+            <mat-hint *ngIf="searchControl.hasError('minlength')" class="text-danger bold">
+              Digite ao menos
+              {{ searchControl.errors.minlength.requiredLength }} caracteres
+            </mat-hint>
+          </mat-form-field>
+        </div>
+
+        <section class="filter-options">
+          <mat-optgroup label="Opções selecionadas" *ngIf="field.searchInput && listOptionsSelected.length > 0"
+            [id]="getElementId(7, 'filter', field.id)">
+            <mat-option *ngFor="let selectedOption of listOptionsSelected" [id]="
+                getElementId(7, 'filter', field.id + '_' + selectedOption.value)
+              " [value]="selectedOption.value" [matTooltip]="field.showTooltip && selectedOption.label"
+              (click)="toggleOption(selectedOption)">
+              {{ selectedOption.label }}
+            </mat-option>
+          </mat-optgroup>
+
+          <mat-optgroup label="Não selecionadas" *ngIf="field.searchInput">
+            <mat-option *ngIf="field.selectAllOptions != null" [id]="getElementId(7, 'filter', field.id + '_selectAll')"
+              (click)="toggleSelectAllOptions()" [value]="'selectAll'">{{ field.selectAllOptions }}
+            </mat-option>
+            <mat-option *ngFor="let option of field.options" [matTooltip]="field.showTooltip && option.label"
+              [id]="getElementId(7, 'filter', field.id + '_' + option.value)" [value]="option.value"
+              (click)="toggleOption(option)">
+              {{ option.label }}</mat-option>
+
+            <!--Opcao criada somente para auxiliar quando nao for encontradas opcoes do back-->
+            <mat-option *ngIf="field.options.length == 0" [id]="getElementId(7, 'filter', field.id + '_OpcaoAux')"
+              [value]="0" disabled class="d-none">
+            </mat-option>
+          </mat-optgroup>
+
+          <section *ngIf="!field.searchInput">
+            <mat-option *ngIf="field.selectAllOptions != null" [id]="getElementId(7, 'filter', field.id + '_selectAll')"
+              #allSelectedOptions (click)="toggleSelectAllOptions()" [value]="'selectAll'">{{ field.selectAllOptions }}
+            </mat-option>
+            <mat-option *ngFor="let option of field.options"
+              [id]="getElementId(7, 'filter', field.id + '_' + option.value)" [value]="option.value"
+              [matTooltip]="field.showTooltip && option.label" (click)="toggleOption(option)">
+              {{ option.label }}</mat-option>
+          </section>
+        </section>
+      </div>
+    </mat-card>
+  </mat-select>
+</div>
+
+<!--Radio Type-->
+<button mat-stroked-button [matMenuTriggerFor]="menuRadio" class="filter-button mt-2" [id]="field.id"
+  *ngIf="field.tipo == 3" type="button" [ngClass]="{
+    'filter-active': control.value,
+    'filter-error': control.invalid
+  }" fxFlex [id]="getElementId(2, 'filter', field.id)">
+  <span class="filter-title">{{ field.titulo }}</span>
+  <i *ngIf="field.iconClass" class="custom-icon" [ngClass]="field.iconClass" [matTooltip]="field.iconTooltip"></i>
+  <i class="fal fa-chevron-down arrow-filter mr-1"></i>
+</button>
+<mat-menu #menuRadio="matMenu" class="mat-elevation-z8 filter">
+  <div class="filter-search" (click)="stopPropagation($event)">
+    <div class="filter-header d-flex justify-content-between pl-2 b-divider">
+      <span> {{ labelInsideFilter }}</span>
+      <button [id]="getElementId(2, 'filter-clean', field.id)" mat-button color="primary" class="btn-redefinir"
+        (click)="redefinir()">
+        Limpar
+      </button>
+    </div>
+
+    <section class="filter-options py-1 px-2">
+      <mat-radio-group [formControl]="control" [id]="getElementId(3, 'filter', field.id)">
+        <mat-radio-button *ngFor="let option of field.options"
+          [id]="getElementId(3, 'filter', field.id + '_' + option.value)" [value]="option.value" class="mb-1">
+          {{ option.label }}</mat-radio-button>
+      </mat-radio-group>
+    </section>
+  </div>
+</mat-menu>
+
+<!--Custom Type-->
+<ng-container select="section.fieldCustom" *ngIf="field.tipo == 5"></ng-container>
+
+<!--Periodo Type-->
+<button mat-stroked-button [matMenuTriggerFor]="menuPeriod" class="filter-button mt-2" type="button"
+  *ngIf="field.tipo === 6" [ngClass]="{
+    'filter-active':
+      (control.value ||
+        getFormControl(deControlName).value ||
+        getFormControl(ateControlName).value) &&
+      !getFormControl(deControlName).invalid &&
+      !getFormControl(ateControlName).invalid,
+    'filter-error':
+      requiredFieldsError ||
+      getFormControl(deControlName).invalid ||
+      getFormControl(ateControlName).invalid
+  }" fxFlex [id]="utility.getElementId(2, 'filter', field.id)">
+  <span class="filter-title">{{ field.titulo }}</span>
+  <i class="fal fa-chevron-down mr-1"></i>
+</button>
+<mat-menu #menuPeriod="matMenu" class="mat-elevation-z8 filter" [hidden]="field.tipo !== 6">
+  <div class="filter-search" (click)="stopPropagation($event)">
+    <div class="filter-header d-flex justify-content-between pl-2 b-divider">
+      <span> {{ field.titulo }}</span>
+      <button [id]="utility.getElementId(2, 'filter-clean', field.id)" mat-button color="primary" class="btn-redefinir"
+        (click)="redefinir()">
+        Limpar
+      </button>
+    </div>
+
+    <section class="filter-options py-1 px-2">
+      <mat-radio-group [formControl]="control" [id]="utility.getElementId(3, 'filter', field.id)"
+        (keyup.enter)="onKeyEnter($event); menuPeriod.closeMenu()"
+        (keyup.numpadEnter)="onKeyEnter($event); menuPeriod.closeMenu()">
+        <mat-radio-button *ngFor="let option of field.options" [value]="option.value" class="mb-1"
+          (change)="cleanDates()">
+          {{ option.label }}</mat-radio-button>
+      </mat-radio-group>
+
+      <div class="row" fxLayoutAlign="end" *ngIf="field.showMaxDays">
+        <i class="fa-regular fa-circle-info text-primary info pr-0" [id]="utility.getElementId(14, 'periodo')"
+          matTooltipClass="tooltip-grid-header" [matTooltip]="field.showMaxDays && 'Na pesquisa, informe intervalo de data limitado a ' 
+          + field.maxDays + (field.maxDays == 1 ? ' dia' : ' dias') + '.'"></i>
+      </div>
+
+      <div class="row pt-1" fxLayoutGap="10">
+        <mat-form-field appearance="outline" fxFlex="50" class="mat-field-small mr-1">
+          <mat-label>DE</mat-label>
+          <input [id]="utility.getElementId(6, 'filter-de', field.id)" [formControl]="getFormControl(deControlName)"
+            matInput placeholder="dd/mm/aaaa" (dateChange)="onChangePeriodo($event.target.value, true)"
+            [min]="addDays(getFormControl(ateControlName).value, -field?.maxDays)"
+            [max]="addDays(getFormControl(ateControlName).value, 0)" [matDatepicker]="de" (click)="de.open()"
+            [required]="
+              getFormControl(ateControlName)?.value != null &&
+              getFormControl(ateControlName)?.value != ''
+            " (keydown.Tab)="stopMatMenuClosing($event)" (keyup.enter)="onKeyEnter($event)"
+            (keyup.numpadEnter)="onKeyEnter($event)" />
+          <mat-datepicker-toggle matSuffix [for]="de" hidden>
+          </mat-datepicker-toggle>
+          <mat-datepicker #de></mat-datepicker>
+          <mat-hint class="text-danger bold" *ngIf="getFormControl(deControlName)?.hasError('required')">
+            Campo obrigatório
+          </mat-hint>
+          <mat-hint class="text-danger bold" *ngIf="getFormControl(deControlName)?.hasError('matDatepickerMax')">
+            Data inicial não pode ser maior que hoje
+          </mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="50" class="mat-field-small">
+          <mat-label>ATÉ </mat-label>
+          <input [id]="utility.getElementId(6, 'filter-ate', field.id)" [formControl]="getFormControl(ateControlName)"
+            matInput placeholder="dd/mm/aaaa" (dateChange)="onChangePeriodo($event.target.value, false)"
+            [matDatepicker]="ate" (click)="ate.open()" [min]="addDays(getFormControl(deControlName).value, 0)"
+            [max]="addDays(getFormControl(deControlName).value, field.maxDays)" [required]="
+              getFormControl(deControlName)?.value != null &&
+              getFormControl(deControlName)?.value != ''" (keyup.enter)="onKeyEnter($event)"
+            (keyup.numpadEnter)="onKeyEnter($event)" />
+          <mat-datepicker-toggle matSuffix [for]="ate" hidden>
+          </mat-datepicker-toggle>
+          <mat-datepicker #ate></mat-datepicker>
+          <mat-error class="text-danger bold" *ngIf="
+              erroDataFinal ||
+              getFormControl(ateControlName)?.hasError('matDatepickerMin')
+            ">
+            Data final deve ser maior que a data inicial
+          </mat-error>
+          <mat-hint class="text-danger bold" *ngIf="getFormControl(ateControlName)?.hasError('required')">
+            Campo obrigatório
+          </mat-hint>
+          <mat-hint class="text-danger bold" *ngIf="getFormControl(ateControlName)?.hasError('matDatepickerMax')">
+            Data final não pode ser maior que hoje
+          </mat-hint>
+        </mat-form-field>
+      </div>
+    </section>
+  </div>
+</mat-menu>
+
+<ng-container *ngIf="field.tipo === 8; then fieldDatepicker"> </ng-container>
+
+<ng-container *ngIf="field.tipo === 9; then fieldExactDate"> </ng-container>
+
+<ng-template #fieldDatepicker>
+  <app-filter-field-datepicker [field]="field" [control]="control"
+    [labelInsideFilter]="labelInsideFilter"></app-filter-field-datepicker>
+</ng-template>
+
+<ng-template #fieldExactDate>
+  <button mat-stroked-button [matMenuTriggerFor]="menu" class="filter-button mt-2"
+    [id]="getElementId(2, 'filter', field.id)" type="button" [ngClass]="{
+    'filter-active': control.value,
+    'filter-error': control.invalid
+  }" fxFlex (click)="triggerFocus(field.id)">
+    <span class="filter-title"> {{ field.titulo }} </span>
+    <i *ngIf="field.iconClass" class="custom-icon" [ngClass]="field.iconClass" [matTooltip]="field.iconTooltip"></i>
+    <i class="fal fa-chevron-down arrow-filter mr-1"></i>
+  </button>
+  <mat-menu #menu="matMenu" class="mat-elevation-z8 filter">
+    <div class="filter-search" (click)="stopPropagation($event)">
+      <div class="filter-header d-flex justify-content-between pl-2">
+        <span> {{ labelInsideFilter }}</span>
+        <button [id]="getElementId(2, 'filter-clean', field.id)" mat-button color="primary" class="btn-redefinir"
+          (click)="redefinir()">
+          Limpar
+        </button>
+      </div>
+      <mat-form-field appearance="outline" class="fix-prefix px-2 pb-0">
+        <mat-label>Data exata</mat-label>
+        <input matInput [matDatepicker]="dp" [formControl]="control" [id]="utility.getElementId(0, 'filter', field.id)">
+        <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+        <mat-datepicker #dp>
+        </mat-datepicker>
+      </mat-form-field>
+    </div>
+  </mat-menu>
+</ng-template>

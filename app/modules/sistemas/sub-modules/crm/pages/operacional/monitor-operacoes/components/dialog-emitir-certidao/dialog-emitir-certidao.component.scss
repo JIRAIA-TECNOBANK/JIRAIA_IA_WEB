@@ -1,0 +1,46 @@
+@import '$settings';
+@import '$tools';
+
+.tab-icon {
+  color: $primary;
+  margin-right: 10px;
+  font-size: 18px;
+}
+
+.content {
+  display: flex;
+  justify-content: center;
+}
+
+.mat-standard-chip {
+  border-radius: 5px;
+}
+
+.mat-chip.mat-standard-chip {
+  background-color: $blue-400;
+}
+
+.mat-chip.mat-standard-chip .mat-chip-remove {
+  color: $primary;
+  opacity: 1;
+}
+
+.custom-fields {
+  .mat-form-field {
+    margin-inline: 20px;
+  }
+}
+
+mat-radio-button {
+  background-color: $gray-300;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.mat-hint-custom {
+  @include fontMontserratRegular;
+  font-size: 75%;
+  margin-left: 0.7rem;
+  display: block;
+  text-align: left;
+}

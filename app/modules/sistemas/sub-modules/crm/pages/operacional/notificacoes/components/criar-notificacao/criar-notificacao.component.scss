@@ -1,0 +1,121 @@
+@import '$settings';
+@import '$tools';
+
+.mat-hint-custom {
+  @include fontMontserratRegular;
+  font-size: 75%;
+  margin-left: 0.7rem;
+  display: block;
+}
+
+.pre-visualizacao {
+  @include border-radius(10px);
+  background-color: $gray-300;
+  padding: 2rem;
+  height: calc(100% - 2rem);
+
+  p {
+    @include fontMontserratBold;
+    color: $gray-500;
+    font-size: 14px;
+  }
+
+  mat-card {
+    box-shadow: none !important;
+    max-width: 21.05rem;
+    overflow-wrap: break-word;
+
+    #cabecalho {
+      @include border-radius(10px);
+      width: 305px;
+      height: 120px;
+      object-fit: contain;
+    }
+
+    #titulo {
+      @include fontMontserratBold;
+      color: $gray-900;
+      font-size: 12px;
+    }
+
+    #conteudo {
+      width: 305px;
+      height: 130px;
+      overflow: auto;
+    }
+
+    .email-content {
+      min-height: 130px;
+      height: auto !important;
+    }
+
+    #botao {
+      display: flex;
+      justify-content: center;
+    }
+  }
+}
+
+.email {
+  background: $primary;
+  padding: 1rem 1rem;
+
+  .social-media {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+
+    .wrapper {
+      @include border-radius(100%);
+      background: $gray-300;
+      width: 2rem;
+      height: 2rem;
+      vertical-align: middle;
+      justify-content: center;
+      display: flex;
+      align-items: center;
+      color: $primary;
+    }
+  }
+
+  .rodape {
+    @include fontMontserratRegular;
+    font-size: 10px !important;
+    color: $gray-300 !important;
+    text-align: center;
+  }
+}
+
+.dropzone {
+  @include border-radius(5px);
+  border: 1px dashed $blue-600;
+  display: flex;
+  justify-content: center;
+
+  .desk {
+    color: $gray-700;
+    font-size: 12px;
+
+    i {
+      font-size: 12px;
+    }
+
+    u {
+      cursor: pointer;
+      font-size: 12px;
+    }
+  }
+
+  &.disabled {
+    border: 1px dashed $gray-400 !important;
+
+    .text-primary {
+      color: $gray-400 !important;
+    }
+  }
+}
+
+.legenda {
+  color: $gray-800;
+  font-size: 12px;
+}

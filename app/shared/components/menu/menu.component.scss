@@ -1,0 +1,147 @@
+@import '$settings';
+@import '$tools';
+
+ul {
+  list-style-type: none;
+}
+
+i {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  z-index: 0 !important;
+}
+
+p {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+}
+
+.sidebar {
+  position: fixed;
+  z-index: 10;
+}
+
+.list-group {
+  @include border-radius(0);
+  display: inline;
+  flex-direction: column;
+  padding-left: 0;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+.flex-column {
+  -webkit-box-orient: vertical !important;
+  -webkit-box-direction: normal !important;
+  flex-direction: column !important;
+}
+
+.d-inline-block {
+  display: inline-block !important;
+}
+
+.first-menu {
+  position: fixed;
+  background-color: $white;
+  width: 72px;
+  transition: width .5s;
+  box-shadow: 0px 16px 48px rgba(0, 0, 0, 0.175);
+  height: calc(100% - 70px);
+  top: 70px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.first-menu a {
+  @include border-radius(10px);
+  text-decoration: none;
+  padding: 0 15px 0 8px;
+  justify-content: space-between;
+  display: flex;
+  height: 40px;
+}
+
+.first-menu .list-group-item.active a,
+.first-menu a:hover {
+  background: $blue-400;
+  color: $primary;
+}
+
+.first-menu .wrapper i {
+  font-size: 20px;
+  color: $blue-900;
+}
+
+.first-menu span {
+  @include fontMontserratBold; 
+  font-size: 14px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.first-menu.active span,
+.first-menu:hover span {
+  opacity: 1;
+  visibility: visible;
+}
+
+.first-menu .list-group-item {
+  @include border-radius(0);
+  display: grid;
+}
+
+.first-menu.active,
+.first-menu:hover {
+  width: 254px;
+}
+
+.arrow-child {
+  color: $gray-500;
+  margin: auto 0;
+}
+
+.list-group-item.active .arrow-child {
+  margin: auto 0;
+}
+
+.list-group-item {
+  position: relative;
+  display: block;
+  text-decoration: none;
+  padding: 7px 12px 0 15px;
+}
+
+.list-group-item:hover {
+  @include border-radius(0);
+}
+
+.align-middle {
+  vertical-align: middle !important;
+}
+
+.py-2 {
+  padding-top: 15px !important;
+  padding-bottom: 15px !important;
+}
+
+.px-1 {
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.menu-label-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}

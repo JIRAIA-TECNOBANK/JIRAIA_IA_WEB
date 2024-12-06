@@ -1,0 +1,16 @@
+<section>
+  <app-header></app-header>
+  <app-menu></app-menu>
+  <app-preloader></app-preloader>
+
+  <div class="content">
+    <div fxLayout="row" fxLayoutGap="10" fxLayoutAlign="space-between center" *ngIf="!accessDenied" class="breadcrumb">
+      <div fxFlex="90">
+        <app-breadcrumb></app-breadcrumb>
+      </div>
+    </div>
+    <div class="content-view">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</section>

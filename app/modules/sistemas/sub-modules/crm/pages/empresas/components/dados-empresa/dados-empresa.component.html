@@ -1,0 +1,140 @@
+<div fxLayout="column">
+  <form [formGroup]="companyForm" (ngSubmit)="onSubmit()" novalidate>
+    <div>
+      <!-- Head Title -->
+      <div fxLayout="row wrap" fxLayoutGap="20px">
+        <h6 class="headline">Dados da Empresa</h6>
+      </div>
+      <!-- First Row -->
+      <div fxLayout="row wrap" fxLayoutGap="10px">
+        <mat-form-field appearance="outline" fxFlex="40">
+          <mat-label>CNPJ</mat-label>
+          <input matInput placeholder="00.000.000/0001-00" formControlName="cnpj" mask="00.000.000/0000-00"
+            (blur)="validarDuplicidadeCnpj()" required id="cnpj_empresa" />
+          <mat-hint>Obrigatório</mat-hint>
+          <mat-error *ngIf="
+              companyForm.get('cnpj').getError('invalidIdentifier') ==
+              'cnpjDuplicado'
+            ">
+            Este CNPJ já foi cadastrado anteriormente
+          </mat-error>
+          <mat-error *ngIf="companyForm.get('cnpj').hasError('documentNotValid')">
+            CNPJ inválido
+          </mat-error>
+          <mat-error *ngIf="companyForm.controls['cnpj'].hasError('required')">Campo obrigatório</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" fxFlex="auto">
+          <mat-label>Razão social</mat-label>
+          <input matInput placeholder="Razão social" formControlName="razaoSocial" #razaosocial required
+            id="razao_social_empresa" maxlength="60" />
+          <mat-hint>Obrigatório</mat-hint>
+          <mat-error *ngIf="companyForm.controls['razaoSocial'].hasError('required')">Campo obrigatório
+          </mat-error>
+          <mat-hint align="end">{{ razaosocial.value?.length || 0 }}/60</mat-hint>
+          <mat-error *ngIf="companyForm.controls['razaoSocial'].hasError('maxlength')" align="end">{{
+            razaosocial.value?.length ||
+            0 }}/60</mat-error>
+        </mat-form-field>
+      </div>
+      <!-- Second Row -->
+      <div fxLayout="row wrap" fxLayoutGap="10px">
+        <mat-form-field appearance="outline" fxFlex="auto">
+          <mat-label>Nome Fantasia</mat-label>
+          <input matInput placeholder="Nome fantasia" formControlName="nomeFantasia" required id="nome_fantasia_empresa"
+            maxlength="40" #nomefantasia />
+          <mat-hint>Obrigatório</mat-hint>
+          <mat-error *ngIf="companyForm.controls['nomeFantasia'].hasError('required')">Campo obrigatório
+          </mat-error>
+          <mat-hint align="end">{{ nomefantasia.value?.length || 0 }}/40</mat-hint>
+          <mat-error *ngIf="companyForm.controls['nomeFantasia'].hasError('maxlength')" align="end">{{
+            nomefantasia.value?.length ||
+            0 }}/40</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="auto">
+          <mat-label>Grupo econômico </mat-label>
+          <input matInput placeholder="Grupo econômico" formControlName="grupoEconomico" id="grupo_economico_empresa" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" fxFlex="auto">
+          <mat-label>Inscrição municipal </mat-label>
+          <input matInput placeholder="Inscrição municipal" formControlName="inscricaoMunicipal" numbers-only
+            id="inscricao_municipal_empresa" #incricaomunicipal maxlength="20" />
+          <mat-hint align="end">{{ incricaomunicipal.value?.length || 0 }}/20</mat-hint>
+          <mat-error *ngIf="companyForm.controls['inscricaoMunicipal'].hasError('maxlength')" align="end">{{
+            incricaomunicipal.value?.length ||
+            0 }}/20</mat-error>
+        </mat-form-field>
+      </div>
+      <!-- Third Row -->
+      <div fxLayout="row wrap" fxLayoutGap="10px">
+        <mat-form-field appearance="outline" fxFlex="auto">
+          <mat-label>Inscrição estadual </mat-label>
+          <input matInput placeholder="Inscrição estadual" formControlName="inscricaoEstadual" numbers-only
+            id="inscricao_estadual_empresa" #inscricaoestadual maxlength="20" />
+          <mat-hint align="end">{{ inscricaoestadual.value?.length || 0 }}/20</mat-hint>
+          <mat-error *ngIf="companyForm.controls['inscricaoEstadual'].hasError('maxlength')" align="end">{{
+            inscricaoestadual.value?.length ||
+            0 }}/20</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" fxFlex="auto">
+          <mat-label>Telefone</mat-label>
+          <input matInput placeholder="DDD + telefone" formControlName="telefone"
+            mask="(00) 0000-0000 || (00) 00000-0000" required id="telefone_empresa" />
+          <mat-hint>Obrigatório</mat-hint>
+          <mat-error *ngIf="companyForm.controls['telefone'].hasError('required')">Campo obrigatório</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" fxFlex="40">
+          <mat-label>E-mail </mat-label>
+          <input matInput placeholder="e-mail" formControlName="email" email required id="email_empresa" />
+          <mat-hint>Obrigatório</mat-hint>
+          <mat-error *ngIf="companyForm.controls['email'].hasError('required')">Campo obrigatório</mat-error>
+          <mat-error *ngIf="companyForm.controls['email'].hasError('email')">E-mail inválido</mat-error>
+        </mat-form-field>
+      </div>
+      <!-- Fourth Row -->
+      <div fxLayout="row wrap" fxLayoutGap="10px">
+        <mat-form-field appearance="outline" fxFlex="auto">
+          <mat-label>Tipo de empresa </mat-label>
+          <mat-select formControlName="tipoEmpresa" required id="tipo_empresa">
+            <mat-option> Tipo de empresa</mat-option>
+            <mat-option *ngFor="let tipoEmpresa of tiposEmpresa" [value]="tipoEmpresa.id">{{ tipoEmpresa.valor }}
+            </mat-option>
+          </mat-select>
+          <mat-hint>Obrigatório</mat-hint>
+          <mat-error *ngIf="companyForm.controls['tipoEmpresa'].hasError('required')">Campo obrigatório
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" fxFlex="auto">
+          <mat-label>Comercial responsável (TBK) </mat-label>
+          <mat-select formControlName="comercialResponsavel" required id="responsavel_empresa">
+            <mat-option>Comercial Responsável</mat-option>
+            <mat-option *ngFor="let respComercial of responsavelComercial" [value]="respComercial.id">{{
+              respComercial.valor }}</mat-option>
+          </mat-select>
+          <mat-hint>Obrigatório</mat-hint>
+          <mat-error *ngIf="
+              companyForm.controls['comercialResponsavel'].hasError('required')
+            ">Campo obrigatório
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <!-- Fifth Row -->
+      <div fxLayout="row wrap" fxLayoutGap="10px">
+        <mat-slide-toggle formControlName="ieIsento" [checked]="ieIsento" (change)="toggleIeIsento()"
+          [ngStyle]="{ 'font-size': '.9em' }" id="isento_empresa">Isento de inscrição estadual</mat-slide-toggle>
+      </div>
+
+      <div fxLayout="row wrap" fxLayoutGap="10px" class="mt-1">
+        <mat-slide-toggle formControlName="cadastroOriginadoContran" [ngStyle]="{ 'font-size': '.9em' }"
+          [id]="utility.getElementId(8, 'empresa-migrada')"> Cadastro originado antes da Res. Contran n° 807</mat-slide-toggle>
+      </div>
+
+      <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="15px" class="mt-3">
+        <button mat-raised-button class="btn btn-primary bold" [disabled]="!isCompanyFormValid()" id="adicionar_empresa"
+          *ngIf="utility.getPermission([Permissoes.GESTAO_EMPRESA_CADASTRAR])">
+          Salvar e continuar
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

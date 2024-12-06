@@ -1,0 +1,12 @@
+<div class="default-tab px-2 pb-3">
+  <div class="top-options" [id]="utility.getElementId(2, 'detalhamento-duda')">
+    <app-atualizar-pagina (atualizar)="atualizarPagina()"></app-atualizar-pagina>
+  </div>
+  <app-grid-filter [filter]="gridFilter" [radiusTop]="true" (redefinir)="redefinir()" [showRedefinir]="showRedefinirBtn"
+    (pesquisar)="search($event)">
+  </app-grid-filter>
+
+  <mat-card class="p-0 mt-2">
+    <app-table-detalhamento-compra [refreshGrid]="refreshGrid" [filtro]="filtro"></app-table-detalhamento-compra>
+  </mat-card>
+</div>

@@ -1,0 +1,122 @@
+<p class="bold desk mt-0">Excluir cobrança</p>
+
+<section class="cabecalho mb-2" fxLayout="row" fxLayoutGap="20px">
+    <div>
+        <p class="mb-0 label">Empresa</p>
+        <p class="mt-0 conteudo">{{ item.empresa }}</p>
+    </div>
+
+    <div>
+        <p class="mb-0 label">Código do cliente</p>
+        <p class="mt-0 conteudo">{{ item.clienteId }}</p>
+    </div>
+
+    <div>
+        <p class="mb-0 label">UF</p>
+        <p class="mt-0 conteudo">{{ item.uf }}</p>
+    </div>
+</section>
+
+<section>
+    <form [formGroup]="formulario" (submit)="pesquisar()" #form="ngForm" fxLayout="row" fxLayoutGap="10px"
+        fxLayoutAlign="space-between center">
+        <mat-form-field appearance="outline" fxFlex [id]="utility.getElementId(5, 'pesquisa')" fxFlex="30">
+            <mat-label>Pesquisar por </mat-label>
+            <mat-select formControlName="pesquisa" required>
+                <mat-option *ngFor="let pesquisa of pesquisarPor" [value]="pesquisa.palavraChave"> {{ pesquisa.valor }}
+                </mat-option>
+            </mat-select>
+            <mat-hint>Obrigatório</mat-hint>
+            <mat-error *ngIf="formulario.controls['pesquisa'].hasError('required')">Obrigatório
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="auto" appearance="outline">
+            <mat-label>{{ labelValorPesquisa }}</mat-label>
+            <input type="text" matInput name="valorPesquisa" formControlName="valorPesquisa"
+                [id]="utility.getElementId(0, 'valor-pesquisa')" required>
+            <mat-hint>Obrigatório</mat-hint>
+            <mat-error *ngIf="formulario.controls['valorPesquisa'].hasError('required')">Obrigatório
+            </mat-error>
+        </mat-form-field>
+
+        <button mat-flat-button color="secondary" class="card__button" type="submit" [disabled]="!formulario.valid"
+            [id]="utility.getElementId(2, 'pesquisar-cobranca')">
+            Pesquisar
+        </button>
+    </form>
+</section>
+
+<section>
+    <table mat-table [dataSource]="dataSource" aria-describedby="Excluir cobrança">
+        <ng-container matColumnDef="selecionar">
+            <th mat-header-cell *matHeaderCellDef class="pr-1">
+                <mat-checkbox [id]="utility.getElementId(4, 'select-all-op-excluir-cobranca')"
+                    (change)="$event ? utility.toggleAllRows(selection, dataSource, 'id') : null"
+                    [checked]="utility.verifyPageSelection(selection, dataSource, 'id') == 1"
+                    [indeterminate]="utility.verifyPageSelection(selection, dataSource, 'id') == 2"
+                    [disabled]="desabilitarCheckboxSelecionarTodos()">
+                </mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let element">
+                <mat-checkbox [id]="utility.getElementId(4, element.id)" (click)="$event.stopPropagation()"
+                    (change)="$event ? utility.check(selection, element, 'id') : null"
+                    [checked]="utility.isSelected(selection, element, 'id')"
+                    [disabled]="desabilitarCheckbox(element.id)">
+                </mat-checkbox>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="chassi">
+            <th mat-header-cell *matHeaderCellDef>Chassi</th>
+            <td mat-cell *matCellDef="let element" class="column-max-width">{{
+                element.chassi }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="numeroContrato">
+            <th mat-header-cell *matHeaderCellDef>N° contrato</th>
+            <td mat-cell *matCellDef="let element" class="column-max-width">{{
+                element.numeroContrato }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="dataContrato">
+            <th mat-header-cell *matHeaderCellDef>Data do contrato</th>
+            <td mat-cell *matCellDef="let element" class="column-max-width">{{
+                element.dataContrato | date: "dd/MM/yyyy HH:mm" }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="tipoOperacao">
+            <th mat-header-cell *matHeaderCellDef>Operação</th>
+            <td mat-cell *matCellDef="let element" class="column-max-width">{{
+                utility.retornarTipoOperacao(element.operacao) }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="numeroGravame">
+            <th mat-header-cell *matHeaderCellDef>N° do gravame</th>
+            <td mat-cell *matCellDef="let element" class="column-max-width">{{
+                element.gravame }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="semRegistro">
+            <th class="text-center feedBack pt-1" mat-cell *matFooterCellDef colspan="11">
+                <img src="./../../../../../../../../../../assets/img/custom-icons/icon-vazio-artigos.svg"
+                    alt="Não há resultado" />
+                <p class="desk bold text-gray-700"> Não há registro. </p>
+            </th>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr mat-row *matFooterRowDef="['semRegistro']" [ngClass]="{'d-none': totalItens > 0 }"></tr>
+    </table>
+</section>
+
+<mat-dialog-actions class="d-flex justify-content-end">
+    <button mat-stroked-button class="btn-outline-primary" color="primary" type="button" [mat-dialog-close]="false"
+        [id]="utility.getElementId(2, 'excluir-cobranca-cancelar')">Cancelar</button>
+
+    <button mat-flat-button color="primary" type="button" [mat-dialog-close]="selection.selected"
+        [disabled]="selection.selected?.length === 0" [id]="utility.getElementId(2, 'excluir-cobranca-confirmar')">
+        Confirmar
+    </button>
+</mat-dialog-actions>

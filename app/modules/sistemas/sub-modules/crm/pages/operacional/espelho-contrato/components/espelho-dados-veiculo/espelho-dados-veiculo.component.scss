@@ -1,0 +1,25 @@
+@import '$tools';
+@import '$settings';
+
+.frota {
+  @include border-radius(10px);
+  border: 1px solid $gray-400;
+  padding: 0 1rem 1rem;
+  margin-top: 1rem;
+}
+
+@media print {
+  * {
+    visibility: visible !important;
+    font-family: Helvetica, sans-serif;
+    font-size: 14px !important;
+  }
+
+  .item-title {
+    font-size: 8pt !important;
+  }
+
+  mat-card {
+    box-shadow: none !important;
+  }
+}

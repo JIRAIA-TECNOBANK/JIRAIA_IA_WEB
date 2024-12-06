@@ -1,0 +1,14 @@
+@import '$settings';
+@import '$tools';
+
+.content {
+  text-align: center;
+}
+
+.mat-hint-custom {
+  @include fontMontserratRegular;
+  font-size: 75%;
+  margin-left: 0.7rem;
+  display: block;
+  text-align: left;
+}

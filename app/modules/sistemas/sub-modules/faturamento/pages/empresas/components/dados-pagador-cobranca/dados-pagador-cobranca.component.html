@@ -1,0 +1,46 @@
+<section (click)="formularioAberto = true" fxLayout="row" [ngClass]="{ 'cursor-pointer': !formularioAberto }">
+    <h6>Gerenciar o pagador responsável pelos boletos de cobrança
+        <i *ngIf="!formularioAberto" class="fas fa-check text-success"></i>
+    </h6>
+</section>
+
+<form [formGroup]="formulario" (ngSubmit)="confirmar()" fxLayout="column" [ngClass]="{ 'd-none': !formularioAberto }">
+    <mat-slide-toggle formControlName="credorContrato" class="mt-2 bold desk">Emitir a cobrança dos boletos da nota
+        fiscal e da nota de débito para o CNPJ Credor responsável pelo envio do contrato</mat-slide-toggle>
+
+    <section class="faturar-por-outra mt-2" fxLayout="column" fxFlex="80"
+        *ngIf="!formulario.controls['credorContrato'].value">
+        <mat-form-field appearance="outline" fxFlex="100">
+            <mat-label>Escolha uma empresa pela qual a cobrança será emitida</mat-label>
+            <input type="text" matInput [id]="utility.getElementId(5, 'empresa')" name="empresaNome"
+                formControlName="empresaNome" placeholder="Digite a empresa" (blur)="selecionaEmpresaValue()"
+                (input)="filtrarEmpresas($event.target.value)" [matAutocomplete]="empresasselect">
+            <mat-autocomplete #empresasselect="matAutocomplete">
+                <mat-option *ngFor="let empresa of empresasFiltradas"
+                    [value]="empresa.nomeFantasia + ' - ' + empresa.cnpj" class="usuario-email"
+                    [matTooltip]="empresa.nomeFantasia + ' - ' + empresa.cnpj">{{
+                    empresa.nomeFantasia }} - {{ empresa.cnpj }}
+                </mat-option>
+            </mat-autocomplete>
+            <mat-hint>Obrigatório</mat-hint>
+            <mat-error *ngIf="formulario.controls['empresaCnpj'].hasError('required')">Campo obrigatório
+            </mat-error>
+        </mat-form-field>
+
+        <p class="bold desk text-gray-800">Selecione o tipo de cobrança que deve ser emitida para a empresa indicada
+            acima</p>
+
+        <mat-radio-group [formControl]="formulario.get('nota')" [id]="utility.getElementId(3, 'tipo-nota')">
+            <mat-radio-button [value]="0" class="mb-2">Nota fiscal</mat-radio-button>
+            <mat-radio-button [value]="1" class="mb-2">Nota de débito</mat-radio-button>
+            <mat-radio-button [value]="2" class="mb-2">Nota fiscal e nota de débito</mat-radio-button>
+        </mat-radio-group>
+    </section>
+
+    <div fxLayout="row" fxLayoutAlign="end">
+        <button mat-flat-button color="primary" [id]="utility.getElementId(2, 'salvar-dados-pagador-cobranca')"
+            type="submit" [disabled]="!formulario.valid" class="bold">
+            Salvar
+        </button>
+    </div>
+</form>

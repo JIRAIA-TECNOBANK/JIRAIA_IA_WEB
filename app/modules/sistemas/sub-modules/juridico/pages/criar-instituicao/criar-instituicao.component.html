@@ -1,0 +1,153 @@
+<mat-card class="mb-4 mx-2">
+  <div fxLayout="column">
+    <form [formGroup]="instituicaoForm" (ngSubmit)="onSubmit()" novalidate>
+      <div>
+        <!-- Head Title -->
+        <div fxLayout="row wrap" fxLayoutGap="20px">
+          <h6 class="headline">Dados do registro de instituição financeira</h6>
+        </div>
+
+        <!-- First Row -->
+        <div fxLayout="row wrap" fxLayoutGap="10px">
+          <mat-form-field appearance="outline" fxFlex="auto">
+            <mat-label>Estado</mat-label>
+
+            <mat-select formControlName="uf">
+              <mat-option value="AC">Acre</mat-option>
+              <mat-option value="AL">Alagoas</mat-option>
+              <mat-option value="AP">Amapá</mat-option>
+              <mat-option value="AM">Amazonas</mat-option>
+              <mat-option value="BA">Bahia</mat-option>
+              <mat-option value="CE">Ceará</mat-option>
+              <mat-option value="DF">Distrito Federal</mat-option>
+              <mat-option value="ES">Espírito Santo</mat-option>
+              <mat-option value="GO">Goiás</mat-option>
+              <mat-option value="MA">Maranhão</mat-option>
+              <mat-option value="MT">Mato Grosso</mat-option>
+              <mat-option value="MS">Mato Grosso do Sul</mat-option>
+              <mat-option value="MG">Minas Gerais</mat-option>
+              <mat-option value="PA">Pará</mat-option>
+              <mat-option value="PB">Paraíba</mat-option>
+              <mat-option value="PR">Paraná</mat-option>
+              <mat-option value="PE">Pernambuco</mat-option>
+              <mat-option value="PI">Piauí</mat-option>
+              <mat-option value="RJ">Rio de Janeiro</mat-option>
+              <mat-option value="RN">Rio Grande do Norte</mat-option>
+              <mat-option value="RS">Rio Grande do Sul</mat-option>
+              <mat-option value="RO">Rondônia</mat-option>
+              <mat-option value="RR">Roraima</mat-option>
+              <mat-option value="SC">Santa Catarina</mat-option>
+              <mat-option value="SP">São Paulo</mat-option>
+              <mat-option value="SE">Sergipe</mat-option>
+              <mat-option value="TO">Tocantins</mat-option>
+            </mat-select>
+
+            <mat-hint>Obrigatório</mat-hint>
+            <mat-error
+              *ngIf="instituicaoForm.controls['uf'].hasError('required')"
+              >Obrigatório</mat-error
+            >
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" fxFlex="auto">
+            <mat-label>Preço de cadastro</mat-label>
+            <input
+              matInput
+              placeholder="R$00,00"
+              formControlName="precoCadastro"
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" fxFlex="auto">
+            <mat-label>Preço de renovação de cadastro</mat-label>
+            <input
+              matInput
+              placeholder="R$00,00"
+              formControlName="precoRenovacaoCadastro"
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" fxFlex="auto">
+            <mat-label>Periodicidade</mat-label>
+            <input
+              matInput
+              placeholder="12 meses"
+              formControlName="periodicidade"
+            />
+          </mat-form-field>
+        </div>
+
+        <!-- Second Row -->
+        <div fxLayout="row wrap" fxLayoutGap="10px">
+          <mat-form-field
+            class="input-width-8"
+            fxFlex="auto"
+            appearance="outline"
+          >
+            <mat-label>Observação</mat-label>
+
+            <textarea
+              [id]="utility.getElementId(0, 'observacoes')"
+              matInput
+              rows="1"
+              name="observacoes"
+              formControlName="observacoes"
+              maxlength="1000"
+            ></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div fxLayout="column">
+        <h6 class="headline">Documentos para credenciamento</h6>
+
+        <mat-form-field appearance="outline" fxFlex="auto">
+          <mat-label>Documentos</mat-label>
+          <input
+            matInput
+            [formControl]="documentoControl"
+            (input)="onInput(documentos.value)"
+            #documentos
+          />
+
+          <ul *ngIf="documentosFiltrados.length || criarNovoDocumento">
+            <li *ngFor="let doc of documentosFiltrados" (click)="selectDocumento(doc)">
+              {{ doc }}
+            </li>
+          </ul>
+
+          <div class="adicionar-novo" *ngIf="criarNovoDocumento">
+            <span>Não encontramos esse documento. Gostaria de adicionar um novo?</span>
+
+            <button (click)="adicionarNovoItem(documentos.value)">
+              <span class="icon-plus">+</span> Adicionar novo item
+            </button>
+          </div>
+        </mat-form-field>
+      </div>
+
+      <div class="documentos-selecionados">
+        <span
+          *ngFor="let documento of documentosSelecionados"
+          matTooltip="{{ documento }}"
+          class="documento-tooltip"
+          (click)="removerDocumento(documento)"
+        >
+          <img src="assets/img/close.svg" alt="">
+          {{ documento }}
+        </span>
+      </div>
+
+      <div align="end" fxLayoutGap="10px">
+        <button
+          mat-flat-button
+          color="secondary"
+          type="submit"
+          [disabled]="instituicaoForm.invalid"
+        >
+          Salvar
+        </button>
+      </div>
+    </form>
+  </div>
+</mat-card>

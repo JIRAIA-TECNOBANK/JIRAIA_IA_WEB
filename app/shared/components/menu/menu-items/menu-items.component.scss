@@ -1,0 +1,99 @@
+@import '$settings';
+@import '$tools';
+
+ul {
+    list-style-type: none;
+}
+
+i {
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+
+a {
+    text-decoration: none;
+    padding: 0 8px;
+    display: flex;
+    color: $gray-800;
+    font-size: 14px;
+    height: 40px;
+}
+
+.list-group {
+    @include border-radius(0);
+    display: inline;
+    flex-direction: column;
+    padding-left: 0;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.flex-column {
+    -webkit-box-orient: vertical !important;
+    -webkit-box-direction: normal !important;
+    flex-direction: column !important;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.list-group-item {
+    padding-top: 7px;
+
+    a {
+        @include border-radius(10px);
+        align-items: center;
+
+        &:hover {
+            background: $gray-300;
+        }
+    }
+}
+
+.wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.list-group-item a {
+    @include border-radius(10px);
+    text-decoration: none;
+    padding: 0 15px 0 8px;
+    justify-content: space-between;
+    display: flex;
+    height: 40px;
+}
+
+.menu-label-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.child {
+    padding-left: 10px;
+
+    span {
+        @include fontMontserratRegular;
+    }
+}
+
+ul {
+    &.child {
+        overflow: hidden;
+        height: 0;
+        transition: height 0.5s ease-in-out;
+
+        &.open {
+            position: static;
+            opacity: 1;
+            visibility: visible;
+            transition: height .5s ease-in-out;
+        }
+    }
+}

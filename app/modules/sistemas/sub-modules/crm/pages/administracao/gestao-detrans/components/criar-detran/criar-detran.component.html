@@ -1,0 +1,49 @@
+<form [formGroup]="formulario" class="w-100 h-100">
+    <mat-card fxLayout="column" fxLayoutGap="10px" class="h-100" fxLayoutAlign="space-between">
+        <div fxLayout="column" fxLayoutAlign="space-between" fxLayoutGap="10px">
+            <p class="bold desk mt-0 text-gray-800">Dados do DETRAN</p>
+
+            <div fxLayout="row" fxLayoutGap="10px">
+                <mat-form-field appearance="outline" fxFlex="10">
+                    <mat-label>UF </mat-label>
+                    <mat-select formControlName="uf" required [id]="utility.getElementId(5, 'uf-detran')">
+                        <mat-option *ngFor="let uf of ufs" [value]="uf.sigla"> {{ uf.sigla }} </mat-option>
+                    </mat-select>
+                    <mat-hint>Obrigatório</mat-hint>
+                    <mat-error *ngIf="formulario.controls['uf'].hasError('required')">Obrigatório
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <p class="bold desk mt-0 text-gray-800">Tempo de inatividade</p>
+
+            <div fxLayout="row" fxLayoutGap="10px">
+                <mat-form-field appearance="outline" fxFlex="20">
+                    <mat-label>Tempo </mat-label>
+                    <input matInput placeholder="HH:MM" aria-label="HH:MM" [ngxTimepicker]="darkPicker" [format]="24"
+                        readonly formControlName="periodoInatividade" required>
+                    <mat-hint>Obrigatório</mat-hint>
+                    <mat-error *ngIf="formulario.controls['periodoInatividade'].hasError('required')">Obrigatório
+                    </mat-error>
+                </mat-form-field>
+                <ngx-material-timepicker #darkPicker [theme]="secondaryTheme"
+                    [cancelBtnTmpl]="cancelBtn"></ngx-material-timepicker>
+
+                <ng-template #cancelBtn>
+                    <button class="timepicker-button" style="margin-right: 10px;">CANCELAR</button>
+                </ng-template>
+            </div>
+
+            <div fxLayout="row" fxLayoutGap="10px">
+                <mat-slide-toggle formControlName="ativo">Ativo?</mat-slide-toggle>
+            </div>
+        </div>
+
+        <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="end center" class="mt-1">
+            <button mat-flat-button color="secondary" type="button" (click)="onClickConfirmar()"
+                [id]="utility.getElementId(2, 'confirmar')" [disabled]="!verificarValidadeFormulario()">Salvar e
+                continuar</button>
+        </div>
+
+    </mat-card>
+</form>

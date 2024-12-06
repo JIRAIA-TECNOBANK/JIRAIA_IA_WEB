@@ -1,0 +1,15 @@
+<div class="alert-container mt-1" [ngClass]="color" fxLayout="row" fxLayoutGap="5px">
+    <div fxLayout="column" fxLayoutAlign="start">
+        <div class="icone-alert">
+            <i class="p-1" [ngClass]="icone"></i>
+        </div>
+    </div>
+    <div class="p-1 pr-2 pl-0" fxLayout="column" fxLayoutAlign="start" fxLayoutGap="10px">
+        <div>
+            <h2 class="bold title-alert m-0">{{ titulo }}</h2>
+        </div>
+        <div>
+            <p class="bold m-0" [innerHTML]="mensagem"></p>
+        </div>
+    </div>
+</div>

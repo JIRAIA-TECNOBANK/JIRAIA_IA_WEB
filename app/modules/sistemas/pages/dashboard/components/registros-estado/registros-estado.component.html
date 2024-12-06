@@ -1,0 +1,40 @@
+<section class="registros-estado h-100" [hidden]="estados.length === 0">
+  <p class="bold mt-0">Registros por estado</p>
+  <svg id="chart"></svg>
+  <div class="tooltip">
+    <div class="tooltip-uf"></div>
+    <div class="tooltip-registros">
+      <span class="registros-title">Contratos recebidos</span>
+      <span class="registros-pill"></span>
+    </div>
+  </div>
+
+  <div class="legenda align-self-end" fxLayout="row wrap">
+    <div class="legenda-item d-flex align-items-center" fxLayout="row">
+      <div class="legenda-cor legenda-sul"></div>
+      <div class="legenda-nome">Sul</div>
+    </div>
+    <div class="legenda-item d-flex align-items-center" fxLayout="row">
+      <div class="legenda-cor legenda-sudeste"></div>
+      <div class="legenda-nome">Sudeste</div>
+    </div>
+    <div class="legenda-item d-flex align-items-center" fxLayout="row">
+      <div class="legenda-cor legenda-nordeste"></div>
+      <div class="legenda-nome">Nordeste</div>
+    </div>
+    <div class="legenda-item d-flex align-items-center" fxLayout="row">
+      <div class="legenda-cor legenda-norte"></div>
+      <div class="legenda-nome">Norte</div>
+    </div>
+    <div class="legenda-item d-flex align-items-center" fxLayout="row">
+      <div class="legenda-cor legenda-centro-oeste"></div>
+      <div class="legenda-nome">Centro-oeste</div>
+    </div>
+  </div>
+</section>
+
+<section class="w-100 h-100 d-flex align-items-center justify-content-center" *ngIf="loading">
+  <mat-spinner [diameter]="50"></mat-spinner>
+</section>
+
+<app-bloco-vazio [options]="blocoVazio" *ngIf="!loading && estados.length === 0"></app-bloco-vazio>

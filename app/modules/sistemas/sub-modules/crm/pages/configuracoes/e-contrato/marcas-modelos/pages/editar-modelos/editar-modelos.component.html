@@ -1,0 +1,20 @@
+<div>
+  <div class="box__btn">
+    <button
+      mat-flat-button
+      class="box__btn--btn"
+      color="secondary"
+      [id]="utility.getElementId(2, 'adicionar-modelo')"
+      (click)="openDialogAdicionarModelo()"
+    >
+      Adicionar modelo
+    </button>
+  </div>
+  <div class="px-2 mt-3">
+    <app-grid-filter [filter]="filter" (pesquisar)="search($event)" (redefinir)="redefinirFiltro()" [showRedefinir]="showRedefinirBtn">
+    </app-grid-filter>
+  </div>
+  <div class="px-2">
+    <app-tabela-modelos [filtro]="filtro" [refreshGrid]="refreshGrid" (atualizarGrid)="atualizarGrid()"></app-tabela-modelos>
+  </div>
+</div>

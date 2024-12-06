@@ -1,0 +1,30 @@
+<div class="px-2">
+  <mat-card class="mb-4 mat-elevation-z8">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="fw-bold">Parametrizar DUDA</div>
+    </div>
+    <form [formGroup]="parametrizarDudaForm" (ngSubmit)="submitParametrizacaoDuda()" class="mt-2">
+      <div fxLayout="row" fxLayoutGap="10px">
+        <mat-form-field appearance="outline" fxFlex="25">
+          <mat-label>CNPJ </mat-label>
+          <input matInput placeholder="CNPJ" formControlName="cnpj" mask="00.000.000/0000-00"
+            [id]="utility.getElementId(0, 'parametrizar-cnpj')" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="25" matTooltip="Representa a quantidade de DUDAs que o sistema deverá manter em estoque. 
+        Novas compras serão realizadas automaticamente à medida que forem sendo consumidas, sempre respeitando a quantidade cadastrada." matTooltipClass="info-tooltip">
+          <mat-label>Estoque <i class="fa-regular fa-circle-info text-primary"></i></mat-label>
+          <input matInput placeholder="Quantidade" formControlName="estoque" required type="number" maxlength="3"
+            [id]="utility.getElementId(0, 'parametrizar-estoque')" />
+        </mat-form-field>
+      </div>
+
+      <div class="d-flex justify-content-end mt-2">
+        <button mat-flat-button color="primary" type="submit" [disabled]="!parametrizarDudaForm.valid"
+          [id]="utility.getElementId(2, 'parametrizar-confirmar')">
+          Confirmar
+        </button>
+      </div>
+    </form>
+  </mat-card>
+</div>

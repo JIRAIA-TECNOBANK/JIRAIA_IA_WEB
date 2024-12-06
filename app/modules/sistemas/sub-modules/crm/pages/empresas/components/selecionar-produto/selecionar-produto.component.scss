@@ -1,0 +1,36 @@
+@import '$tools';
+@import '$settings';
+
+div {
+  h6 {
+    @include fontMontserratBold;
+    font-size: 16px;
+    color: $gray-800;
+    margin: 8px 0 8px 0;
+  }
+
+  .produtos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 30px 20px;
+  }
+
+  .produto-item {
+    border: solid 1px #4880b2;
+    padding: 20px;
+    display: inline-block;
+    border-radius: 10px;
+    cursor: pointer;
+
+    &__content {
+      display: flex;
+      align-items: center;
+    }
+
+    input[type="checkbox"] {
+      margin-right: 10px;
+    }
+  }
+}

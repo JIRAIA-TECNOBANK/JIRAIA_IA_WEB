@@ -1,0 +1,112 @@
+@import '$settings';
+@import '$tools';
+
+.status-pill {
+  border-radius: 10px;
+  border-style: solid;
+  border-width: 2px;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+  width: 60px;
+}
+
+.status-pill__active {
+  border-color: $success-900;
+  color: $success-900;
+}
+
+.status-pill__inactive {
+  border-color: $gray-600;
+  color: $gray-600;
+}
+
+.mat-column-acoes {
+  text-align: right;
+}
+
+.mat-tab-labels .mat-tab-label:last-child {
+  min-width: 0;
+  padding: 0 12px;
+  color: unset;
+  opacity: unset;
+  background-color: $error-900;
+}
+
+.label-filter span {
+  @include fontMontserratBold;
+}
+
+.label-filter {
+  margin: auto 0;
+  display: flex;
+  align-items: center;
+
+  button {
+    padding: 0;
+    width: 29px;
+    height: 27px;
+    border-radius: 4px;
+    line-height: 0px;
+    margin-left: 4px;
+
+    &.opened {
+      border: 1px solid $primary;
+      color: $primary;
+    }
+
+    &.active {
+      color: $primary;
+    }
+  }
+}
+
+.filter {
+  display: none;
+  width: 326px;
+  position: absolute;
+  z-index: 9;
+  right: 163px;
+  top: 263px;
+  margin-top: 3px;
+  font-size: 14px;
+
+  &.active {
+    display: block;
+  }
+
+  p {
+    @include fontMontserratBold;
+    color: $primary;
+    font-size: 14px;
+    border-bottom: 1px solid $gray-400;
+    padding: 6px 0;
+    margin-top: 0;
+  }
+
+  .mat-form-field {
+    width: 128px;
+  }
+}
+
+.divider {
+  margin-top: 20px;
+  border-top: 1px solid #D0D3D6;
+  padding-top: 14px;
+}
+
+.filter-buttons {
+  justify-content: space-between;
+}
+
+
+.box__btn {
+  display: flex;
+  justify-content: right;
+  position: relative;
+
+  .box__btn--btn {
+    position: absolute;
+    top: -68px;
+  }
+}

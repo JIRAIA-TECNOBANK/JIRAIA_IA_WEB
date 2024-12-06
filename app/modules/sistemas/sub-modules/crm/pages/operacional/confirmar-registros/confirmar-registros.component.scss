@@ -1,0 +1,15 @@
+@import '$settings';
+@import '$tools';
+
+i {
+  cursor: pointer;
+}
+
+.copiado {
+  color: $gray-700;
+  font-size: 14px;
+}
+
+p {
+  font-size: 14px;
+}

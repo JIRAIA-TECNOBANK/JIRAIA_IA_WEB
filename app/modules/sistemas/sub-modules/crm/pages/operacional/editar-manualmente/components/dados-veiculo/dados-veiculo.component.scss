@@ -1,0 +1,32 @@
+@import '$tools';
+@import '$settings';
+
+.desk {
+  border: none;
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  background: none;
+  cursor: pointer;
+
+  i {
+    font-size: 30px;
+  }
+}
+
+.veiculos-adicionados {
+  background: $blue-700;
+  color: $white;
+  padding: 9px 16px;
+  height: 33px;
+  border-radius: 30px;
+  cursor: pointer;
+  border: none;
+}
+
+.headline {
+  @include fontMontserratBold;
+  font-size: 16px;
+  color: $gray-800;
+  margin: 8px 0 8px 0;
+}

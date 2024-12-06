@@ -1,0 +1,173 @@
+<div class="default-tab px-2 pb-3">
+  <mat-card class="mat-elevation-z8">
+    <p class="bold desk gray-800">Dados para aplicação de desconto</p>
+    <form [formGroup]="formulario" fxLayout="row wrap" fxLayoutGap="10px grid" (ngSubmit)="confirmarDesconto()">
+      <mat-form-field appearance="outline">
+        <mat-label>Mês de referência </mat-label>
+        <mat-select formControlName="mes" name="mes" [id]="utility.getElementId(5, 'mes-desconto')">
+          <mat-option *ngFor="let mesReferencia of meses; let i = index" [value]="i">
+            {{ mesReferencia }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" fxFlex="20">
+        <mat-label>Ano de referência</mat-label>
+        <input matInput placeholder="Ano de referência" formControlName="ano" required
+          [id]="utility.getElementId(0, 'ano-desconto')" />
+        <mat-error class="text-danger bold" *ngIf="formulario.get('ano').hasError('required')">Obrigatório</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" fxFlex="auto">
+        <mat-label>Área responsável pelo acordo </mat-label>
+        <mat-select formControlName="areaResponsavel" name="areaResponsavel"
+          [id]="utility.getElementId(5, 'area-desconto')">
+          <mat-option value="Diretoria"> Diretoria </mat-option>
+          <mat-option value="Comercial"> Comercial </mat-option>
+          <mat-option value="Financeiro"> Financeiro </mat-option>
+          <mat-option value="Operações"> Operações </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="chip-list pb-0" appearance="outline" fxFlex="100">
+        <mat-label>Informe o e-mail dos responsáveis que deverão ser notificados sobre a
+          aplicação desse desconto</mat-label>
+        <mat-chip-list #chipList aria-label="Emails" class="emails" required [disabled]="somenteConsulta">
+          <mat-chip *ngFor="let email of emails" selectable="false" removable="true" (removed)="remove(email)"
+            class="value-mat-chip">
+            {{ email }}
+            <button matChipRemove>
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip>
+          <input [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            matChipInputAddOnBlur="true" (matChipInputTokenEnd)="add($event)"
+            [id]="utility.getElementId(0, 'emails-desconto')" required />
+        </mat-chip-list>
+        <mat-hint *ngIf="mensagemErroEmail" class="bold text-danger">Apenas e-mails válidos do domínio @tecnobank.com.br
+          podem ser
+          adicionados</mat-hint>
+      </mat-form-field>
+
+      <div class="info-warning w-100 px-2 pt-2 mr-1" fxLayout="row" fxLayoutGap="15px" fxFlex="100">
+        <i class="fa-regular fa-memo-circle-info"></i>
+        <section>
+          <p class="bold my-0">IMPORTANTE</p>
+          <ul class="pl-2 mt-0">
+            <li>
+              <p class="bold my-0">
+                Para que seja efetivado o desconto, seu valor deverá ser
+                inferior ao da nota, pois ele será subtraído do valor
+                total da nota.
+              </p>
+            </li>
+          </ul>
+        </section>
+      </div>
+
+      <div fxLayout="column" fxFlex="100">
+        <p class="desk bold">Dados do desconto da Nota Fiscal</p>
+
+        <div fxLayout="row" fxFlex="100">
+          <mat-form-field appearance="outline" fxFlex="25">
+            <mat-label>Valor do desconto da NF</mat-label>
+            <input matInput placeholder="Valor do desconto" formControlName="valorNF"
+              [min]="formulario.get('valorNF').value > 0 ? 0.01 : 0" [id]="utility.getElementId(0, 'valorNF-desconto')"
+              type="text" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }" maxlength="18" />
+            <mat-error class="text-danger bold" *ngIf="formulario.get('valorNF').hasError('max')">Valor inválido,
+              maior
+              do
+              que o valor da nota fiscal.</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div fxLayout="row" fxFlex="100">
+          <mat-form-field class="input-width-8" fxFlex="100" appearance="outline">
+            <mat-label>Justifique o motivo do desconto</mat-label>
+            <textarea [id]="utility.getElementId(0, 'motivoNF-desconto')" matInput rows="3" name="motivoNF"
+              formControlName="motivoNF" maxlength="150" [required]="formulario.get('valorNF').value"
+              #motivoNF></textarea>
+            <mat-hint align="end">{{ motivoNF.value?.length || 0 }}/150</mat-hint>
+            <mat-error *ngIf="formulario.get('motivoNF').hasError('required')">Obrigatório</mat-error>
+            <mat-error *ngIf="formulario.get('motivoNF').hasError('maxlength')" align="end">{{ motivoNF.value?.length
+              ||
+              0
+              }}/150</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div fxLayout="row" fxFlex="100">
+          <mat-form-field class="input-width-8" fxFlex="100" appearance="outline">
+            <mat-label>Descreva o conteúdo para nota de rodapé visando esclarecer a razão
+              pelo qual o desconto está sendo aplicado (essa informação será visível
+              pelo cliente na nota fiscal)</mat-label>
+            <textarea [id]="utility.getElementId(0, 'nota-rodapeNF-desconto')" matInput rows="3" name="notaRodapeNF"
+              formControlName="notaRodapeNF" maxlength="1000" nonSpecialChar
+              [required]="formulario.get('valorNF').value" #notaRodapeNF></textarea>
+            <mat-hint align="end">{{ notaRodapeNF.value?.length || 0 }}/1000</mat-hint>
+            <mat-error *ngIf="formulario.get('notaRodapeNF').hasError('required')">Obrigatório</mat-error>
+            <mat-error *ngIf="formulario.get('notaRodapeNF').hasError('maxlength')" align="end">{{
+              notaRodapeNF.value?.length || 0 }}/1000</mat-error>
+          </mat-form-field>
+        </div>
+
+        <p class="desk bold">Dados do desconto da Nota de Débito</p>
+
+        <div fxLayout="row" fxFlex="100">
+          <mat-form-field appearance="outline" fxFlex="25">
+            <mat-label>Valor do desconto da ND</mat-label>
+            <input matInput placeholder="Valor do desconto" formControlName="valorND"
+              [min]="formulario.get('valorND').value > 0 ? 0.01 : 0" [id]="utility.getElementId(0, 'valorND-desconto')"
+              type="text" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }" maxlength="18" />
+            <mat-error class="text-danger bold" *ngIf="formulario.get('valorND').hasError('max')">Valor inválido,
+              maior
+              do
+              que o valor da nota de débito.</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div fxLayout="row" fxFlex="100">
+          <mat-form-field class="input-width-8" fxFlex="100" appearance="outline">
+            <mat-label>Justifique o motivo do desconto</mat-label>
+            <textarea [id]="utility.getElementId(0, 'motivoND-desconto')" matInput rows="3" name="motivoND"
+              formControlName="motivoND" maxlength="150" [required]="formulario.get('valorND').value"
+              #motivoND></textarea>
+            <mat-hint align="end">{{ motivoND.value?.length || 0 }}/150</mat-hint>
+            <mat-error *ngIf="formulario.get('motivoND').hasError('required')">Obrigatório</mat-error>
+            <mat-error *ngIf="formulario.get('motivoND').hasError('maxlength')" align="end">{{ motivoND.value?.length
+              ||
+              0
+              }}/150</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div fxLayout="row" fxFlex="100">
+          <mat-form-field class="input-width-8" fxFlex="100" appearance="outline">
+            <mat-label>Descreva o conteúdo para nota de rodapé visando esclarecer a razão
+              pelo qual o desconto está sendo aplicado (essa informação será visível
+              pelo cliente na nota de débito)</mat-label>
+            <textarea [id]="utility.getElementId(0, 'nota-rodapeND-desconto')" matInput rows="3" name="notaRodapeND"
+              formControlName="notaRodapeND" maxlength="1000" nonSpecialChar
+              [required]="formulario.get('valorND').value" #notaRodapeND></textarea>
+            <mat-hint align="end">{{ notaRodapeND.value?.length || 0 }}/1000</mat-hint>
+            <mat-error *ngIf="formulario.get('notaRodapeND').hasError('required')">Obrigatório</mat-error>
+            <mat-error *ngIf="formulario.get('notaRodapeND').hasError('maxlength')" align="end">{{
+              notaRodapeND.value?.length || 0 }}/1000</mat-error>
+          </mat-form-field>
+        </div>
+
+      </div>
+
+
+      <div class="d-flex justify-content-end" fxFlex="100">
+        <button mat-stroked-button class="btn-outline-primary mr-2" color="primary" (click)="voltar()">
+          {{somenteConsulta ? 'Fechar' : 'Cancelar'}}
+        </button>
+        <button *ngIf="!somenteConsulta" mat-flat-button color="primary" type="submit"
+          [disabled]="!habilitarConfirmar()" [id]="utility.getElementId(2, 'confirmar-desconto')">
+          Confirmar
+        </button>
+      </div>
+    </form>
+  </mat-card>
+</div>

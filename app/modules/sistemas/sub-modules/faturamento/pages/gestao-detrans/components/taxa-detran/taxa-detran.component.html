@@ -1,0 +1,36 @@
+<div fxLayout="row" fxLayoutAlign="space-between" class="mb-2">
+    <p class="bold desk mt-0 text-gray-800"> Taxa DETRAN {{ uf }}</p>
+
+    <button mat-flat-button class="btn-add" [id]="utility.getElementId(2, 'add-taxa')" *ngIf="!criarTaxaDetran"
+        (click)="addNovaTaxa()"
+        [disabled]="!utility.getPermission([Permissoes.GESTAO_FINANCEIRO_PRECO_CADASTRAR, Permissoes.GESTAO_FINANCEIRO_APROVACAO_PRECO_TECNOBANK])">
+        <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Add nova taxa
+    </button>
+
+    <button mat-flat-button class="btn-cancelar" [id]="utility.getElementId(2, 'cancelar-taxa')" *ngIf="criarTaxaDetran"
+        (click)="cancelar()">
+        Cancelar
+    </button>
+</div>
+
+<ng-container *ngIf="!criarTaxaDetran && listaTaxasDetran.length > 0; then gridTaxasDetran"></ng-container>
+<ng-container *ngIf="criarTaxaDetran; then formTaxaDetran"></ng-container>
+
+<app-bloco-vazio *ngIf="!criarTaxaDetran && listaTaxasDetran.length === 0" [options]="blocoVazio"></app-bloco-vazio>
+
+<ng-template #gridTaxasDetran>
+    <section fxLayout="column" fxLayoutAlign="space-between" class="conteudo">
+        <app-lista-taxa-detran [listaTaxaDetran]="listaTaxasDetran" (resumoTaxa)="editarTaxa($event)"
+            (excluirTaxaDetran)="carregarTaxasDetran()"></app-lista-taxa-detran>
+
+        <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="end center" class="mt-1">
+            <button mat-flat-button color="secondary" type="button" (click)="onClickContinuar()"
+                [id]="utility.getElementId(2, 'continuar-taxa-detran')">Continuar</button>
+        </div>
+    </section>
+</ng-template>
+
+<ng-template #formTaxaDetran>
+    <app-criar-taxa-detran [uf]="uf" (fecharFormulario)="fecharCriarTaxa()" [taxaDetran]="editarTaxaDetran"
+        [transacoesElegiveis]="transacoesElegiveis"></app-criar-taxa-detran>
+</ng-template>

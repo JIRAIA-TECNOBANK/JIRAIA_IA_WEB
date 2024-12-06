@@ -1,0 +1,22 @@
+@import '$settings';
+@import '$tools';
+
+i {
+    &.cabecalho {
+        font-size: 3rem;
+    }
+}
+
+.content {
+    @include fontMontserratRegular;
+    text-align: justify;
+    font-size: 14px;
+
+    p {
+        color: $gray-800;
+    }
+}
+
+.texto-adicional {
+    font-size: 10px;
+}

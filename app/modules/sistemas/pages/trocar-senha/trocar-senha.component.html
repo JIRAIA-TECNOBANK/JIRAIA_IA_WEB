@@ -1,0 +1,131 @@
+<div>
+  <mat-card class="ml-3 mr-3">
+    <p class="bold">Preencha os campos abaixo</p>
+    <form [formGroup]="trocarSenhaForm" class="mt-2" (ngSubmit)="onSubmit()">
+      <div fxLayout="column" fxLayoutGap="10px">
+        <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start">
+          <mat-form-field appearance="outline" fxFlex="25">
+            <mat-label>Nova senha</mat-label>
+            <input
+              matInput
+              placeholder="Nova senha"
+              formControlName="novaSenha"
+              type="password"
+              required
+              [id]="getElementId(1, 'nova-senha')"
+              (keyup)="updateConfirmaSenha()"
+            />
+            <mat-hint>Obrigatório</mat-hint>
+            <mat-error
+              *ngIf="trocarSenhaForm.controls['novaSenha'].hasError('required')"
+              >Obrigatório</mat-error
+            >
+            <mat-error
+              *ngIf="
+                trocarSenhaForm
+                  .get('novaSenha')
+                  .getError('invalidIdentifier') === 'requisitos'
+              "
+            >
+              Senha não possui os requisitos abaixo</mat-error
+            >
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" fxFlex="25">
+            <mat-label>Confirme a nova senha</mat-label>
+            <input
+              matInput
+              placeholder="Confirme a nova senha"
+              formControlName="confirmarSenha"
+              type="password"
+              required
+              [id]="getElementId(1, 'confirma-senha')"
+            />
+            <mat-hint>Obrigatório</mat-hint>
+            <mat-error
+              *ngIf="
+                trocarSenhaForm.controls['confirmarSenha'].hasError('required')
+              "
+              >Obrigatório</mat-error
+            >
+            <mat-error
+              *ngIf="
+                trocarSenhaForm
+                  .get('confirmarSenha')
+                  .getError('invalidIdentifier') === 'naoCoincidem'
+              "
+              >Senhas não coincidem</mat-error
+            >
+          </mat-form-field>
+        </div>
+
+        <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="space-between">
+          <div class="info" fxFlex="75">
+            <div fxFlex="5" fxLayoutAlign="start">
+              <i class="fa-regular fa-circle-info"></i>
+            </div>
+            <div fxFlex>
+              <p>
+                <i
+                  class="fa-solid"
+                  [ngClass]="{
+                    'fa-check text-success': verificaRequisito(1),
+                    'fa-circle text-secondary': !verificaRequisito(1)
+                  }"
+                ></i>
+                Deve conter entre 8 e 20 caracteres;
+              </p>
+              <p>
+                <i
+                  class="fa-solid"
+                  [ngClass]="{
+                    'fa-check text-success': verificaRequisito(2),
+                    'fa-circle text-secondary': !verificaRequisito(2)
+                  }"
+                ></i>
+                Deve conter ao menos 1 letra maiúscula e 1 letra minúscula;
+              </p>
+              <p>
+                <i
+                  class="fa-solid"
+                  [ngClass]="{
+                    'fa-check text-success': verificaRequisito(3),
+                    'fa-circle text-secondary': !verificaRequisito(3)
+                  }"
+                ></i>
+                Deve conter ao menos 1 caractere especial;
+              </p>
+              <p>
+                <i
+                  class="fa-solid"
+                  [ngClass]="{
+                    'fa-check text-success': verificaRequisito(4),
+                    'fa-circle text-secondary': !verificaRequisito(4)
+                  }"
+                ></i>
+                Deve conter ao menos um número.
+              </p>
+
+              <p class="bold mb-0">
+                Após alterar a senha, você será redirecionado para refazer o
+                login utilizando a nova senha.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div fxLayout="row" fxLayoutAlign="end">
+        <button
+          mat-flat-button
+          color="primary"
+          type="submit"
+          [disabled]="!trocarSenhaForm.valid"
+          class="bold"
+        >
+          Confirmar
+        </button>
+      </div>
+    </form>
+  </mat-card>
+</div>
