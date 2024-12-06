@@ -1,0 +1,31 @@
+// Base
+@import "$settings";
+@import "$tools";
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  @include fontMontserratRegular;
+  background: $gray-200;
+  height: 100%;
+  min-height: 100%;
+  scroll-behavior: smooth;
+  margin: 0;
+}
+
+a {
+  cursor: pointer;
+  color: $blue-900;
+}
+
+i.fal {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}

@@ -1,0 +1,73 @@
+// Tools
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap');
+
+/* Fontface */
+@font-face {
+    font-family: 'Montserrat Regular';
+    src: url('../assets/font/Montserrat-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Montserrat Bold';
+    src: url('../assets/font/Montserrat-Bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Montserrat ExtraBold';
+    src: url('../assets/font/Montserrat-ExtraBold.ttf') format('truetype');
+}
+
+/** Mixins **/
+/* Font Montserrat */
+@mixin fontMontserratRegular($fw: 400, $fs: normal) {
+    font-family: 'Montserrat Regular', sans-serif;
+    font-weight: $fw;
+    font-style: $fs;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+}
+
+@mixin fontMontserratBold($fw: 700, $fs: normal) {
+    font-family: 'Montserrat Bold', sans-serif;
+    font-weight: $fw;
+    font-style: $fs;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+}
+
+@mixin fontMontserratExtraBold($fw: 800, $fs: normal) {
+    font-family: 'Montserrat ExtraBold', sans-serif;
+    font-weight: $fw;
+    font-style: $fs;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+}
+
+/* Border radius */
+@mixin border-radius($bd-radius) {
+    border-radius: $bd-radius !important;
+}
+
+/* Transition */
+@mixin transition($x...) {
+    transition: $x;
+}
+
+/* Media Querys*/
+@mixin desktop-up {
+    @media (min-width: 1200px) {
+        @content;
+    }
+}
+
+/* Text overflow */
+@mixin text-overflow($max-width) {
+    text-overflow: ellipsis !important;
+    max-width: $max-width !important;
+    white-space: nowrap;
+    overflow: hidden;
+}

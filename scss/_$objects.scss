@@ -1,0 +1,72 @@
+@import '$settings';
+@import '$tools';
+
+// Objects
+/* Button */
+.btn-lg {
+  padding: 0 45px !important;
+  line-height: 50px !important;
+}
+
+.btn-md {
+  padding: 0 30px !important;
+  line-height: 40px !important;
+}
+
+.btn-secundary {
+  background-color: $blue-800;
+}
+
+/* Input */
+.input-width-2 {
+  width: 250px;
+}
+
+.input-width-3 {
+  width: 350px;
+}
+
+/* Dialog */
+.dialog {
+  padding: 8px 26px 26px 26px;
+}
+
+.mat-dialog-container {
+  max-height: 85vh !important;
+  overflow: hidden !important;
+}
+
+.mat-dialog-title {
+  @include fontMontserratBold;
+}
+
+/* STATUS PILLS */
+.status-pill {
+  border-radius: 10px;
+  border-style: solid;
+  border-width: 2px;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+  width: 70px;
+}
+
+.status-pill__active {
+  border-color: $success-900;
+  color: $success-900;
+}
+
+.status-pill__inactive {
+  border-color: $gray-600;
+  color: $gray-600;
+}
+
+.status-pill__pending {
+  border-color: $warning-900;
+  color: $warning-900;
+}
+
+.mat-line {
+  @include fontMontserratRegular;
+  color: $gray-900;
+}

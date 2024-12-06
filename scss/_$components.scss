@@ -1,0 +1,899 @@
+// Components
+@import "$settings";
+@import "$tools";
+
+/* Títulos */
+.title {
+  @include fontMontserratBold;
+  border: 0;
+  color: $primary;
+  font-size: 28px;
+}
+
+.page-title {
+  @include fontMontserratBold;
+  font-size: 23px;
+  color: $primary;
+  padding-left: 24px;
+  margin-bottom: 0px;
+  margin-top: 0;
+}
+
+.text-primary {
+  color: $primary;
+  font-size: 16px;
+}
+
+.text-blue-700 {
+  color: $blue-700;
+}
+
+.text-secondary {
+  color: $gray-400;
+}
+
+.text-danger {
+  color: $error-900 !important;
+}
+
+.text-gray-800 {
+  color: $gray-800;
+}
+
+.text-gray-700 {
+  color: $gray-700;
+}
+
+.text-captalize {
+  text-transform: capitalize;
+}
+
+.desk {
+  font-size: 14px;
+}
+
+.info-primary {
+  @include border-radius(5px);
+  background-color: $blue-info-bg;
+  color: $primary;
+  width: 50%;
+  padding: 0.18rem 0.5rem;
+  align-items: center;
+
+  p {
+    @include fontMontserratBold;
+    color: $primary;
+    font-size: 12px;
+    margin: 0;
+  }
+
+  i {
+    color: $primary;
+    font-size: 18px;
+  }
+}
+
+.info-warning {
+  @include border-radius(5px);
+  background-color: $warning-200;
+  color: $text-warning;
+  padding: 1rem;
+
+  i {
+    color: $text-warning;
+    font-size: 18px;
+  }
+
+  p {
+    color: $text-warning;
+    font-size: 12px;
+  }
+
+  li {
+    p {
+      @include fontMontserratRegular;
+
+      &.bold {
+        @include fontMontserratBold;
+      }
+    }
+  }
+}
+
+mat-error {
+  @include fontMontserratBold;
+}
+
+.description-primary {
+  @include fontMontserratRegular;
+  font-size: 16px;
+  color: #6d6d6d;
+}
+
+.color-primary {
+  color: $primary;
+}
+
+.label {
+  @include fontMontserratRegular;
+  color: $primary;
+}
+
+.bold {
+  @include fontMontserratBold;
+}
+
+/* Button */
+button span {
+  @include fontMontserratBold;
+  white-space: pre-wrap;
+  line-height: 0;
+}
+
+.mat-button.mat-primary,
+.mat-icon-button.mat-primary,
+.mat-stroked-button.mat-primary {
+  color: $blue-800 !important;
+}
+
+.btn {
+  color: $white;
+
+  &:disabled {
+    background-color: #d1d2d5 !important;
+    color: #6d6d6d !important;
+  }
+}
+
+.btn-primary {
+  background-color: $primary !important;
+}
+
+.btn-secondary {
+  background-color: $error-900 !important;
+}
+
+.btn-outline-primary {
+  border: 2px solid $primary !important;
+  color: $primary;
+
+  &:disabled {
+    border: 0 !important;
+  }
+}
+
+.btn-lg {
+  padding: 0 45px !important;
+  line-height: 50px !important;
+}
+
+.btn-md {
+  padding: 0 30px !important;
+  line-height: 40px !important;
+}
+
+.btn-disabled {
+  color: rgba(0, 0, 0, 0.26) !important;
+  cursor: default !important;
+}
+
+.dropzone-disabled {
+  border: 2px dashed $gray-700 !important;
+  opacity: 0.5;
+  cursor: default !important;
+}
+
+.mat-flat-button.mat-primary,
+.mat-raised-button.mat-primary,
+.mat-fab.mat-primary,
+.mat-mini-fab.mat-primary {
+  background-color: $primary;
+  border: 2px solid $primary;
+  color: $white;
+
+  &:disabled {
+    border: 0 !important;
+  }
+}
+
+button.mat-secondary {
+  background-color: $blue-800;
+  color: $white;
+}
+
+button.mat-cancel {
+  padding: 0;
+}
+
+button.mat-primary-list {
+  background-color: $primary;
+  height: 24px;
+  line-height: normal;
+  color: $white;
+}
+
+button.mat-danger-list {
+  background-color: $error-700;
+  height: 24px;
+  line-height: normal;
+  color: $white;
+}
+
+button.mat-reset {
+  color: $error-900;
+}
+
+button.btn-cancel {
+  color: inherit;
+  background: #0000;
+}
+
+button.mat-menu-item {
+  @include fontMontserratRegular;
+}
+
+.btn-outline-primary.mat-button-disabled {
+  border-color: rgba(0, 0, 0, 0.26) !important;
+}
+
+button {
+  background-color: transparent;
+}
+
+/* Button Toggle */
+.mat-button-toggle-group .mat-button-toggle:hover,
+.mat-button-toggle-group .mat-button-toggle-checked {
+  color: $white;
+  background: $error-900 !important;
+}
+
+.toggle-default {
+  .mat-button-toggle-group .mat-button-toggle {
+    color: $gray-700;
+  }
+
+  .mat-button-toggle-group .mat-button-toggle:disabled:hover {
+    color: $white !important;
+    background: $gray-400 !important;
+    border-radius: 6px;
+  }
+
+  .mat-button-toggle-group .mat-button-toggle:hover,
+  .mat-button-toggle-group .mat-button-toggle-checked {
+    color: $white !important;
+    background: $blue-600 !important;
+    border-radius: 6px;
+  }
+
+  .mat-button-toggle-group {
+    gap: 5px;
+  }
+
+  .mat-button-toggle-group-appearance-standard {
+    border-radius: 0;
+    border: none;
+  }
+
+  .mat-button-toggle-button {
+    border: solid 1px #d0d3d6;
+    border-radius: 5px;
+  }
+
+  .mat-button-toggle-group-appearance-standard .mat-button-toggle+.mat-button-toggle {
+    border-left: none;
+  }
+
+  .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
+    @include fontMontserratBold;
+    font-size: 0.9em;
+    padding: 4px 12px;
+    min-width: 70px;
+  }
+
+  &.inline {
+    margin-top: 4px;
+    display: flex;
+    height: 54px;
+    align-items: center;
+
+    .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
+      padding: 2px 12px;
+    }
+  }
+}
+
+.toggle-juridico {
+  .mat-button-toggle {
+    flex: 1;
+  }
+
+  @media (max-width: 1067px) {
+    .mat-button-toggle {
+      flex: none;
+    }
+  }
+}
+
+/* Mat Tab */
+.mat-tab-label-content {
+  @include fontMontserratExtraBold;
+  font-size: 14px;
+
+  div {
+    i {
+      color: $primary;
+      margin-right: 10px;
+      font-size: 1em;
+    }
+
+    span {
+      @include fontMontserratBold;
+    }
+  }
+}
+
+.tab-100 mat-tab-header {
+  padding: 0;
+}
+
+.tab-100 .mat-tab-label {
+  width: 100%;
+  border-radius: 0;
+  box-shadow: none;
+  margin: 0;
+}
+
+/* Spinner */
+.mat-progress-spinner circle,
+.mat-spinner circle {
+  stroke: $primary;
+}
+
+.mat-progress-spinner.spinner-bg circle,
+.mat-spinner.spinner-bg circle {
+  stroke: $gray-400;
+}
+
+/* Mat Hint */
+.mat-form-field-subscript-wrapper {
+  margin-top: 2px;
+}
+
+/* Mat Paginator */
+.mat-paginator {
+  background: transparent;
+}
+
+/* Mat Checkbox */
+.mat-checkbox-layout .mat-checkbox-label {
+  line-height: 1;
+  font-size: 15px;
+}
+
+.mat-form-field {
+  font-size: 15px;
+}
+
+.mat-checkbox-disabled {
+  opacity: 0.5;
+}
+
+/* Mat Tooltip */
+.info-tooltip {
+  @include fontMontserratBold;
+  background-color: $blue-400;
+  color: $primary !important;
+  font-size: 0.8em;
+  white-space: pre-line !important;
+  max-width: 550px !important;
+}
+
+/* Mat Table */
+
+table {
+  width: 100%;
+}
+
+.mat-header-row th,
+.mat-sort-header-content {
+  background-color: $blue-300;
+  @include fontMontserratExtraBold;
+  color: $gray-900;
+}
+
+.mat-sort-header-content {
+  text-align: left !important;
+}
+
+.mat-checkbox-checked.mat-accent .mat-checkbox-background,
+.mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+  background-color: $primary;
+}
+
+.mat-checkbox-checked:not(.mat-checkbox-disabled).mat-accent .mat-ripple-element,
+.mat-checkbox:active:not(.mat-checkbox-disabled).mat-accent .mat-ripple-element,
+.mat-pseudo-checkbox-checked,
+.mat-pseudo-checkbox-indeterminate,
+.mat-accent .mat-pseudo-checkbox-checked,
+.mat-accent .mat-pseudo-checkbox-indeterminate {
+  background: $primary;
+}
+
+th.mat-header-cell {
+  border-color: $blue-300;
+  font-size: 12px;
+}
+
+.mat-header-row {
+  .mat-header-cell {
+    border: none;
+  }
+}
+
+.mat-row {
+
+  mat-footer-row,
+  mat-header-row,
+  mat-row,
+  td.mat-cell,
+  td.mat-footer-cell,
+  th.mat-header-cell {
+    border-bottom-color: #0000001f;
+  }
+
+  .mat-cell {
+    font-size: 14px;
+    color: #000000de;
+  }
+}
+
+.actions-column {
+  width: 120px !important;
+}
+
+/* Input */
+.input-width-2 {
+  width: 250px;
+}
+
+.input-width-3 {
+  width: 350px;
+}
+
+.input-width-8 {
+  width: 850px;
+}
+
+.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick,
+.mat-form-field.mat-focused .mat-form-field-label {
+  color: $primary;
+}
+
+/* Dialog */
+.dialog {
+  padding: 0 0 10px 0;
+}
+
+/*Paragrafos*/
+.field-title {
+  @include fontMontserratRegular;
+  color: #a0a0a0;
+}
+
+/*Mat Card*/
+
+.mat-card {
+  @include border-radius(10px);
+  box-shadow: 0px 12px 17px rgba(0, 0, 0, 0.08),
+    0px 5px 22px rgba(0, 0, 0, 0.08), 0px 7px 8px rgba(0, 0, 0, 0.05) !important;
+  overflow: auto;
+  background-color: $white;
+}
+
+/*Radio*/
+.mat-radio-button {
+  font-size: 14px;
+}
+
+.mat-radio-button.mat-accent .mat-radio-inner-circle,
+.mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element:not(.mat-radio-persistent-ripple),
+.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-persistent-ripple,
+.mat-radio-button.mat-accent:active .mat-radio-persistent-ripple {
+  background-color: $primary;
+}
+
+.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+  border-color: $primary;
+}
+
+mat-radio-button {
+  margin-right: 15px;
+}
+
+/*Datepicker*/
+.mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover>.mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical),
+.cdk-keyboard-focused .mat-calendar-body-active>.mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical),
+.cdk-program-focused .mat-calendar-body-active>.mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
+  background-color: $primary !important;
+  color: $white;
+}
+
+.mat-calendar-body-selected {
+  background-color: $primary;
+}
+
+@media print {
+  body * {
+    visibility: hidden !important;
+    font-family: Helvetica, sans-serif;
+  }
+
+  .content {
+    margin-top: 0px !important;
+    margin-left: 0px !important;
+  }
+
+  .mt-2 {
+    margin-top: 0px !important;
+  }
+
+  @page {
+    margin: 17mm 0 15mm 0 !important;
+  }
+}
+
+.pulse {
+  background-color: $gray-400;
+  display: inline-block;
+  height: 36px;
+  overflow: hidden;
+  position: relative;
+  width: 150px;
+
+  &::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: translateX(-100%);
+    background-image: linear-gradient(90deg,
+        rgba($white, 0) 0,
+        rgba($white, 0.2) 20%,
+        rgba($white, 0.5) 60%,
+        rgba($white, 0));
+    animation: shimmer 2s infinite;
+    content: "";
+  }
+
+  @keyframes shimmer {
+    100% {
+      transform: translateX(100%);
+    }
+  }
+}
+
+/* Accordion */
+
+.mat-expansion-panel-spacing,
+.mat-accordion .mat-expansion-panel:not(.mat-expanded),
+.mat-accordion .mat-expansion-panel:not(.mat-expansion-panel-spacing),
+.mat-accordion .mat-expansion-panel:first-of-type,
+.mat-accordion .mat-expansion-panel:last-of-type {
+  @include border-radius(10px);
+}
+
+.mat-expansion-panel {
+  box-shadow: 0px 12px 17px rgb(0 0 0 / 8%), 0px 5px 22px rgb(0 0 0 / 8%),
+    0px 7px 8px rgb(0 0 0 / 5%) !important;
+}
+
+.gestao-detran {
+
+  .mat-expansion-panel-spacing,
+  .mat-expansion-panel:not(.mat-expanded),
+  .mat-expansion-panel:not(.mat-expansion-panel-spacing),
+  .mat-expansion-panel:first-of-type,
+  .mat-expansion-panel:last-of-type {
+    @include border-radius(5px);
+  }
+
+  .mat-expansion-panel {
+    box-shadow: none !important;
+  }
+
+  .mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:not([aria-disabled="true"]):hover {
+    background-color: transparent;
+  }
+
+  .mat-expansion-panel-body {
+    padding: 0;
+  }
+}
+
+/*Chip list*/
+
+.default-chip-list {
+  width: 100%;
+}
+
+.default-chip-list .mat-form-field-wrapper {
+  padding: 0;
+}
+
+.mat-chip.mat-standard-chip {
+  @include border-radius(5px);
+  background-color: $blue-400;
+}
+
+.email-chip {
+  line-height: 33px !important;
+  align-items: unset !important;
+}
+
+.email-chip>.mat-option-text span {
+  display: block;
+  line-height: 0px;
+  font-size: 12px;
+  color: $gray-700;
+}
+
+.email-chip>.mat-option-text span.usuario-adicionado {
+  color: $blue-800;
+  margin-left: 105px;
+  position: relative;
+  top: -16px;
+  left: 225px;
+  font-size: 14px;
+}
+
+.top-options {
+  display: flex;
+  justify-content: right;
+  position: relative;
+  grid-gap: 10px;
+  gap: 10px;
+  margin-top: -56px;
+  margin-bottom: 20px;
+  padding: 0 1rem;
+}
+
+/*-Mat accordion-*/
+
+.revisao-registro {
+  .mat-accordion .mat-expansion-panel:first-of-type {
+    border-top-right-radius: 5px !important;
+    border-top-left-radius: 5px !important;
+  }
+
+  .mat-expansion-panel:not([class*="mat-elevation-z"]) {
+    @include border-radius(5px);
+    box-shadow: none !important;
+    border: 1px solid $gray-400;
+  }
+
+  .mat-expansion-panel {
+    margin-bottom: 1.2rem !important;
+  }
+
+  .mat-expansion-panel-header {
+    height: 70px !important;
+  }
+
+  .header-warning {
+    border: 1px solid $warning-900 !important;
+  }
+}
+
+/*-Mat accordion-*/
+
+.mat-expansion-indicator::after {
+  border-style: none !important;
+  border-width: none !important;
+  padding: 0 !important;
+  background-image: url(../assets/img/custom-icons/icon-expansion-indicator.svg) !important;
+  width: 20px !important;
+  height: 20px !important;
+  transform: rotate(0deg) !important;
+}
+
+//#region Impressao
+@media print {
+  body * {
+    visibility: hidden !important;
+    font-family: Helvetica, sans-serif;
+  }
+
+  .content {
+    margin-top: 0px !important;
+    margin-left: 0px !important;
+    padding: 95px 0 0 0 !important;
+  }
+
+  .mt-2 {
+    margin-top: 0px !important;
+  }
+
+  @page {
+    margin: 17mm 0 15mm 0 !important;
+  }
+
+  app-espelho-dados-complementares {
+    page-break-after: always !important;
+  }
+}
+
+//#endregion
+
+//#region Espelho contrato
+
+.espelho-contrato {
+  height: 100%;
+
+  .item-title {
+    font-size: 14px;
+  }
+
+  .item {
+    @include fontMontserratRegular;
+    width: 0;
+    flex: 1 1 0px;
+    word-wrap: break-word;
+  }
+
+  .item-description {
+    color: $blue-800;
+  }
+
+  .panel-title {
+    @include fontMontserratBold(700);
+  }
+}
+
+//#endregion
+
+.mat-form-field-appearance-legacy .mat-form-field-underline {
+  background-color: transparent;
+}
+
+.mat-form-field-appearance-legacy .mat-form-field-wrapper {
+  padding: 0;
+}
+
+.mat-stepper-vertical,
+.mat-stepper-horizontal {
+  background-color: transparent !important;
+}
+
+.mat-paginator-container {
+  align-items: baseline !important;
+}
+
+//#region LISTA TAXA DETRAN E PRECO TBK
+
+.wrap-taxa {
+  @include border-radius(5px);
+  border: 2px solid $gray-300;
+  padding: .5rem 1rem;
+
+  span {
+    font-size: 14px;
+  }
+
+  .gray-600 {
+    color: $gray-600;
+  }
+
+  .expandir-taxa {
+    @include border-radius(100%);
+    background-color: $blue-600;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+    i {
+      color: $white;
+      font-size: 13px;
+      margin-top: 1px;
+    }
+  }
+
+  .icone {
+    @include border-radius(5px);
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+
+    &.edicao {
+      background-color: #E0EFFF;
+
+      i {
+        color: #70B2E7;
+      }
+    }
+
+    &.exclusao {
+      background-color: #FFE2EB;
+
+      i {
+        color: $error-900;
+      }
+    }
+  }
+
+  .detalhes-taxa {
+    .operacoes {
+      @include border-radius(10px);
+      background: $gray-200;
+      padding: 10px 1rem;
+      font-size: 12px;
+
+      i {
+        color: $gray-400;
+      }
+
+      .valor {
+        @include border-radius(5px);
+        background-color: $blue-400;
+        padding: 3px 10px;
+        color: $blue-700;
+      }
+    }
+  }
+
+  &.selected {
+    border-color: $primary;
+  }
+}
+
+//#endregion
+
+//#region CRIAR TAXA DETRAN E PRECO TBK
+
+.criar-taxa-detran {
+
+  .wrap-flags {
+    @include border-radius(5px);
+    border: 2px solid $gray-300;
+  }
+
+  .cabecalho {
+    justify-content: center;
+    background: $gray-200;
+    border-bottom: 2px solid $gray-300;
+
+    .celula {
+      padding: 1rem 0;
+    }
+  }
+
+  .celula {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $gray-800;
+    font-size: 14px;
+
+    &.meio {
+      border-left: 2px solid $gray-300;
+      border-right: 2px solid $gray-300;
+    }
+
+    &.operacao-label {
+      justify-content: start;
+    }
+
+    .desabilitada {
+      color: $gray-400;
+    }
+  }
+}
+
+//#endregion
+
+.fnt-12 {
+  font-size: 12px !important;
+}

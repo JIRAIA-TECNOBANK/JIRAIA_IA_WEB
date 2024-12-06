@@ -1,0 +1,35 @@
+<svg width="127" height="105" viewBox="0 0 127 105" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Group 954">
+<g id="Group 14">
+<g id="Group 13">
+<circle id="Ellipse 33" cx="18.5" cy="75.5" r="4.5" fill="#DFEEFC"/>
+<circle id="Ellipse 34" cx="18.5" cy="28.5" r="4.5" fill="#DFEEFC"/>
+<circle id="Ellipse 36" cx="101.5" cy="13.5" r="4.5" fill="#DFEEFC"/>
+<circle id="Ellipse 37" cx="106.5" cy="69.5" r="3" stroke="#CEE8FF" stroke-width="3"/>
+<circle id="Ellipse 38" cx="45.5" cy="4.5" r="3" stroke="#CEE8FF" stroke-width="3"/>
+<circle id="Ellipse 39" cx="4.5" cy="56.5" r="3" stroke="#CEE8FF" stroke-width="3"/>
+<circle id="Ellipse 35" cx="122.5" cy="42.5" r="4.5" fill="#DFEEFC"/>
+<rect id="Rectangle 303" x="38.5" y="25.5" width="50" height="65" rx="3.5" stroke="#5B94C7" stroke-width="3" stroke-dasharray="3 3"/>
+<rect id="Rectangle 304" opacity="0.5" x="38.5" y="25.5" width="50" height="65" rx="3.5" fill="#5B94C7" stroke="#5B94C7" stroke-width="3" stroke-dasharray="3 3"/>
+<g id="Subtract">
+<mask id="path-10-inside-1_16624_11381" fill="white">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M80.3737 17.2627H49C46.2386 17.2627 44 19.5013 44 22.2627V81.999C44 84.7605 46.2386 86.999 49 86.999H92C94.7614 86.999 97 84.7605 97 81.999V33.4473L80.3737 17.2627Z"/>
+</mask>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M80.3737 17.2627H49C46.2386 17.2627 44 19.5013 44 22.2627V81.999C44 84.7605 46.2386 86.999 49 86.999H92C94.7614 86.999 97 84.7605 97 81.999V33.4473L80.3737 17.2627Z" fill="white"/>
+<path d="M80.3737 17.2627L82.4662 15.113L81.5927 14.2627H80.3737V17.2627ZM97 33.4473H100V32.1809L99.0926 31.2976L97 33.4473ZM49 20.2627H80.3737V14.2627H49V20.2627ZM47 22.2627C47 21.1581 47.8954 20.2627 49 20.2627V14.2627C44.5817 14.2627 41 17.8444 41 22.2627H47ZM47 81.999V22.2627H41V81.999H47ZM49 83.999C47.8954 83.999 47 83.1036 47 81.999H41C41 86.4173 44.5817 89.999 49 89.999V83.999ZM92 83.999H49V89.999H92V83.999ZM94 81.999C94 83.1036 93.1046 83.999 92 83.999V89.999C96.4183 89.999 100 86.4173 100 81.999H94ZM94 33.4473V81.999H100V33.4473H94ZM99.0926 31.2976L82.4662 15.113L78.2811 19.4124L94.9074 35.597L99.0926 31.2976Z" fill="#5B94C7" mask="url(#path-10-inside-1_16624_11381)"/>
+</g>
+<circle id="Ellipse 41" opacity="0.5" cx="55" cy="49" r="2.5" stroke="#5B94C7" stroke-width="3"/>
+<circle id="Ellipse 44" opacity="0.5" cx="57.5" cy="32.5" r="5" fill="#5B94C7" stroke="#5B94C7" stroke-width="3"/>
+<circle id="Ellipse 42" opacity="0.5" cx="55" cy="61" r="2.5" stroke="#5B94C7" stroke-width="3"/>
+<circle id="Ellipse 43" opacity="0.5" cx="55" cy="73" r="2.5" stroke="#5B94C7" stroke-width="3"/>
+<rect id="Rectangle 300" opacity="0.5" x="82" y="59" width="4" height="18" rx="2" transform="rotate(90 82 59)" fill="#5B94C7"/>
+<rect id="Rectangle 302" opacity="0.5" x="89" y="47" width="4" height="25" rx="2" transform="rotate(90 89 47)" fill="#5B94C7"/>
+<rect id="Rectangle 301" opacity="0.5" x="76" y="71" width="4" height="12" rx="2" transform="rotate(90 76 71)" fill="#5B94C7"/>
+<path id="Vector 19" d="M95.1677 31.7724L81.186 18.5897C80.5481 17.9882 79.5 18.4405 79.5 19.3173V32.5C79.5 33.0523 79.9477 33.5 80.5 33.5H94.4817C95.3868 33.5 95.8263 32.3934 95.1677 31.7724Z" fill="#CEE8FF" stroke="#5B94C7" stroke-width="3" stroke-linecap="round"/>
+</g>
+<ellipse id="Ellipse 41_2" cx="66" cy="101" rx="31" ry="4" fill="#DFEEFC"/>
+</g>
+<circle id="Ellipse 61" cx="92.5" cy="84.5" r="14" fill="white" stroke="#5B94C7" stroke-width="3"/>
+<path id="!" d="M90.8854 87.9096L90.0781 75H94.9219L94.1146 87.9096H90.8854ZM92.5 95C91.7708 95 91.1719 94.7458 90.7031 94.2373C90.2344 93.7288 90 93.1262 90 92.4294C90 91.7137 90.2344 91.1205 90.7031 90.6497C91.1719 90.1601 91.7708 89.9153 92.5 89.9153C93.2465 89.9153 93.8455 90.1601 94.2969 90.6497C94.7656 91.1205 95 91.7137 95 92.4294C95 93.1262 94.7656 93.7288 94.2969 94.2373C93.8455 94.7458 93.2465 95 92.5 95Z" fill="#5B94C7"/>
+</g>
+</svg>

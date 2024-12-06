@@ -1,0 +1,29 @@
+// Generic
+@import '$tools';
+
+* {
+  -webkit-font-smoothing: antialased;
+  -moz-osx-font-smoothing: antialased;
+}
+
+span,
+p,
+td,
+table.mat-table,
+.mat-option,
+.mat-input-element,
+.mat-input-element::-webkit-search-cancel-button,
+.mat-input-element::-webkit-search-decoration,
+.mat-input-element::-webkit-search-results-button,
+.mat-input-element::-webkit-search-results-decoration,
+.mat-form-field-empty.mat-form-field-label,
+.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label,
+.mat-form-field,
+.mat-paginator-page-size {
+  //para que o angular editor possa funcionar corretamente
+  @include fontMontserratRegular;
+}
+
+b {
+  @include fontMontserratBold;
+}
